@@ -12,7 +12,7 @@
 (* :Keywords: *)
 (* :Discussion: *)
 
-BeginPackage["Imputation`", {"RS`"}]
+BeginPackage["Imputation`"];
 (* Exported symbols added here with SymbolName::usage *)
 ImputeVersion::usage = "ImputateVersion";
 TestAlgorithm::usage = "TestAlgorithm[]";
@@ -40,7 +40,7 @@ AbortAssert[test_, message__] :=
 
 Begin["`Private`"];
 
-ImputeVersion = "0.1.1";
+ImputeVersion = "Imputation Package v0.1.1";
 PrintTemporary[ImputeVersion];
 
 $cObject = 0;
@@ -175,16 +175,25 @@ TestAlgorithm[datasets_List, numIter_Integer] := Module[
   SetInitValues[];
   AbortAssert[ $missingRate > 0 && $missingRate < 0.5 ];
 
+  $lastResult = "";
+
+  $minResult = Infinity;
+  $maxResult = -Infinity;
+
   PrintTemporary@Dynamic@Dataset[
     <|
-      "Name of Dataset" -> name,
       "No." -> ToString@cDataset <> "/" <> ToString@Length@datasets,
+      "Dataset" -> name,
+      "Missing Rate" -> MissingRate[],
       "No. Instances" -> $n,
       "No. Attributes" -> $m,
-      "No. Missing Values" -> $numMissings,
+      "No. Missing Values" -> ($numMissings - 1),
       "Current Method" -> $method,
       "Current Iteration" -> ToString@citer <> "/" <> ToString@numIter,
-      "Current Incomplete Row" -> ToString@$cObject <> "/" <> ToString@$numIncompleteRows
+      "Current Incomplete Row" -> ToString@$cObject <> "/" <> ToString@$numIncompleteRows,
+      "Last result" -> ToString@$lastResult,
+      "Min. result" -> $minResult,
+      "Max. result" -> $maxResult
     |>
   ];
 
@@ -207,6 +216,8 @@ TestAlgorithm[datasets_List, numIter_Integer] := Module[
 
     Table[
       $method = method;
+      $minResult = Infinity;
+      $maxResult = -Infinity;
       $cTask = "Starting... " <> ToString@$method;
       resPerMethod = 0.0;
       citer = 0;
@@ -218,17 +229,29 @@ TestAlgorithm[datasets_List, numIter_Integer] := Module[
         AbortAssert[$numLaps > 0, "TestAlgorithm"];
         StepTwo[$numLaps];
         $cTask = "Computing stats...";
-        matches = Table[
-          Length[oldJ[[i]]] - HammingDistance[$X[[i, oldJ[[i]]]], oData[[i, oldJ[[i]]]]]
-          , {i, $M}];
-        N[Total[matches] / $numMissings]
+        matches = checkMatches[oldJ];
+        With[{res = N[Total@matches / $numMissings]},
+          $lastResult = res;
+          $minResult = Min[$minResult, res];
+          $maxResult = Max[$maxResult, res];
+          res
+        ]
         , {numIter}];
-      outcome[cDataset][ToString@method] = NumberForm[Mean[resPerMethod], {3, 2}];
+      outcome[cDataset][ToString@method] = {$minResult, NumberForm[Mean@resPerMethod, {3, 2}], $maxResult};
       , {method, $listMethods}];
     cDataset++;
     , {dataset, datasets}];
 
   Return@outcome;
+];
+
+Clear[checkMatches];
+checkMatches[oldJ_] := Module[
+  {matches},
+  matches = Table[
+    Length[oldJ[[i]]] - HammingDistance[$X[[i, oldJ[[i]]]], $oldX[[i, oldJ[[i]]]]]
+    , {i, $n}];
+  Return@matches;
 ];
 
 Clear[Impute];
@@ -240,10 +263,6 @@ Impute[ex_] := Module[
   Return@$X;
 ];
 
-
-
-
-
 Clear[StepOne];
 StepOne[] := Module[{},
   $cTask = "Running ... StepOne";
@@ -252,6 +271,8 @@ StepOne[] := Module[{},
     {$n, $m} = d;
     AbortAssert[$n > 2 && $m > 2, "StepOne"];
   ];
+  $rangeN = Range@$n;
+  $rangeM = Range@$m;
   $s = $m - 1;
   $J = Table[{}, {$n}];
   $R = Table[{$m}, {$n}];
@@ -307,7 +328,7 @@ StepTwo[lap_] := Module[{},
     $cObject++;
     $J[[i]] = SortBy[$J[[i]], $orderCols * Length@$I[[#]] &];
     Table[
-      AbortAssert[ Length@$R[[i]] > 1];
+      AbortAssert[ Length@$R[[i]] > 1, "StepTwo"];
       $X[[i, j]] = ClassifyReduceModel[i, j];
       If[ Not@MissingQ[$X[[i, j]]],
         $R[[i]] = $R[[i]] ~ Join ~ {j};
@@ -328,11 +349,12 @@ StepTwo[lap_] := Module[{},
 
 
 Clear[ClassifyReduceModel];
-ClassifyReduceModel[i_, j_] := Module[
+ClassifyReduceModel[i_Integer, j_Integer] := Module[
   {rowsRef1, colsRef1, ref1, rowsRef2, colsRef2, ref2,
     rowsRef3, colsRef3, ref3, answers},
   $cTask = "Reduce-model imputation ClassifyReduceModel[i,j] ";
   AbortAssert[Length@$R[[i]] >= 2, "ClassifyReduceModel"];
+
   answers = $X[[All, j]];
 
   If[ Length@Union@Complement2[answers, {i}],
@@ -340,10 +362,13 @@ ClassifyReduceModel[i_, j_] := Module[
   ];
 
   rowsRef1 = Complement2[$rangeN, $I[[j]]];
-  colsRef1 = $R[[i]];
+  colsRef1 = Complement2[$R[[i]], {$m}];
+
+  AbortAssert[Not@MemberQ[$X[[i, colsRef1]], Missing[]]];
+
   ref1 = $X[[rowsRef1, colsRef1]];
 
-  AbortAssert[ rowsRef1 != {}, "ClassifyReduceModel"];
+  AbortAssert[ Length@rowsRef1 > 0, "ClassifyReduceModel"];
 
   If[ Length@rowsRef1 == 1,
     With[{class = answers[[ rowsRef1[[1]] ]] },
@@ -356,62 +381,89 @@ ClassifyReduceModel[i_, j_] := Module[
 
   rowsRef2 = Select[rowsRef1, Intersection[$J[[#]], $R[[i]]] == {} &];
   colsRef2 = colsRef1;
+
+  AbortAssert[Not@MemberQ[$X[[i, colsRef2]], Missing[]]];
+
   ref2 = $X[[rowsRef2, colsRef2]];
+
   If[ Length@rowsRef2 == 1,
     With[{class = answers[[ rowsRef2[[1]] ]] },
       Return@class;
     ];
   ];
-  If[ Length@Union@answers[[rowsRef2]] == 1,
+
+  If[ Length@rowsRef2 > 0 && Length@Union@answers[[rowsRef2]] == 1,
     Return@answers[[ rowsRef2[[1]] ]];
   ];
-  If[ Length@rowsRef2 <= 0.10 * $n,
-    Return[ClassifyModel[rowsRef2, colsRef2, answers[[rowsRef2]], $X[[colsRef2]] ] ]
+
+  If[ Length@rowsRef2>= 0 && Length@rowsRef2 <= 0.10 * $n,
+    Return@ClassifyReducedModel[rowsRef2, colsRef2, answers[[rowsRef2]], $X[[i, colsRef2]]];
   ];
 
   If[ Length@rowsRef2 == 0,
-    rowsRef3 = rowsRef2;
-    colsRef3 = colsRef2;
-    ref3 = ref2;
+    rowsRef2 = rowsRef1;
+    colsRef2 = colsRef1;
+    ref2 = ref1;
   ];
 
-  colsRef3 = FindReduct[rowsRef3, colsRef3, answers[[rowsRef3]]];
   rowsRef3 = rowsRef2;
+  colsRef3 = FindReduct[rowsRef2, colsRef2, j];
   ref3 = $X[[ rowsRef3, colsRef3 ]];
+
+  AbortAssert[Not@MemberQ[$X[[i, colsRef2]], Missing[]]];
+
 
   If[ Length@rowsRef3 == 1,
     With[{class = answers[[ rowsRef3[[1]] ]] },
       Return@class;
     ];
   ];
+
   If[ Length@Union@answers[[rowsRef3]] == 1,
     Return@answers[[ rowsRef3[[1]] ]];
   ];
 
-  Return[ClassifyModel[rowsRef3, colsRef3, answers[[rowsRef3]], $X[[colsRef3]] ] ];
+  Return@ClassifyReducedModel[rowsRef3, colsRef3, answers[[rowsRef3]], $X[[i, colsRef3]] ];
 ];
 
-Clear[ClassifyModel];
-ClassifyModel[modelRows_, modelCols_, answers_, toclassify_] := Module[
-  {},
-(*Return[Classify[trainingset, goal, Method -> $method ]];*)
-  Return@Missing[];
+Clear[ClassifyReducedModel];
+ClassifyReducedModel[rows_, cols_, answers_, goal_] := Module[
+  {model, c},
+  model = $X[[rows, cols]] -> answers;
+  AbortAssert[Length@rows > 1];
+  AbortAssert[Length@rows == Length@answers, "ClassifyReducedModel"];
+  AbortAssert[Length@Union@answers > 1, "ClassifyReducedModel" ];
+  AbortAssert[Length@goal == Length@cols];
+
+  c = Classify[model, Method -> $method];
+  Return[c[goal]];
 ];
 
-FindReduct[rows_, cols_, answers_] := Module[
-  {},
-(*Clear["RS`*"];*)
-(*<< RS`;*)
-(*Clear[RS`universe, RS`attributes];*)
-(*RS`universe = $X[[domain, $R[[i]] ~ Join ~ {j} ]];*)
-(*lr = Length[$R[[i]]];*)
-(*If[ lr <= 1, Return[$FailCompleteSymbol]];*)
-(*RS`attributes = Range[lr];*)
-(*RS`conditions = Range[lr - 1];*)
-(*RS`Base = RS`conditions;*)
-(*RS`decisions = {lr};*)
-  Return[rows]
-]
+Clear[FindReduct];
+FindReduct[rows_, cols_, j_] := Module[
+  {reduct, ncols},
+  ncols = SortBy[cols, Length@$I[[#]] &];
+  With[{half = Ceiling[Length@ncols/2]},
+    AbortAssert[Length@ncols > half];
+    Return@Take[ncols, half];
+  ];
+
+  (*Clear["RS`*"];*)
+  (*<< RS`;*)
+  (*Clear[RS`$universe, RS`$attributes];*)
+  (*RS`Universo@$X[[rows, cols ~ Join ~ {j}]];*)
+  (*RS`Attributes@Range@Length@cols;*)
+  (*RS`Conditions@Range@(Length@cols - 1);*)
+  (*RS`Base@RS`conditions;*)
+  (*RS`Decisions@{Length@cols};*)
+  (*reduct = RS`QuickReduct[];*)
+  (*If[ Length@reduct == 0,*)
+    (*Return@cols;*)
+  (*];*)
+  (*Return[reduct];*)
+];
+
+
 End[];
 
 (*`Private`*)
