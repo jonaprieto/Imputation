@@ -1,1 +1,498 @@
-Notebook[{}]
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     18286,        489]
+NotebookOptionsPosition[     17174,        447]
+NotebookOutlinePosition[     17560,        464]
+CellTagsIndexPosition[     17517,        461]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.6795080435158873`*^9, 3.679508052536869*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.679508057406155*^9, 3.679508070062048*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"dirDatasets", "=", " ", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Directory", "[", "]"}], ",", " ", "\"\<databases\>\""}], "}"}],
+     "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"pathsDatasets", "=", " ", 
+   RowBox[{"FileNames", "[", 
+    RowBox[{
+     RowBox[{"RegularExpression", "[", "\"\<[^.]*\>\"", "]"}], ",", " ", 
+     "dirDatasets"}], "]"}]}], " ", ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Clear", "[", "sets", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Block", "[", 
+   RowBox[{
+    RowBox[{"{", "base21", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"sets", " ", "=", " ", 
+      RowBox[{"Table", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"nombre", " ", "=", " ", 
+          RowBox[{"FileBaseName", "[", "base21", "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"<|", 
+          RowBox[{
+           RowBox[{"\"\<filename\>\"", "\[Rule]", "nombre"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"\"\<data\>\"", "\[Rule]", "  ", 
+            RowBox[{"FileNameJoin", "[", 
+             RowBox[{"{", 
+              RowBox[{"base21", ",", " ", 
+               RowBox[{"nombre", "<>", "\"\<.data\>\""}]}], "}"}], "]"}]}], 
+           ",", "\[IndentingNewLine]", 
+           RowBox[{"\"\<attr_names\>\"", "\[Rule]", " ", 
+            RowBox[{"FileNameJoin", "[", 
+             RowBox[{"{", 
+              RowBox[{"base21", ",", " ", 
+               RowBox[{"nombre", "<>", "\"\<.attr\>\""}]}], "}"}], "]"}]}]}], 
+          "\[IndentingNewLine]", "|>"}]}], "\[IndentingNewLine]", ",", 
+        RowBox[{"{", 
+         RowBox[{"base21", ",", "pathsDatasets"}], "}"}]}], "]"}]}], ";"}]}], 
+   "\[IndentingNewLine]", "]"}], ";"}]}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Block", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"n22", ",", "m22", ",", " ", 
+       RowBox[{"info", " ", "=", " ", 
+        RowBox[{"<|", " ", "|>"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Table", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"dataa", " ", "=", 
+          RowBox[{"Import", "@", 
+           RowBox[{
+            RowBox[{"sets", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], "[", "\"\<data\>\"", "]"}]}]}], 
+         ";", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"n22", ",", " ", "m22"}], " ", "}"}], " ", "=", 
+          RowBox[{"Dimensions", "@", "dataa"}]}], ";", "\[IndentingNewLine]", 
+         
+         RowBox[{
+          RowBox[{"info", "[", "i", "]"}], " ", "=", " ", 
+          RowBox[{"<|", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"\"\<Dataset\>\"", "\[Rule]", " ", 
+             RowBox[{
+              RowBox[{"sets", "[", 
+               RowBox[{"[", "i", "]"}], "]"}], "[", "\"\<filename\>\"", 
+              "]"}]}], ",", "\[IndentingNewLine]", 
+            RowBox[{"\"\<No. of Instances\>\"", "\[Rule]", " ", "n22"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"\"\<No. of Attributes\>\"", "\[Rule]", " ", "m22"}], ",", 
+            RowBox[{"\"\<No. of Classes\>\"", " ", "\[Rule]", " ", 
+             RowBox[{"Length", "[", 
+              RowBox[{"Tally", "[", 
+               RowBox[{"dataa", "[", 
+                RowBox[{"[", 
+                 RowBox[{"All", ",", " ", 
+                  RowBox[{"-", "1"}]}], "]"}], "]"}], "]"}], "]"}]}]}], 
+           "\[IndentingNewLine]", "|>"}]}]}], "\[IndentingNewLine]", ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", " ", 
+          RowBox[{"Length", "[", "sets", "]"}]}], "}"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Print", "@", 
+       RowBox[{"Dataset", "[", "info", "]"}]}]}]}], "\[IndentingNewLine]", 
+    "]"}], ";"}], "\[IndentingNewLine]"}]], "Input"],
+
+Cell[BoxData[
+ TagBox[
+  TemplateBox[{GridBox[{{
+       ItemBox["", Frame -> {False, True, True, False}], 
+       StyleBox["\"Dataset\"", 
+        GrayLevel[0.3]], 
+       StyleBox["\"No. of Instances\"", 
+        GrayLevel[0.3]], 
+       StyleBox["\"No. of Attributes\"", 
+        GrayLevel[0.3]], 
+       StyleBox["\"No. of Classes\"", 
+        GrayLevel[0.3]]}, {
+       StyleBox[1, 
+        GrayLevel[0.3]], 
+       StyleBox["\"balance-scale\"", FontColor -> GrayLevel[0.4]], 625, 5, 
+       3}, {
+       StyleBox[2, 
+        GrayLevel[0.3]], 
+       StyleBox["\"breast-cancer\"", FontColor -> GrayLevel[0.4]], 277, 10, 
+       2}, {
+       StyleBox[3, 
+        GrayLevel[0.3]], 
+       StyleBox["\"car-evaluation\"", FontColor -> GrayLevel[0.4]], 1728, 7, 
+       4}, {
+       StyleBox[4, 
+        GrayLevel[0.3]], 
+       StyleBox["\"fisher-order\"", FontColor -> GrayLevel[0.4]], 47, 36, 4}, {
+       StyleBox[5, 
+        GrayLevel[0.3]], 
+       StyleBox["\"kinship\"", FontColor -> GrayLevel[0.4]], 24, 12, 2}, {
+       StyleBox[6, 
+        GrayLevel[0.3]], 
+       StyleBox["\"soyban-small\"", FontColor -> GrayLevel[0.4]], 47, 36, 4}, {
+       StyleBox[7, 
+        GrayLevel[0.3]], 
+       StyleBox["\"spect\"", FontColor -> GrayLevel[0.4]], 80, 23, 2}, {
+       StyleBox[8, 
+        GrayLevel[0.3]], 
+       StyleBox["\"zoo\"", FontColor -> GrayLevel[0.4]], 101, 17, 7}, {
+       ItemBox[
+        RowBox[{"2 levels", 
+          AdjustmentBox[" | ", BoxBaselineShift -> -0.3], 
+          RowBox[{"8", "rows"}]}], 
+        BaseStyle -> {
+         FontFamily -> "Helvetica", FontSize -> 10, FontColor -> 
+          GrayLevel[0.4], Editable -> False, Selectable -> False}, 
+        ItemSize -> {Automatic, Automatic}, Alignment -> {Left, Center}, 
+        Background -> RGBColor[0.92, 0.92, 0.9]], "\[SpanFromLeft]", 
+       "\[SpanFromLeft]", "\[SpanFromLeft]", "\[SpanFromLeft]"}}, 
+     GridBoxFrame -> {"ColumnsIndexed" -> {{{1, -1}, {1, -1}} -> True}}, 
+     FrameStyle -> RGBColor[0, 0, 0, 0.4], GridBoxDividers -> {"Columns" -> {
+         RGBColor[0, 0, 0, 0.4], 
+         RGBColor[0, 0, 0, 0.3], {
+          RGBColor[0, 0, 0, 0.09]}, 
+         RGBColor[0, 0, 0, 0.4]}, "Rows" -> {
+         RGBColor[0, 0, 0, 0.4], 
+         RGBColor[0, 0, 0, 0.3], {
+          RGBColor[0, 0, 0, 0.08]}, 
+         RGBColor[0, 0, 0, 0.4]}}, RowSpacings -> {1.5, 1.2}, 
+     GridBoxBackground -> {"Columns" -> {
+         RGBColor[0.92, 0.92, 0.9]}, "Rows" -> {
+         RGBColor[0.92, 0.92, 0.9]}}, 
+     GridBoxAlignment -> {"Columns" -> {{Left}}}, ColumnSpacings -> 2.5, 
+     GridFrameMargins -> {{2, 3}, {1, 3}}, 
+     GridBoxItemSize -> {"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+      RowMinHeight -> 1.3],
+    "Dataset[Association[(_Integer -> _Association)..]]"},
+   "Dataset",
+   DisplayFunction->(TagBox[
+     StyleBox[#, {
+      ShowAutoStyles -> False, LineBreakWithin -> False, FontWeight -> 
+       "Light", FontFamily -> "Helvetica Neue", NumberMarks -> False, 
+       SpanMaxSize -> 3, SpanMinSize -> 1., Editable -> False, Selectable -> 
+       True, Background -> RGBColor[0.985, 0.98, 0.973], 
+       LinebreakAdjustments -> {0.4, 5, 100, 0, 0.5}, LineIndent -> 0, 
+       LineSpacing -> {1.1, 5}}], Deploy]& ),
+   InterpretationFunction->(#2& )],
+  False,
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Print",
+ CellChangeTimes->{{3.679531446861188*^9, 3.679531475993507*^9}}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.679509102308391*^9, 3.679509105726016*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Take", "[", 
+  RowBox[{"sets", ",", 
+   RowBox[{"-", "2"}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"\[LeftAssociation]", 
+    RowBox[{
+     RowBox[{"\<\"filename\"\>", "\[Rule]", "\<\"spect\"\>"}], ",", 
+     RowBox[{"\<\"data\"\>", 
+      "\[Rule]", "\<\"/Users/jonaprieto/Imputation/databases/spect/spect.data\
+\"\>"}], ",", 
+     RowBox[{"\<\"attr_names\"\>", 
+      "\[Rule]", "\<\"/Users/jonaprieto/Imputation/databases/spect/spect.attr\
+\"\>"}]}], "\[RightAssociation]"}], ",", 
+   RowBox[{"\[LeftAssociation]", 
+    RowBox[{
+     RowBox[{"\<\"filename\"\>", "\[Rule]", "\<\"zoo\"\>"}], ",", 
+     RowBox[{"\<\"data\"\>", 
+      "\[Rule]", \
+"\<\"/Users/jonaprieto/Imputation/databases/zoo/zoo.data\"\>"}], ",", 
+     RowBox[{"\<\"attr_names\"\>", 
+      "\[Rule]", \
+"\<\"/Users/jonaprieto/Imputation/databases/zoo/zoo.attr\"\>"}]}], 
+    "\[RightAssociation]"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.679531500245071*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"metodos", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<NaiveBayes\>\"", ",", "\"\<RandomForest\>\"", ",", " ", 
+     "\"\<LogisticRegression\>\"", ",", " ", "Automatic"}], "}"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.679531517579843*^9, 3.679531531710925*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.679531839295548*^9, 3.679531848366838*^9}, 
+   3.679535549855031*^9}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.67950806631745*^9, 3.679508082677177*^9}, 
+   3.679533454321373*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"classifyMethods", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.679531811853005*^9, 3.6795318168821993`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"NaiveBayes\"\>", ",", "\<\"RandomForest\"\>"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.6795318144366913`*^9, 3.6795318172728853`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Print", "[", 
+  RowBox[{"Dynamic", "[", "Imputation`$currentTask", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.679531897139423*^9, 3.6795319122859163`*^9}}],
+
+Cell[BoxData[
+ DynamicBox[ToBoxes[Imputation`$currentTask, StandardForm],
+  ImageSizeCache->{259., {4., 12.}}]], "Print",
+ CellChangeTimes->{3.679531912666278*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.679531972852933*^9, 3.679531985343093*^9}, 
+   3.6795334565893106`*^9, 3.679534029582419*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"<<", "Imputation`"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetInitValues", "[", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"MissingRate", "[", "0.01", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"subset", " ", "=", " ", 
+   RowBox[{"Take", "[", 
+    RowBox[{"sets", ",", " ", 
+     RowBox[{"-", "1"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"out", "=", " ", 
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{"subset", " ", ",", "2"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Dataset", "[", "out", "]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.6795318331541157`*^9, 3.679531856778083*^9}, {
+   3.679531969328072*^9, 3.6795319716209297`*^9}, {3.67953235865697*^9, 
+   3.6795323735016747`*^9}, {3.679532550541814*^9, 3.679532557117655*^9}, {
+   3.67953346532117*^9, 3.679533468237602*^9}, 3.6795335275734158`*^9, {
+   3.67953393682447*^9, 3.679533945847234*^9}, {3.679533996713332*^9, 
+   3.679533998133202*^9}, {3.6795340313313713`*^9, 3.679534047528234*^9}, {
+   3.679535553216024*^9, 3.679535555256209*^9}, {3.679536754681065*^9, 
+   3.679536764091956*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  TemplateBox[{GridBox[{{
+       ItemBox["", Frame -> {False, True, True, False}], 
+       StyleBox["\"Dataset\"", 
+        GrayLevel[0.3]], 
+       StyleBox["\"Size\"", 
+        GrayLevel[0.3]], 
+       StyleBox["\"NaiveBayes\"", 
+        GrayLevel[0.3]]}, {
+       StyleBox[1, 
+        GrayLevel[0.3]], 
+       StyleBox["\"balance-scale\"", FontColor -> GrayLevel[0.4]], 
+       StyleBox["\"625x5\"", FontColor -> GrayLevel[0.4]], 
+       InterpretationBox[
+        TagBox["Null", Short[#, 5]& ], 
+        NumberForm[Null, {3, 2}]]}, {
+       StyleBox[2, 
+        GrayLevel[0.3]], 
+       StyleBox["\"breast-cancer\"", FontColor -> GrayLevel[0.4]], 
+       StyleBox["\"277x10\"", FontColor -> GrayLevel[0.4]], 
+       InterpretationBox[
+        TagBox["Null", Short[#, 5]& ], 
+        NumberForm[Null, {3, 2}]]}, {
+       StyleBox[3, 
+        GrayLevel[0.3]], 
+       StyleBox["\"car-evaluation\"", FontColor -> GrayLevel[0.4]], 
+       StyleBox["\"1728x7\"", FontColor -> GrayLevel[0.4]], 
+       InterpretationBox[
+        TagBox["Null", Short[#, 5]& ], 
+        NumberForm[Null, {3, 2}]]}, {
+       StyleBox[4, 
+        GrayLevel[0.3]], 
+       StyleBox["\"fisher-order\"", FontColor -> GrayLevel[0.4]], 
+       StyleBox["\"47x36\"", FontColor -> GrayLevel[0.4]], 
+       InterpretationBox[
+        TagBox["Null", Short[#, 5]& ], 
+        NumberForm[Null, {3, 2}]]}, {
+       StyleBox[5, 
+        GrayLevel[0.3]], 
+       StyleBox["\"kinship\"", FontColor -> GrayLevel[0.4]], 
+       StyleBox["\"24x12\"", FontColor -> GrayLevel[0.4]], 
+       InterpretationBox[
+        TagBox["Null", Short[#, 5]& ], 
+        NumberForm[Null, {3, 2}]]}, {
+       StyleBox[6, 
+        GrayLevel[0.3]], 
+       StyleBox["\"soyban-small\"", FontColor -> GrayLevel[0.4]], 
+       StyleBox["\"47x36\"", FontColor -> GrayLevel[0.4]], 
+       InterpretationBox[
+        TagBox["Null", Short[#, 5]& ], 
+        NumberForm[Null, {3, 2}]]}, {
+       StyleBox[7, 
+        GrayLevel[0.3]], 
+       StyleBox["\"spect\"", FontColor -> GrayLevel[0.4]], 
+       StyleBox["\"80x23\"", FontColor -> GrayLevel[0.4]], 
+       InterpretationBox[
+        TagBox["Null", Short[#, 5]& ], 
+        NumberForm[Null, {3, 2}]]}, {
+       StyleBox[8, 
+        GrayLevel[0.3]], 
+       StyleBox["\"zoo\"", FontColor -> GrayLevel[0.4]], 
+       StyleBox["\"101x17\"", FontColor -> GrayLevel[0.4]], 
+       InterpretationBox[
+        TagBox["Null", Short[#, 5]& ], 
+        NumberForm[Null, {3, 2}]]}, {
+       ItemBox[
+        RowBox[{"2 levels", 
+          AdjustmentBox[" | ", BoxBaselineShift -> -0.3], 
+          RowBox[{"8", "rows"}]}], 
+        BaseStyle -> {
+         FontFamily -> "Helvetica", FontSize -> 10, FontColor -> 
+          GrayLevel[0.4], Editable -> False, Selectable -> False}, 
+        ItemSize -> {Automatic, Automatic}, Alignment -> {Left, Center}, 
+        Background -> RGBColor[0.92, 0.92, 0.9]], "\[SpanFromLeft]", 
+       "\[SpanFromLeft]", "\[SpanFromLeft]"}}, 
+     GridBoxFrame -> {"ColumnsIndexed" -> {{{1, -1}, {1, -1}} -> True}}, 
+     FrameStyle -> RGBColor[0, 0, 0, 0.4], GridBoxDividers -> {"Columns" -> {
+         RGBColor[0, 0, 0, 0.4], 
+         RGBColor[0, 0, 0, 0.3], {
+          RGBColor[0, 0, 0, 0.09]}, 
+         RGBColor[0, 0, 0, 0.4]}, "Rows" -> {
+         RGBColor[0, 0, 0, 0.4], 
+         RGBColor[0, 0, 0, 0.3], {
+          RGBColor[0, 0, 0, 0.08]}, 
+         RGBColor[0, 0, 0, 0.4]}}, RowSpacings -> {1.5, 1.2}, 
+     GridBoxBackground -> {"Columns" -> {
+         RGBColor[0.92, 0.92, 0.9]}, "Rows" -> {
+         RGBColor[0.92, 0.92, 0.9]}}, 
+     GridBoxAlignment -> {"Columns" -> {{Left}}}, ColumnSpacings -> 2.5, 
+     GridFrameMargins -> {{2, 3}, {1, 3}}, 
+     GridBoxItemSize -> {"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+      RowMinHeight -> 1.3],
+    "Dataset[Association[(_Integer -> _Association)..]]"},
+   "Dataset",
+   DisplayFunction->(TagBox[
+     StyleBox[#, {
+      ShowAutoStyles -> False, LineBreakWithin -> False, FontWeight -> 
+       "Light", FontFamily -> "Helvetica Neue", NumberMarks -> False, 
+       SpanMaxSize -> 3, SpanMinSize -> 1., Editable -> False, Selectable -> 
+       True, Background -> RGBColor[0.985, 0.98, 0.973], 
+       LinebreakAdjustments -> {0.4, 5, 100, 0, 0.5}, LineIndent -> 0, 
+       LineSpacing -> {1.1, 5}}], Deploy]& ),
+   InterpretationFunction->(#2& )],
+  False,
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{
+  3.679534038133151*^9, {3.679534084293285*^9, 3.6795341076452503`*^9}, 
+   3.679534254631851*^9, 3.679535191985895*^9, 3.6795352229011087`*^9, 
+   3.679535256429472*^9, 3.679535288898532*^9, 3.6795353216737347`*^9, 
+   3.679535380045658*^9, 3.6795354441267767`*^9, 3.679535493320808*^9, {
+   3.679535529948235*^9, 3.6795355569479847`*^9}, 3.679535610174027*^9, {
+   3.679535646828377*^9, 3.679535690309519*^9}, 3.679535739102569*^9, 
+   3.679535799855956*^9, 3.679536325246661*^9, 3.679536432776371*^9, {
+   3.679536466484247*^9, 3.679536515761533*^9}, {3.6795366112378902`*^9, 
+   3.6795366526050673`*^9}, {3.679536689212716*^9, 3.6795366978693953`*^9}, {
+   3.679536740334909*^9, 3.6795367605352163`*^9}}]
+}, Open  ]]
+},
+WindowSize->{Full, Full},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+Magnification:>1.5 Inherited,
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 9, \
+2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 94, 1, 43, "Input"],
+Cell[655, 23, 189, 4, 43, "Input"],
+Cell[847, 29, 1830, 46, 319, "Input"],
+Cell[CellGroupData[{
+Cell[2702, 79, 2084, 50, 344, "Input"],
+Cell[4789, 131, 3428, 81, 348, "Print"]
+}, Open  ]],
+Cell[8232, 215, 92, 1, 43, "Input"],
+Cell[CellGroupData[{
+Cell[8349, 220, 102, 3, 43, "Input"],
+Cell[8454, 225, 884, 22, 119, "Output"]
+}, Open  ]],
+Cell[9353, 250, 311, 8, 43, "Input"],
+Cell[9667, 260, 118, 2, 43, "Input"],
+Cell[9788, 264, 117, 2, 43, "Input"],
+Cell[CellGroupData[{
+Cell[9930, 270, 131, 2, 43, "Input"],
+Cell[10064, 274, 182, 4, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10283, 283, 182, 3, 43, "Input"],
+Cell[10468, 288, 163, 3, 30, "Print"]
+}, Open  ]],
+Cell[10646, 294, 142, 2, 43, "Input"],
+Cell[CellGroupData[{
+Cell[10813, 300, 1169, 24, 194, "Input"],
+Cell[11985, 326, 5173, 118, 379, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

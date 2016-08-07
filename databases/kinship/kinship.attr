@@ -1,0 +1,41 @@
+{
+ {"aunt", 1},
+ {"brother", 2},
+ {"daughter", 3},
+ {"father", 4},
+ {"husband", 5},
+ {"mother", 6},
+ {"nephew", 7},
+ {"niece", 8},
+ {"sister", 9},
+ {"son", 10},
+ {"uncle", 11},
+ {"wife", 12}
+}
+
+{
+ {" Alfonso" -> 1},
+ {" Andrew" -> 2},
+ {" Angela" -> 3},
+ {" Arthur" -> 4},
+ {" Charles" -> 5},
+ {" Charlotte" -> 6},
+ {" Christine" -> 7},
+ {" Christopher" -> 8},
+ {" Colin" -> 9},
+ {" Emilio" -> 10},
+ {" Francesca" -> 11},
+ {" Gina" -> 12},
+ {" James" -> 13},
+ {" Jennifer" -> 14},
+ {" Lucia" -> 15},
+ {" Marco" -> 16},
+ {" Margaret" -> 17},
+ {" Maria" -> 18},
+ {" Penelope" -> 19},
+ {" Pierro" -> 20},
+ {" Roberto" -> 21},
+ {" Sophia" -> 22},
+ {" Tomaso" -> 23},
+ {" Victoria" -> 24}
+}
