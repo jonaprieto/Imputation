@@ -308,7 +308,7 @@ StepTwo[lap_] := Module[{},
     $J[[i]] = SortBy[$J[[i]], $orderCols * Length@$I[[#]] &];
     Table[
       AbortAssert[ Length@$R[[i]] > 1];
-      $X[[i, j]] = BlackBox[i, j];
+      $X[[i, j]] = ClassifyReduceModel[i, j];
       If[ Not@MissingQ[$X[[i, j]]],
         $R[[i]] = $R[[i]] ~ Join ~ {j};
         $I[[j]] = Complement2[$I[[j]], {i}];
@@ -327,52 +327,91 @@ StepTwo[lap_] := Module[{},
 ];
 
 
-Clear[BlackBox]
-BlackBox[i_, j_] := Module[
-  {goal, classes, classes2, trainingset, goods, refined},
-  (*$cTask = "Reduce-model imputation BlackBox[i,j] ";*)
-  (*AbortAssert[Length@$R[[i]] >= 2];*)
-  (*goal = $X[[ i, $R[[i]] ]];*)
-  (*goods = Complement2[$rangeN, $I[[j]]];*)
-  (*Assert[Length@goods >= 1];*)
-  (*If[ Length@goods == 0,*)
-    (*Return[ $FailCompleteSymbol];*)
-  (*];*)
+Clear[ClassifyReduceModel];
+ClassifyReduceModel[i_, j_] := Module[
+  {rowsRef1, colsRef1, ref1, rowsRef2, colsRef2, ref2,
+    rowsRef3, colsRef3, ref3, answers},
+  $cTask = "Reduce-model imputation ClassifyReduceModel[i,j] ";
+  AbortAssert[Length@$R[[i]] >= 2, "ClassifyReduceModel"];
+  answers = $X[[All, j]];
 
-  (*classes = Union@$X[[goods, j]];*)
-  (*If[ Length@classes == 1,*)
-    (*Return[First@classes]*)
-  (*];*)
-  (*refined = Select[goods, Intersection[$J[[#]], $R[[i]]] == {} &];*)
-  (*classes2 = Union@$X[[ refined, j]];*)
+  If[ Length@Union@Complement2[answers, {i}],
+    Return[First@answers];
+  ];
 
-  (*Which[*)
-    (*Length@refined == 0, domain = goods,*)
-    (*Length@refined == 1, Return[First@classes],*)
-    (*Length@classes2 == 1, Return[First@classes],*)
-    (*Length@refined > Ceiling[$n * 0.1], domain = refined,*)
-    (*True,*)
-    (*Return@$FailCompleteSymbol*)
-    (*domain = goods*)
-  (*];*)
-  (*If[ $method == "RWNB",*)
-    (*Clear["RS`*"];*)
-    (*<< RS`;*)
-    (*Clear[RS`universe, RS`attributes];*)
-    (*RS`universe = $X[[domain, $R[[i]] ~ Join ~ {j} ]];*)
-    (*lr = Length[$R[[i]]];*)
-    (*If[ lr <= 1, Return[$FailCompleteSymbol]];*)
-    (*RS`attributes = Range[lr];*)
-    (*RS`conditions = Range[lr - 1];*)
-    (*RS`Base = RS`conditions;*)
-    (*RS`decisions = {lr};*)
-  (*];*)
+  rowsRef1 = Complement2[$rangeN, $I[[j]]];
+  colsRef1 = $R[[i]];
+  ref1 = $X[[rowsRef1, colsRef1]];
 
-  (*trainingset = $X[[domain, $R[[i]]]] -> $X[[domain, j]];*)
-  (*Return[Classify[trainingset, goal, Method -> $method ]];*)
+  AbortAssert[ rowsRef1 != {}, "ClassifyReduceModel"];
+
+  If[ Length@rowsRef1 == 1,
+    With[{class = answers[[ rowsRef1[[1]] ]] },
+      Return@class;
+    ];
+  ];
+  If[ Length@Union@answers[[rowsRef1]] == 1,
+    Return@answers[[ rowsRef1[[1]] ]];
+  ];
+
+  rowsRef2 = Select[rowsRef1, Intersection[$J[[#]], $R[[i]]] == {} &];
+  colsRef2 = colsRef1;
+  ref2 = $X[[rowsRef2, colsRef2]];
+  If[ Length@rowsRef2 == 1,
+    With[{class = answers[[ rowsRef2[[1]] ]] },
+      Return@class;
+    ];
+  ];
+  If[ Length@Union@answers[[rowsRef2]] == 1,
+    Return@answers[[ rowsRef2[[1]] ]];
+  ];
+  If[ Length@rowsRef2 <= 0.10 * $n,
+    Return[ClassifyModel[rowsRef2, colsRef2, answers[[rowsRef2]], $X[[colsRef2]] ] ]
+  ];
+
+  If[ Length@rowsRef2 == 0,
+    rowsRef3 = rowsRef2;
+    colsRef3 = colsRef2;
+    ref3 = ref2;
+  ];
+
+  colsRef3 = FindReduct[rowsRef3, colsRef3, answers[[rowsRef3]]];
+  rowsRef3 = rowsRef2;
+  ref3 = $X[[ rowsRef3, colsRef3 ]];
+
+  If[ Length@rowsRef3 == 1,
+    With[{class = answers[[ rowsRef3[[1]] ]] },
+      Return@class;
+    ];
+  ];
+  If[ Length@Union@answers[[rowsRef3]] == 1,
+    Return@answers[[ rowsRef3[[1]] ]];
+  ];
+
+  Return[ClassifyModel[rowsRef3, colsRef3, answers[[rowsRef3]], $X[[colsRef3]] ] ];
+];
+
+Clear[ClassifyModel];
+ClassifyModel[modelRows_, modelCols_, answers_, toclassify_] := Module[
+  {},
+(*Return[Classify[trainingset, goal, Method -> $method ]];*)
   Return@Missing[];
 ];
 
+FindReduct[rows_, cols_, answers_] := Module[
+  {},
+(*Clear["RS`*"];*)
+(*<< RS`;*)
+(*Clear[RS`universe, RS`attributes];*)
+(*RS`universe = $X[[domain, $R[[i]] ~ Join ~ {j} ]];*)
+(*lr = Length[$R[[i]]];*)
+(*If[ lr <= 1, Return[$FailCompleteSymbol]];*)
+(*RS`attributes = Range[lr];*)
+(*RS`conditions = Range[lr - 1];*)
+(*RS`Base = RS`conditions;*)
+(*RS`decisions = {lr};*)
+  Return[rows]
+]
 End[];
 
 (*`Private`*)
