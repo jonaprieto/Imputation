@@ -361,13 +361,15 @@ ClassifyReduceModel[i_Integer, j_Integer] := Module[
     Return[First@answers];
   ];
 
+  AbortAssert[MemberQ[$I[[j]], i], "ClassifyReduceModel"];
+
   rowsRef1 = Complement2[$rangeN, $I[[j]]];
   colsRef1 = Complement2[$R[[i]], {$m}];
-
-  AbortAssert[Not@MemberQ[$X[[i, colsRef1]], Missing[]]];
-
   ref1 = $X[[rowsRef1, colsRef1]];
 
+  (*PrintTemporary["ref1 ",Length /@ {rowsRef1, colsRef1}];*)
+
+  AbortAssert[Not@MemberQ[$X[[i, colsRef1]], Missing[]], "ClassifyReduceModel"];
   AbortAssert[ Length@rowsRef1 > 0, "ClassifyReduceModel"];
 
   If[ Length@rowsRef1 == 1,
@@ -382,7 +384,9 @@ ClassifyReduceModel[i_Integer, j_Integer] := Module[
   rowsRef2 = Select[rowsRef1, Intersection[$J[[#]], $R[[i]]] == {} &];
   colsRef2 = colsRef1;
 
-  AbortAssert[Not@MemberQ[$X[[i, colsRef2]], Missing[]]];
+  (*PrintTemporary["ref2 ",Length /@ {rowsRef2, colsRef2}];*)
+
+  AbortAssert[Not@MemberQ[$X[[i, colsRef2]], Missing[]], "ClassifyReduceModel"];
 
   ref2 = $X[[rowsRef2, colsRef2]];
 
@@ -396,7 +400,7 @@ ClassifyReduceModel[i_Integer, j_Integer] := Module[
     Return@answers[[ rowsRef2[[1]] ]];
   ];
 
-  If[ Length@rowsRef2>= 0 && Length@rowsRef2 <= 0.10 * $n,
+  If[ Length@rowsRef2 >= 0 && Length@rowsRef2 <= 100,
     Return@ClassifyReducedModel[rowsRef2, colsRef2, answers[[rowsRef2]], $X[[i, colsRef2]]];
   ];
 
@@ -406,11 +410,19 @@ ClassifyReduceModel[i_Integer, j_Integer] := Module[
     ref2 = ref1;
   ];
 
+  (*rowsRef3 = RandomSample[rowsRef2, UpTo@200];*)
   rowsRef3 = rowsRef2;
-  colsRef3 = FindReduct[rowsRef2, colsRef2, j];
+
+  colsRef3 = If[ Length@colsRef2 >= $m / 2,
+    FindReduct[rowsRef2, colsRef2, j],
+    colsRef2
+  ];
   ref3 = $X[[ rowsRef3, colsRef3 ]];
 
-  AbortAssert[Not@MemberQ[$X[[i, colsRef2]], Missing[]]];
+  (*PrintTemporary["ref3 ",Length /@ {rowsRef3, colsRef3}];*)
+  (*PrintTemporary[];*)
+
+  AbortAssert[Not@MemberQ[$X[[i, colsRef2]], Missing[]], "ClassifyReduceModel"];
 
 
   If[ Length@rowsRef3 == 1,
@@ -430,37 +442,39 @@ Clear[ClassifyReducedModel];
 ClassifyReducedModel[rows_, cols_, answers_, goal_] := Module[
   {model, c},
   model = $X[[rows, cols]] -> answers;
-  AbortAssert[Length@rows > 1];
+
+  AbortAssert[Length@rows > 1, "ClassifyReducedModel"];
   AbortAssert[Length@rows == Length@answers, "ClassifyReducedModel"];
   AbortAssert[Length@Union@answers > 1, "ClassifyReducedModel" ];
-  AbortAssert[Length@goal == Length@cols];
+  AbortAssert[Length@goal == Length@cols, "ClassifyReducedModel"];
 
-  c = Classify[model, Method -> $method];
+  c = Classify[model, Method -> $method, PerformanceGoal -> "Quality"];
   Return[c[goal]];
 ];
 
 Clear[FindReduct];
 FindReduct[rows_, cols_, j_] := Module[
   {reduct, ncols},
-  ncols = SortBy[cols, Length@$I[[#]] &];
-  With[{half = Ceiling[Length@ncols/2]},
-    AbortAssert[Length@ncols > half];
-    Return@Take[ncols, half];
-  ];
+  Return[cols];
+(*ncols = SortBy[cols, Length@$I[[#]] &];*)
+(*With[{half = Ceiling[Length@ncols/2]},*)
+(*AbortAssert[Length@ncols > half];*)
+(*Return@Take[ncols, half];*)
+(*];*)
 
-  (*Clear["RS`*"];*)
-  (*<< RS`;*)
-  (*Clear[RS`$universe, RS`$attributes];*)
-  (*RS`Universo@$X[[rows, cols ~ Join ~ {j}]];*)
-  (*RS`Attributes@Range@Length@cols;*)
-  (*RS`Conditions@Range@(Length@cols - 1);*)
-  (*RS`Base@RS`conditions;*)
-  (*RS`Decisions@{Length@cols};*)
-  (*reduct = RS`QuickReduct[];*)
-  (*If[ Length@reduct == 0,*)
-    (*Return@cols;*)
-  (*];*)
-  (*Return[reduct];*)
+(*Clear["RS`*"];*)
+(*<< RS`;*)
+(*Clear[RS`$universe, RS`$attributes];*)
+(*RS`Universo@$X[[rows, cols ~ Join ~ {j}]];*)
+(*RS`Attributes@Range@Length@cols;*)
+(*RS`Conditions@Range@(Length@cols - 1);*)
+(*RS`Base@RS`conditions;*)
+(*RS`Decisions@{Length@cols};*)
+(*reduct = RS`QuickReduct[];*)
+(*If[ Length@reduct == 0,*)
+(*Return@cols;*)
+(*];*)
+(*Return[reduct];*)
 ];
 
 
