@@ -40,8 +40,9 @@ AbortAssert[test_, message__] :=
 
 Begin["`Private`"];
 
-ImputeVersion = "Imputation Package v0.1.1";
-PrintTemporary[ImputeVersion];
+ImputeVersion = "Imputation Package v0.1.2";
+Print[ImputeVersion];
+
 
 $cObject = 0;
 $cTask = "";
@@ -412,11 +413,7 @@ ClassifyReduceModel[i_Integer, j_Integer] := Module[
 
   (*rowsRef3 = RandomSample[rowsRef2, UpTo@200];*)
   rowsRef3 = rowsRef2;
-
-  colsRef3 = If[ Length@colsRef2 >= $m / 2,
-    FindReduct[rowsRef2, colsRef2, j],
-    colsRef2
-  ];
+  colsRef3 = FindReduct[rowsRef2, colsRef2, j];
   ref3 = $X[[ rowsRef3, colsRef3 ]];
 
   (*PrintTemporary["ref3 ",Length /@ {rowsRef3, colsRef3}];*)
@@ -454,27 +451,19 @@ ClassifyReducedModel[rows_, cols_, answers_, goal_] := Module[
 
 Clear[FindReduct];
 FindReduct[rows_, cols_, j_] := Module[
-  {reduct, ncols},
-  Return[cols];
-(*ncols = SortBy[cols, Length@$I[[#]] &];*)
-(*With[{half = Ceiling[Length@ncols/2]},*)
-(*AbortAssert[Length@ncols > half];*)
-(*Return@Take[ncols, half];*)
-(*];*)
+  {reduct, ncols, nn, mm},
+  nn = Length@rows; mm = Length@cols + 1;
+  Clear["RS`*"];
+  << RS`;
+  RS`Universe@$X[[rows, cols~Join~{j} ]];
+  RS`Attrs@Range[mm];
+  RS`Conditions@Range[mm-1];
+  RS`Decisions@{mm};
+  RS`Base@RS`Conditions[];
+  ncols = RS`QuickReduct[];
+  Print["reduct..."];
 
-(*Clear["RS`*"];*)
-(*<< RS`;*)
-(*Clear[RS`$universe, RS`$attributes];*)
-(*RS`Universo@$X[[rows, cols ~ Join ~ {j}]];*)
-(*RS`Attributes@Range@Length@cols;*)
-(*RS`Conditions@Range@(Length@cols - 1);*)
-(*RS`Base@RS`conditions;*)
-(*RS`Decisions@{Length@cols};*)
-(*reduct = RS`QuickReduct[];*)
-(*If[ Length@reduct == 0,*)
-(*Return@cols;*)
-(*];*)
-(*Return[reduct];*)
+  Return@If[ Length@ncols > 0,  cols[[ncols]], cols];
 ];
 
 

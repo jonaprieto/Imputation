@@ -10,16 +10,17 @@
 (* :Mathematica Version: *)
 (* :Copyright: (c) 2016 jonaprieto *)
 (* :Keywords: *)
-(* :Discussion: *)
+(* :Discussion: This is a modified version of RS.wl for Imputation purposes. *)
 
 BeginPackage["RS`"];
-(* Exported symbols added here with SymbolName::usage *)
+
 
 Universe::usage = "";
 Attrs::usage = "";
 Conditions::usage = "";
 Decisions::usage = "";
 Base::usage = "";
+QuickReduct::usage = "";
 
 Begin["`Private`"];
 
@@ -37,11 +38,14 @@ Conditions[list_] := ($conditions = list);
 
 Clear[Decisions];
 Decisions[] := Return@$decisions;
-Decisions[list_] := ($deecisions = list);
+Decisions[list_] := ($decisions = list);
 
 Clear[Base];
 Base[] := Return@$base;
 Base[list_] := ($base = list);
+
+Clear[Complement3];
+Complement3[A_, B_] := DeleteCases[A, Alternatives @@ B];
 
 Clear[VFunction];
 VFunction[a_] := Module[
@@ -94,7 +98,7 @@ EquivIndexes[li_, B_] := (
       With[{el = li[[First[indices] ]]},
         eq = Select[indices, IRelation[el, li[[#]], B] &];
         res654 = h654[res654, eq];
-        indices = Complement[indices, eq]
+        indices = Complement3[indices, eq]
       ]
     ];
     Return[List @@ Flatten[res654, Infinity, h654]];
@@ -154,7 +158,7 @@ UpperApprox[Xsubset_, B_] := (UpperApprox[Xsubset, B] = Block[
 
 Clear[Boundary];
 Boundary[Xsubset_] := Boundary[Xsubset, Base[]];
-Boundary[Xsubset_, B_] := Intersection[UpperApprox[Xsubset, B], Complement[$universe, LowerApprox[Xsubset, B]]];
+Boundary[Xsubset_, B_] := Intersection[UpperApprox[Xsubset, B], Complement3[$universe, LowerApprox[Xsubset, B]]];
 
 
 Clear[MemberFunction];
@@ -174,11 +178,11 @@ POS[Dsubset_, B_] := (RS`POS[Dsubset, B] = With[
 Clear[NEG];
 NEG[Dsubset_, B_] := With[
   {classes = EquivClasses[$universe, Dsubset]},
-  Complement[$universe, Union@Flatten[Table[ UpperApprox[X, B], {X, classes}], 1]]
+  Complement3[$universe, Union@Flatten[Table[ UpperApprox[X, B], {X, classes}], 1]]
 ];
 
 Clear[BND];
-BND[Dsubset_, B_] := Complement[ NEG[Dsubset, B], POS[Dsubset, B]];
+BND[Dsubset_, B_] := Complement3[ NEG[Dsubset, B], POS[Dsubset, B]];
 
 
 Clear[DependencyAttributes];
@@ -188,7 +192,7 @@ DependencyAttributes[Dsubset_, Csubset_] := (
 Clear[SignificanceAttributes];
 SignificanceAttributes[a_] := (SignificanceAttributes[a] = SignificanceAttributes[$conditions, $decisions, a]);
 SignificanceAttributes[a_, Csubset_, Dsubset_] := (
-  SignificanceAttributes[a, Csubset, Dsubset] = 1 - N@Divide[DependencyAttributes[Dsubset, Complement[Csubset, {a}]], DependencyAttributes[Dsubset, Csubset]]);
+  SignificanceAttributes[a, Csubset, Dsubset] = 1 - N@Divide[DependencyAttributes[Dsubset, Complement3[Csubset, {a}]], DependencyAttributes[Dsubset, Csubset]]);
 
 
 Clear[QuickReduct];
@@ -201,7 +205,7 @@ QuickReduct[Csubset_List, Dsubset_List] := Module[
       If[ DependencyAttributes[Dsubset, R ~ Join ~ {attr}] > DependencyAttributes[Dsubset, T],
         T = Flatten[{R, attr}, Infinity];
       ]
-      , {attr, Complement[Csubset, R]}];
+      , {attr, Complement3[Csubset, R]}];
     R = T;
     If[ DependencyAttributes[Dsubset, R] == DependencyAttributes[Dsubset, Csubset], Break[]]
   ];
