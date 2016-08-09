@@ -411,8 +411,7 @@ ClassifyReduceModel[i_Integer, j_Integer] := Module[
     ref2 = ref1;
   ];
 
-  (*rowsRef3 = RandomSample[rowsRef2, UpTo@200];*)
-  rowsRef3 = rowsRef2;
+  rowsRef3 = RandomSample[rowsRef2, UpTo@100];
   colsRef3 = FindReduct[rowsRef2, colsRef2, j];
   ref3 = $X[[ rowsRef3, colsRef3 ]];
 
@@ -451,19 +450,22 @@ ClassifyReducedModel[rows_, cols_, answers_, goal_] := Module[
 
 Clear[FindReduct];
 FindReduct[rows_, cols_, j_] := Module[
-  {reduct, ncols, nn, mm},
+  {reduct, ncols, nn, mm, t},
   nn = Length@rows; mm = Length@cols + 1;
   Clear["RS`*"];
   << RS`;
-  RS`Universe@$X[[rows, cols~Join~{j} ]];
+  RS`Universe@$X[[rows, cols ~ Join ~ {j} ]];
   RS`Attrs@Range[mm];
-  RS`Conditions@Range[mm-1];
+  RS`Conditions@Range[mm - 1];
   RS`Decisions@{mm};
   RS`Base@RS`Conditions[];
-  ncols = RS`QuickReduct[];
   Print["reduct..."];
+  t = AbsoluteTiming[
+    ncols = RS`QuickReduct[];
+  ];
+  Print["termino un reduct... ", First@t];
 
-  Return@If[ Length@ncols > 0,  cols[[ncols]], cols];
+  Return@If[ Length@ncols > 0, cols[[ncols]], cols];
 ];
 
 
