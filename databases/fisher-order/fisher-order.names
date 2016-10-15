@@ -16,7 +16,7 @@
          classification knowledge in noisy domains.  Proceedings of the Fifth
          International Conference on Machine Learning (pp. 121-134). Ann Arbor,
          Michigan: Morgan Kaufmann.
-         -- IWN recorded a 97.1% classification accuracy 
+         -- IWN recorded a 97.1% classification accuracy
             -- 290 training and 340 test instances
       3. Fisher,D.H. & Schlimmer,J.C. (1988). Concept Simplification and
          Predictive Accuracy. Proceedings of the Fifth
@@ -36,8 +36,8 @@
 5. Number of Instances: 307
 
 6. Number of Attributes: 35 (all have been nominalized)
- 
-7. Attribute Information: 
+
+7. Attribute Information:
     -- 19 Classes
      diaporthe-stem-canker, charcoal-rot, rhizoctonia-root-rot,
      phytophthora-rot, brown-stem-rot, powdery-mildew,
@@ -45,7 +45,7 @@
      bacterial-pustule, purple-seed-stain, anthracnose,
      phyllosticta-leaf-spot, alternarialeaf-spot,
      frog-eye-leaf-spot, diaporthe-pod-&-stem-blight,
-     cyst-nematode, 2-4-d-injury, herbicide-injury. 
+     cyst-nematode, 2-4-d-injury, herbicide-injury.
 
     1. date:        april,may,june,july,august,september,october,?.
     2. plant-stand: normal,lt-normal,?.
@@ -122,7 +122,7 @@
    34. shriveling: 29
    35. roots: 35
 
-9. Class Distribution: 
+9. Class Distribution:
    1. diaporthe-stem-canker: 10
    2. charcoal-rot: 10
    3. rhizoctonia-root-rot: 10
