@@ -21,9 +21,25 @@ BeginPackage["Imputation2`"];
 ImputeVersion::usage = "ImputateVersion";
 TestAlgorithm::usage = "TestAlgorithm[]";
 Impute::usage = "Impute[]";
+checkMatches::usage = "";
+
 $U::usage = "dataset";
 $oldU::usage = "original dataset";
 $missingU::usage = "dataset with random missing values";
+StepOne::usage = "";
+StepTwo::usage = "";
+
+$V::usage = "";
+$MOS::usage = "";
+$MAS::usage = "";
+$NS::usage = "";
+$GM::usage = "";
+$Mlv::usage = "";
+$OMS::usage = "";
+$outcome::usage = "";
+$verboseOutcome::usage = "";
+$missingRate::usage ="";
+
 
 
 Off[AbortAssert];
@@ -111,10 +127,10 @@ SetMissings[] := Module[
   ];
 
   AbortAssert[m-1 > 0 && n > 1, "SetMissings"];
-  AbortAssert[MissingRate[] < 1 && MissingRate[] > 0, "SetMissings"];
-  $cTask = "Putting missing values in the dataset";
-  cant = Ceiling[n * (m-1) * MissingRate[]];
-  ms = MakeArrange[{n, m-1}, MissingRate[]];
+  AbortAssert[$missingRate < 1 && $missingRate > 0, "SetMissings"];
+
+  cant = Ceiling[n * (m-1) * $missingRate];
+  ms = MakeArrange[{n, m-1}, $missingRate];
   Table[
     $U[[pos[[1]], pos[[2]]]] = $missingSymbol, {pos, ms}];
   $numMissings = Length[ms];
@@ -133,6 +149,7 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
 
   Clear[$outcome]
   Clear[$verboseOutcome];
+  $outcome = <||>;
   
   $lastResult = "";
 
@@ -143,7 +160,7 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
     <|
       "No." -> ToString@cDataset <> "/" <> ToString@Length@datasets,
       "Dataset" -> name,
-      "Missing Rate" -> MissingRate[],
+      "Missing Rate" -> $missingRate,
       "No. Instances" -> n,
       "No. Attributes" -> m,
       "No. Missing Values" -> ($numMissings - 1),
@@ -153,6 +170,8 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
       "Max. result" -> $maxResult 
     |>
   ];
+  
+  $outcome = Association@Table[i-> <||>,{i, 1, Length@datasets}];
   
   cDataset = 1;
   Table[
@@ -192,17 +211,19 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
         ]
        , {numIter}];
        
-      $outcome[cDataset]= <|
+      $outcome[[cDataset]]= <|
         "min"-> $minResult
       , "mean" -> NumberForm[Mean@res, {3, 2}]
       , "max" ->  $maxResult
       |>;
-      $verboseOutcome[cDataset] = <|
+      $verboseOutcome[[cDataset]] = <|
          "measures"-> res
       |>;
       
     cDataset++;
     , {dataset, datasets}];
+    Print[Dataset[$outcome]];
+    Return[$outcome];
 ];
 
 
@@ -293,8 +314,12 @@ Table[
 
 Table[
 	$V[k] = Union@Flatten[$V[k], Infinity];
+	AbortAssert[Length@$V[k] > 0, "Problems with $V[k]"];
+	
 	$OMS[k] = Union@Flatten[$OMS[k], Infinity];
 ,{k, 1, m}];
+
+
 
 ];
 
