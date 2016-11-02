@@ -278,8 +278,17 @@ Table[
 		];
 	,{k, 1, m}];
 
-	If[ Length@$MAS[i] >= 1, $MOS = {$MOS, i}];
+	If[ Length@$MAS[i] > 0, $MOS = {$MOS, i}];
 	$Mlv[i,i] = 1;
+,{i, 1, n}];
+
+Table[
+		$V[k] = Union@Flatten[$V[k], Infinity];
+		$OMS[k] = Union@Flatten[$OMS[k], Infinity];
+,{k,1, m}];
+	
+	
+Table[	
 	Table[
 		$GM[i,j] = {}; $Mlv[i,j] = 1;
 		Table[
@@ -311,14 +320,6 @@ Table[
 	$NS[i] = Union@Flatten[$NS[i], Infinity];
 	Table[ $GM[i,j] = Union@Flatten[$GM[i,j], Infinity], {j,i+1,m}];	
 ,{i, 1, n}];
-
-Table[
-	$V[k] = Union@Flatten[$V[k], Infinity];
-	AbortAssert[Length@$V[k] > 0, "Problems with $V[k]"];
-	
-	$OMS[k] = Union@Flatten[$OMS[k], Infinity];
-,{k, 1, m}];
-
 
 
 ];
