@@ -22,6 +22,7 @@ ImputeVersion::usage = "ImputateVersion";
 TestAlgorithm::usage = "TestAlgorithm[]";
 Impute::usage = "Impute[]";
 checkMatches::usage = "";
+SetMissings::usage = "";
 
 $U::usage = "dataset";
 $oldU::usage = "original dataset";
@@ -52,8 +53,6 @@ AbortAssert[test_, message__] :=
       Abort[]];
 
 
-
-Begin["`Private`"];
 
 ImputeVersion = "Imputation Package v0.2";
 
@@ -142,14 +141,10 @@ SetMissings[] := Module[
 Clear[TestAlgorithm];
 TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
   {oData, name, citer, outcome = <||>, matches, cDataset = 0,
-  res, oldJ, n=0,m=0},
+  res, oldJ, n=0,m=0, numMissing=0},
 
   SetInitValues[];
   AbortAssert[ $missingRate > 0 && $missingRate < 0.5 ];
-
-  Clear[$outcome]
-  Clear[$verboseOutcome];
-  $outcome = <||>;
   
   $lastResult = "";
 
@@ -158,7 +153,7 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
 
   PrintTemporary@Dynamic@Dataset[
     <|
-      "No." -> ToString@cDataset <> "/" <> ToString@Length@datasets,
+      "No." -> ToString@(cDataset) <> "/" <> ToString@Length@datasets,
       "Dataset" -> name,
       "Missing Rate" -> $missingRate,
       "No. Instances" -> n,
@@ -171,7 +166,9 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
     |>
   ];
   
+  Clear[$outcome, $verboseOutcome];
   $outcome = Association@Table[i-> <||>,{i, 1, Length@datasets}];
+  $verboseOutcome =  Association@Table[i-> <||>,{i, 1, Length@datasets}];
   
   cDataset = 1;
   Table[
@@ -184,11 +181,6 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
       AbortAssert[n > 2 && m > 2, "TestAlgorithm"];
     ];
     
-    $outcome[cDataset] = <|
-      "Dataset" -> name,
-      "Size" -> ToString@n <> "x" <> ToString@m
-    |>;
-
       $minResult = Infinity;
       $maxResult = -Infinity;
  
@@ -199,31 +191,43 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
         SetMissings[];
         StepOne[];
         oldJ = Table[$MAS[i], {i, 1, n}];
+         numMissing = $numMissings;
         StepTwo[];
+        MeanCompleter[];
        
         matches = checkMatches[oldJ];
         
-        With[{stat = N[Total@matches / $numMissings]},
+        With[{stat = N[Total@matches /numMissing]},
           $lastResult = stat;
           $minResult = Min[$minResult, stat];
           $maxResult = Max[$maxResult, stat];
-          stat
-        ]
+        ];
+        $lastResult
        , {numIter}];
-       
+
       $outcome[[cDataset]]= <|
-        "min"-> $minResult
+         "Dataset" -> name
+      ,  "Size" -> ToString@n <> "x" <> ToString@m
+      , "min"-> $minResult
       , "mean" -> NumberForm[Mean@res, {3, 2}]
       , "max" ->  $maxResult
       |>;
+      
+      
+      
       $verboseOutcome[[cDataset]] = <|
-         "measures"-> res
+          "Dataset" -> name
+      ,   "Size" -> ToString@n <> "x" <> ToString@m
+      ,   "measures" -> With[ {mean = Mean@res, stand = StandardDeviation@res, mult = If[numIter>= 30, 1.96]},
+         {mean - 1.96*(stand/Sqrt[numIter]), mean + 1.96*(stand/Sqrt[numIter])}
+      ]
       |>;
       
     cDataset++;
     , {dataset, datasets}];
-    Print[Dataset[$outcome]];
-    Return[$outcome];
+    
+    Print[Dataset@$outcome];
+    Return[$verboseOutcome];
 ];
 
 
@@ -280,6 +284,7 @@ Table[
 
 	If[ Length@$MAS[i] > 0, $MOS = {$MOS, i}];
 	$Mlv[i,i] = 1;
+	$GM[i,i] = {};
 ,{i, 1, n}];
 
 Table[
@@ -318,9 +323,12 @@ $MOS = Union@Flatten[$MOS, Infinity];
 Table[
 	$MAS[i] = Union@Flatten[$MAS[i], Infinity];
 	$NS[i] = Union@Flatten[$NS[i], Infinity];
-	Table[ $GM[i,j] = Union@Flatten[$GM[i,j], Infinity], {j,i+1,m}];	
+	Table[ 
+		$GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
+		$GM[j,i] = $GM[i,j];
+		$Mlv[j,i] = $Mlv[i,j];
+		, {j,i+1,n}];	
 ,{i, 1, n}];
-
 
 ];
 
@@ -332,21 +340,24 @@ If[ Length@Dimensions@$U != 2, Print["Step Two. Invalid $U."]; Return[]];
 {n,m} = Dimensions[$U];
 
 $MOS = SortBy[$MOS, -$MAS[#] &];
+
 Table[ 
 	maxJ = -1; valMaxJ = -1;
 	Table[
 		If[ i != j && $Mlv[i,j] > valMaxJ,
-			maxJ = j; valMaxJ = $Mlv[i,j];
+			maxJ = j;
+			valMaxJ = $Mlv[i,j];
 		];
 	, {j, 1, n}];
 	
 	If[ maxJ > 0,
 		Table[
-			$U[[i,k]] = $U[[maxJ,k]];
+			$U[[i,k]] = $U[[maxJ,k]]; If[ $numMissings>0, --$numMissings];
 			$OMS[k] = DeleteCases[$OMS[k], i];
-		,{k, 1, m}];
+		,{k, $MAS[i]}];
 		$MAS[i] = {};
 		$MOS = DeleteCases[$MOS, i];
+		(* then, update the containers *)
 		Table[
 			$Mlv[i,j] = 1; $GM[i,j] = {};
 			Table[
@@ -365,7 +376,7 @@ Table[
 		$NS[i] = Union@Flatten[$NS[i], Infinity];
 	];
 	
-,{i, 1, n}];
+,{i, $MOS}];
   
 ];
 
@@ -386,12 +397,6 @@ Table[
 	
 ,{k, 1,m}];
 ];
-
-
-End[];
-
-(*`Private`*)
-
 
 
 EndPackage[];
