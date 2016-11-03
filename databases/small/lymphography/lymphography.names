@@ -2,27 +2,27 @@
 |
 | Citation Request:
 |    This lymphography domain was obtained from the University Medical Centre,
-|    Institute of Oncology, Ljubljana, Yugoslavia.  Thanks go to M. Zwitter and 
+|    Institute of Oncology, Ljubljana, Yugoslavia.  Thanks go to M. Zwitter and
 |    M. Soklic for providing the data.  Please include this citation if you plan
 |    to use this database.
-| 
+|
 | 1. Title: Lymphography Domain
-| 
-| 2. Sources: 
+|
+| 2. Sources:
 |     (a) See Above.
-|     (b) Donors: Igor Kononenko, 
+|     (b) Donors: Igor Kononenko,
 |                 University E.Kardelj
 |                 Faculty for electrical engineering
 |                 Trzaska 25
 |                 61000 Ljubljana (tel.: (38)(+61) 265-161
-| 
+|
 |                 Bojan Cestnik
 |                 Jozef Stefan Institute
 |                 Jamova 39
 |                 61000 Ljubljana
-|                 Yugoslavia (tel.: (38)(+61) 214-399 ext.287) 
+|                 Yugoslavia (tel.: (38)(+61) 214-399 ext.287)
 |    (c) Date: November 1988
-| 
+|
 | 3. Past Usage: (sveral)
 |     1. Cestnik,G., Konenenko,I, & Bratko,I. (1987). Assistant-86: A
 |        Knowledge-Elicitation Tool for Sophisticated Users.  In I.Bratko
@@ -39,16 +39,16 @@
 |        Artificial Intelligence, 1041-1045. Philadelphia, PA: Morgan Kaufmann.
 |        -- Experts: 85% accuracy (estimate)
 |        -- AQ15: 80-82%
-| 
+|
 | 4. Relevant Information:
 |      This is one of three domains provided by the Oncology Institute
 |      that has repeatedly appeared in the machine learning literature.
 |      (See also breast-cancer and primary-tumor.)
-| 
+|
 | 5. Number of Instances: 148
-| 
+|
 | 6. Number of Attributes: 19 including the class attribute
-| 
+|
 | 7. Attribute information:
 |     --- NOTE: All attribute values in the database have been entered as
 |               numeric values corresponding to their index in the list
@@ -67,16 +67,16 @@
 |    12. changes in lym.: bean, oval, round
 |    13. defect in node: no, lacunar, lac. marginal, lac. central
 |    14. changes in node: no, lacunar, lac. margin, lac. central
-|    15. changes in stru: no, grainy, drop-like, coarse, diluted, reticular, 
-|                         stripped, faint, 
+|    15. changes in stru: no, grainy, drop-like, coarse, diluted, reticular,
+|                         stripped, faint,
 |    16. special forms: no, chalices, vesicles
 |    17. dislocation of: no, yes
 |    18. exclusion of no: no, yes
 |    19. no. of nodes in: 0-9, 10-19, 20-29, 30-39, 40-49, 50-59, 60-69, >=70
-| 
+|
 | 8. Missing Attribute Values: None
-| 
-| 9. Class Distribution: 
+|
+| 9. Class Distribution:
 |     Class:        Number of Instances:
 |     normal find:  2
 |     metastases:   81
@@ -99,7 +99,7 @@ changes in lym: 1, 2, 3		| bean, oval, round
 defect in node: 1, 2, 3, 4	| no, lacunar, lac. marginal, lac. central
 changes in node: 1, 2, 3, 4	| no, lacunar, lac. margin, lac. central
 changes in stru: 1, 2, 3, 4, 5, 6, 7, 8	| no, grainy, drop-like, coarse,
-					| diluted, reticular, stripped, faint, 
+					| diluted, reticular, stripped, faint,
 special forms: 1, 2, 3		| no, chalices, vesicles
 dislocation of: 1, 2		| no, yes
 exclusion of no: 1, 2		| no, yes

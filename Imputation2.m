@@ -218,15 +218,15 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
       $verboseOutcome[[cDataset]] = <|
           "Dataset" -> name
       ,   "Size" -> ToString@n <> "x" <> ToString@m
-      ,   "measures" -> With[ {mean = Mean@res, stand = StandardDeviation@res, mult = If[numIter>= 30, 1.96]},
-         {mean - 1.96*(stand/Sqrt[numIter]), mean + 1.96*(stand/Sqrt[numIter])}
+      ,   "measures" -> With[ {mean = Mean@res, stand = StandardDeviation@res},
+         {mean - 2.01*(stand/Sqrt[numIter]), mean + 2.01*(stand/Sqrt[numIter])}
       ]
       |>;
       
     cDataset++;
     , {dataset, datasets}];
     
-    Print[Dataset@$outcome];
+    Print[Dataset@$verboseOutcome];
     Return[$verboseOutcome];
 ];
 
@@ -266,36 +266,39 @@ Clear[$MOS, $MAS, $V, $OMS, $GM, $Mlv, $NS];
 
 Table[
 	$V[k] = {};
-	$OMS[k] = {};
+	(*$OMS[k] = {};*)
 ,{k, 1, m}];
 
 $MOS = {};
 
 Table[
-	$MAS[i] = {}; $NS[i] = {};
+	$MAS[i] = {};(* $NS[i] = {};*)
 	Table[
 		If[ MissingQ@$U[[i,k]],
 			$MAS[i] = {$MAS[i], k};
-			$OMS[k] = {$OMS[k], i};
+			(*$OMS[k] = {$OMS[k], i};*)
 		,
 			$V[k] = {$V[k], $U[[i, k]]};
 		];
 	,{k, 1, m}];
-
+	$MAS[i] = Union@Flatten[$MAS[i], Infinity];
 	If[ Length@$MAS[i] > 0, $MOS = {$MOS, i}];
 	$Mlv[i,i] = 1;
-	$GM[i,i] = {};
+	(*$GM[i,i] = {};*)
 ,{i, 1, n}];
 
+$MOS = Union@Flatten[$MOS, Infinity];
+
 Table[
-		$V[k] = Union@Flatten[$V[k], Infinity];
-		$OMS[k] = Union@Flatten[$OMS[k], Infinity];
+	$V[k] = Union@Flatten[$V[k], Infinity];
+	(*	$OMS[k] = Union@Flatten[$OMS[k], Infinity];*)
 ,{k,1, m}];
 	
 	
 Table[	
 	Table[
-		$GM[i,j] = {}; $Mlv[i,j] = 1;
+		(*$GM[i,j] = {};*)
+		$Mlv[i,j] = 1;
 		Table[
 			If[ MissingQ@$U[[i,k]],
 				If[  MissingQ@$U[[j,k]],
@@ -307,30 +310,36 @@ Table[
 					,
 					If[ $U[[i,k]]!= $U[[j,k]],
 						$Mlv[i,j] = 0;
-						$GM[i,j] = {$GM[i,j], k};	
+					(*	$GM[i,j] = {$GM[i,j], k};*)	
 					];
 		        ];
 		    ];
 		,{k,1 , m}];
-		If[ Length@$GM[i,j] == 0,
+		(*If[ Length@$GM[i,j] == 0,
 			$NS[i] = {$NS[i], j};
-		];
+		];*)
+	$Mlv[j,i] = $Mlv[i,j];
+	
 	,{j, i+1, n}];
+	
 ,{i, 1, n}];
 
 (* simplify every list to become a set *)
-$MOS = Union@Flatten[$MOS, Infinity];
+
 Table[
 	$MAS[i] = Union@Flatten[$MAS[i], Infinity];
-	$NS[i] = Union@Flatten[$NS[i], Infinity];
+	(*$NS[i] = Union@Flatten[$NS[i], Infinity];*)
 	Table[ 
-		$GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
-		$GM[j,i] = $GM[i,j];
+		(*$GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
+		$GM[j,i] = $GM[i,j];*)
 		$Mlv[j,i] = $Mlv[i,j];
 		, {j,i+1,n}];	
 ,{i, 1, n}];
 
 ];
+
+
+
 
 
 Clear[StepTwo];
@@ -353,24 +362,25 @@ Table[
 	If[ maxJ > 0,
 		Table[
 			$U[[i,k]] = $U[[maxJ,k]]; If[ $numMissings>0, --$numMissings];
-			$OMS[k] = DeleteCases[$OMS[k], i];
+			(*$OMS[k] = DeleteCases[$OMS[k], i];*)
 		,{k, $MAS[i]}];
 		$MAS[i] = {};
 		$MOS = DeleteCases[$MOS, i];
 		(* then, update the containers *)
 		Table[
-			$Mlv[i,j] = 1; $GM[i,j] = {};
+			$Mlv[i,j] = 1;
+			(*$GM[i,j] = {};*)
 			Table[
 				If[ MissingQ@$U[[j,k]],
 					$Mlv[i,j] = $Mlv[i,j] / Length[$V[k]];
 				,   $Mlv[i,j] = 0;
-					$GM[i,j] = {$GM[i,j], k};
+				(*	$GM[i,j] = {$GM[i,j], k};*)
 				];
 			, {k, 1, m}];
-			$GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
+			(*$GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
 			If[ Length@$GM[i,j] == 0,
 				$NS[i] = {$NS[i], j};
-			];
+			];*)
 		, {j, 1, n}];
 		
 		$NS[i] = Union@Flatten[$NS[i], Infinity];
