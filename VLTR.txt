@@ -1,0 +1,57 @@
+Clear[StepTwo];
+StepTwo[] := Module[
+{valMaxJ, maxJ, n,m},
+If[ Length@Dimensions@$U != 2, Print["Step Two. Invalid $U."]; Return[]];
+{n,m} = Dimensions[$U];
+
+$MOS = SortBy[$MOS, -$MAS[#] &];
+
+Table[
+    Which[
+    Length@$NS[i] == 1,
+        Table[
+            $U[[i,k]] = $U[[j,k]]; If[ $numMissings>0, --$numMissings];
+            $OMS[k] = DeleteCases[$OMS[k], i];
+        ,{j, $NS[i]}];
+    , Length@$NS[i] >= 2,
+
+    maxJ = -1; valMaxJ = -1;
+    Table[
+        If[ i != j && $Mlv[i,j] > valMaxJ,
+            maxJ = j;
+            valMaxJ = $Mlv[i,j];
+        ];
+    , {j, 1, n}];
+
+    If[ maxJ > 0,
+        Table[
+            $U[[i,k]] = $U[[maxJ,k]]; If[ $numMissings>0, --$numMissings];
+            $OMS[k] = DeleteCases[$OMS[k], i];
+        ,{k, $MAS[i]}];
+        $MAS[i] = {};
+        $MOS = DeleteCases[$MOS, i];
+        (* then, update the containers *)
+        Table[
+            $Mlv[i,j] = 1;
+            (*$GM[i,j] = {};*)
+            Table[
+                If[ MissingQ@$U[[j,k]],
+                    $P[i,j] = 1 / Length[$V[k]];
+                    $Mlv[i,j] = $Mlv[i,j] / Length[$V[k]];
+                ,   $Mlv[i,j] = 0;
+                    $P[i,j] = 0;
+                (*  $GM[i,j] = {$GM[i,j], k};*)
+                ];
+            , {k, 1, m}];
+            (*$GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
+            If[ Length@$GM[i,j] == 0,
+                $NS[i] = {$NS[i], j};
+            ];*)
+        , {j, 1, n}];
+
+        $NS[i] = Union@Flatten[$NS[i], Infinity];
+        ];
+    ];
+,{i, $MOS}];
+
+];
