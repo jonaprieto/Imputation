@@ -139,12 +139,13 @@ SetMissings[] := Module[
 
 
 Clear[TestAlgorithm];
-TestAlgorithm[dataset_Association, numIter_Integer, algo_String]:= TestAlgorithm[{dataset}, numIter, algo]
-TestAlgorithm[datasets_List, numIter_Integer:30, algo_String] := Module[
+TestAlgorithm[dataset_Association, numIter_Integer, miss_,algo_String]:= TestAlgorithm[{dataset}, numIter, miss, algo]
+TestAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
   {oData, name, citer, outcome = <||>, matches, cDataset = 0,
   res, oldJ, n=0,m=0, numMissing=0, attr, mean, stand, conf},
 
   SetInitValues[];
+  $missingRate = miss;
   AbortAssert[ $missingRate > 0 && $missingRate < 0.5 ];
 
   $lastResult = "";
@@ -231,11 +232,11 @@ TestAlgorithm[datasets_List, numIter_Integer:30, algo_String] := Module[
       ,   "ConfidenceInt" -> conf
       |>;
    
-      Export[FileNameJoin[{dataset[["dir"]], algo<>".csv"}],
+      Export[FileNameJoin[{dataset[["dir"]], algo<>"-"<>ToString[miss]<>".csv"}],
       { algo
       , name
       , $missingRate
-      , numMissing
+      , numIter
       , res
       , {$minResult, $maxResult}
       , {mean, stand} 
@@ -427,20 +428,19 @@ Which[
 	Length@$NS[i] == 1,
 	With[{j = $NS[i][[1]]},
 		$U[[i,k]] = $U[[j,k]];
-        If[ $numMissings>0, --$numMissings];
+        If[ $numMissings > 0, --$numMissings];
 	    $MAS[i] = DeleteCases[$MAS[i], k];
 	    flag = True;
 	];
   , True,
 	condition = False;
-	For[j0=1, j0<=Length@$NS[i] && condition, j0++,
-		For[j1=j0+1, j1 <= Length@$NS[i] && condition, j1++, 
+	For[j0 = 1, j0 <= Length@$NS[i] && condition, j0++,
+		For[j1 = j0+1, j1 <= Length@$NS[i] && condition, j1++, 
 			If[!MissingQ@$U[[$NS[i][[j0]], k]]
 			&& !MissingQ@$U[[$NS[i][[j1]], k]]
 			&& $U[[$NS[i][[j0]],k]] !=  $U[[$NS[i][[j1]],k]],
 			$U[[i, k ]] = Missing[]; (* sobra *)
 		       condition = True;
-		       Break[]; 
 		     ];
 		  ];
     ];
