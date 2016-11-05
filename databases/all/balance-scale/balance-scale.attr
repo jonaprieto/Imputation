@@ -1,5 +1,5 @@
-left-weight
-left-distance
-right-weight
-right-distance
-class
+left-weight, 5
+left-distance, 5
+right-weight, 5
+right-distance, 5
+class, 3

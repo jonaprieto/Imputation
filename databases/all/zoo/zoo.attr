@@ -1,18 +1,17 @@
-animal-name
-hair
-feathers
-eggs
-milk
-airborne
-aquatic
-predator
-toothed
-backbone
-breathes
-venomous
-fins
-legs
-tail
-domestic
-catsize
-type
+hair, 2
+feathers, 2
+eggs, 2
+milk, 2
+airborne, 2
+aquatic, 2
+predator, 2
+toothed, 2
+backbone, 2
+breathes, 2
+venomous, 2
+fins, 2
+legs, 6
+tail, 2
+domestic, 2
+catsize, 2
+type, 7

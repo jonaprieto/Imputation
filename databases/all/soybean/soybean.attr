@@ -1,0 +1,36 @@
+date, 7
+plant-stand, 2
+precip, 3
+temp, 3
+hail, 2
+crop-hist, 4
+area-damaged, 4
+severity, 3
+seed-tmt, 3
+germination, 3
+plant-growth, 2
+leaves, 2
+leafspots-halo, 3
+leafspots-marg, 3
+leafspot-size, 3
+leaf-shread, 2
+leaf-malf, 2
+leaf-mild, 3
+stem, 2
+lodging, 2
+stem-cankers, 4
+canker-lesion, 4
+fruiting-bodies, 4
+external decay, 3
+mycelium, 2
+int-discolor, 3
+sclerotia, 2
+fruit-pods, 4
+fruit spots, 5
+seed, 2
+mold-growth, 2
+seed-discolor, 2
+seed-size, 2
+shriveling, 2
+roots, 3
+class, 4

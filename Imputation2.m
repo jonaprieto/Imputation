@@ -139,9 +139,10 @@ SetMissings[] := Module[
 
 
 Clear[TestAlgorithm];
-TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
+TestAlgorithm[dataset_Association, numIter_Integer, algo_String]:= TestAlgorithm[{dataset}, numIter, algo]
+TestAlgorithm[datasets_List, numIter_Integer:30, algo_String] := Module[
   {oData, name, citer, outcome = <||>, matches, cDataset = 0,
-  res, oldJ, n=0,m=0, numMissing=0},
+  res, oldJ, n=0,m=0, numMissing=0, attr, mean, stand, conf},
 
   SetInitValues[];
   AbortAssert[ $missingRate > 0 && $missingRate < 0.5 ];
@@ -153,6 +154,7 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
 
   PrintTemporary@Dynamic@Dataset[
     <|
+      "Algo" -> algo,
       "No." -> ToString@(cDataset) <> "/" <> ToString@Length@datasets,
       "Dataset" -> name,
       "Missing Rate" -> $missingRate,
@@ -172,8 +174,11 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
 
   cDataset = 1;
   Table[
-    name = dataset["filename"];
+    name = dataset["name"];
+   
     oData = Import@dataset["data"];
+     attr = Import@dataset["attr"];
+    
     With[
       {d = Dimensions@oData},
       AbortAssert[Length@d == 2, "TestAlgorithm"];
@@ -181,19 +186,25 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
       AbortAssert[n > 2 && m > 2, "TestAlgorithm"];
     ];
 
-      $minResult = Infinity;
-      $maxResult = -Infinity;
+    $minResult = Infinity;
+    $maxResult = -Infinity;
 
       citer = 0;
       res = Table[
         citer++;
         $U = oData;
+        AbortAssert[Length@attr == m, "attribute file invalid " <>ToString@m<>" vs "<>ToString@Length@attr];
+        Table[$V[k] = attr[[k]], {k, 1, m}];
         SetMissings[];
         StepOne[];
         oldJ = Table[$MAS[i], {i, 1, n}];
-         numMissing = $numMissings;
-        Roustida[];
-         matches = checkMatches[oldJ];
+        numMissing = $numMissings;
+  
+        Which[
+           algo=="ROUSTIDA", ROUSTIDA[]
+         , algo=="VTRIDA", VTRIDA[]
+         ];
+        matches = checkMatches[oldJ];
 
         With[{stat = N[Total@matches /numMissing]},
           $lastResult = stat;
@@ -210,20 +221,29 @@ TestAlgorithm[datasets_List, numIter_Integer:30] := Module[
       , "mean" -> NumberForm[Mean@res, {3, 2}]
       , "max" ->  $maxResult
       |>;
+      
+      mean = Mean@res; stand = StandardDeviation@res;
+      conf = {mean - 2.01*(stand/Sqrt[numIter]), mean + 2.01*(stand/Sqrt[numIter])};
 
       $verboseOutcome[[cDataset]] = <|
           "Dataset" -> name
       ,   "Size" -> ToString@n <> "x" <> ToString@m
-      ,   "measures" -> With[ {mean = Mean@res, stand = StandardDeviation@res},
-         {mean - 2.01*(stand/Sqrt[numIter]), mean + 2.01*(stand/Sqrt[numIter])}
-      ]
+      ,   "ConfidenceInt" -> conf
       |>;
-
-    cDataset++;
-    ClearSystemCache[];
+   
+      Export[FileNameJoin[{dataset[["dir"]], algo<>".csv"}],
+      { algo
+      , name
+      , $missingRate
+      , numMissing
+      , res
+      , {$minResult, $maxResult}
+      , {mean, stand} 
+      , conf}
+      , "CSV"];
+ 
+     cDataset++;
     , {dataset, datasets}];
-
-    Print[Dataset@$verboseOutcome];
     Return[$verboseOutcome];
 ];
 
@@ -259,10 +279,9 @@ If[Length@Dimensions[$U] != 2, Print["Step One, invalid $U"]; Return[]];
 
 {n, m} = Dimensions[$U];
 
-Clear[$MOS, $MAS, $V, $OMS, $GM, $Mlv, $NS];
+Clear[$MOS, $MAS, $OMS, $GM, $Mlv, $NS];
 
 Table[
-	$V[k] = {};
 	$OMS[k] = {};
 ,{k, 1, m}];
 
@@ -275,8 +294,6 @@ Table[
 		If[ MissingQ@$U[[i,k]],
 			$MAS[i] = $MAS[i]~Join~{k};
 			$OMS[k] = $OMS[k]~Join~{i};
-		,
-			$V[k] = $V[k]~Join~{$U[[i, k]]};
 		];
 	,{k, 1, m}];
 	If[ Length@$MAS[i] > 0, $MOS = $MOS~Join~{i}];
@@ -285,57 +302,51 @@ Table[
 ,{i, 1, n}];
 
 Table[
-	Table[
-		$GM[i,j] = {};
-		$Mlv[i,j] = 1;
-		Table[
-			If[ MissingQ@$U[[i,k]],
-				If[  MissingQ@$U[[j,k]],
-					(*$P[i,j,k] = 1 / (Length[$V[k]]^2);*)
-					$Mlv[i,j] = $Mlv[i,j] / (Length[$V[k]]^2);
-				,   $Mlv[i,j] = $Mlv[i,j] / Length[$V[k]];
-					(*$P[i,j,k] = 1 / Length[$V[k]];*)
-				];
-			, If[  MissingQ@$U[[j,k]],
-					$Mlv[i,j] = $Mlv[i,j] / Length[$V[k]];
-					(*$P[i,j,k] = 1 / (Length[$V[k]]^2);*)
-					,
-					If[ $U[[i,k]]!= $U[[j,k]],
-						(*$P[i,j,k] = 0;*)
-						$Mlv[i,j] = 0;
-						$GM[i,j] = $GM[i,j]~Join~{k};
-					,
-						(*$P[i,j,k] = 1;*)
-						$Mlv[i,j] = $Mlv[i,j]*1;
-					];
-		        ];
-		    ];
-		(*   $P[j,i,k] = $P[i,j, k];*)
-		,{k,1 , m}];
-		If[ Length@$GM[i,j] == 0,
-			$NS[i] = $NS[i]~Join~{j};
+$GM[i,j] = {};
+$Mlv[i,j] = 1;
+Table[
+	If[ MissingQ@$U[[i,k]],
+		If[  MissingQ@$U[[j,k]],
+			(*$P[i,j,k] = 1 / $V[k]]^2;*)
+			$Mlv[i,j] = $Mlv[i,j] / ($V[k]^2);
+		,   $Mlv[i,j] = $Mlv[i,j] / $V[k];
+			(*$P[i,j,k] = 1 / $V[k];*)
 		];
-	$Mlv[j,i] = $Mlv[i,j];
+	, If[  MissingQ@$U[[j,k]],
+		$Mlv[i,j] = $Mlv[i,j] / $V[k];
+		(*$P[i,j,k] = 1 / ($V[k]]^2);*)
+	,
+		If[ $U[[i,k]]!= $U[[j,k]],
+			(*$P[i,j,k] = 0;*)
+			$Mlv[i,j] = 0;
+			$GM[i,j] = $GM[i,j]~Join~{k};
+		,
+			(*$P[i,j,k] = 1;*)
+			$Mlv[i,j] = $Mlv[i,j]*1;
+			];
+	   ];
+    ];
+		(*   $P[j,i,k] = $P[i,j, k];*)
+,{k, 1, m}];
+If[ Length@$GM[i,j] == 0,
+	$NS[i] = $NS[i]~Join~{j};
+];
 
-	,{j, i+1, n}];
-
-,{i, 1, n}];
-
+$Mlv[j,i] = $Mlv[i,j];
+,{i, 1, n}, {j, i+1, n}];
 ];
 
 
-Clear[StepTwo];
-StepTwo[] := Module[
+Clear[VTRIDA];
+VTRIDA[] := Module[
 {valMaxJ, maxJ, n,m, flag},
 If[ Length@Dimensions@$U != 2, Print["Step Two. Invalid $U."]; Return[]];
 {n,m} = Dimensions[$U];
 
-$MOS = SortBy[$MOS, -$MAS[#] &];
-flag = False;
 Table[
  (* no hay cambios por el momento *)
 Which[
-	Length@$NS[i] == 1,
+ Length@$NS[i] == 1,
 	With[{j = First@$NS[i]},
 		Table[
 			$U[[i,k]] = $U[[j,k]];
@@ -371,97 +382,107 @@ Which[
 		$MOS = DeleteCases[$MOS, i];
 		(* then, update the containers *)
 		Table[
+			If[i != j,
 			$Mlv[i,j] = 1;
 			$GM[i,j] = {};
 
 			Table[
 				If[ MissingQ@$U[[j,k]],
-					(*$P[i,j] = 1 / Length[$V[k]];*)
-					$Mlv[i,j] = $Mlv[i,j] / Length[$V[k]];
+					(*$P[i,j] = 1 / $V[k];*)
+					$Mlv[i,j] = $Mlv[i,j] / $V[k];
 				,   $Mlv[i,j] = 0;
 					(*$P[i,j] = 0;*)
-					$GM[i,j] = {$GM[i,j], k};
-				];
-			, {k, 1, m}];
-			$GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
-			If[ Length@$GM[i,j] == 0,
-				$NS[i] = {$NS[i], j};
-			];
-		, {j, 1, n}];
-
-		$NS[i] = Union@Flatten[$NS[i], Infinity];
-		];
-	];
-,{i, $MOS}];
-If[ flag,
-	StepTwo[]
-,   StepThree[]
-];
-];
-
-
-Clear[Roustida];
-Roustida[] := Module[
-{condition, n,m, flag },
-If[ Length@Dimensions@$U != 2, Print["Step Two. Invalid $U."]; Return[]];
-{n,m} = Dimensions[$U];
-flag = False;
-
-Table[
- (* no hay cambios por el momento *)
- 
-Which[
-	Length@$NS[i] == 1,
-	With[{j = $NS[i][[1]]},
-		Table[
-			$U[[i,k]] = $U[[j,k]];
-            If[ $numMissings>0, --$numMissings];
-			$OMS[k] = DeleteCases[$OMS[k], i];
-			flag = True;
-		,{k, $MAS[i]}];
-	];
-	$MAS[i] = {};
-	$MOS = DeleteCases[$MOS, i];
-	
-  , Length@$NS[i] >= 2,
-		condition = False;
-		Table[
-			Table[
-				If[ j0 != j1
-				  || !MissingQ@$U[[j0, k]]
-				  || !MissingQ@$U[[j1, k]]
-				  || $U[[j0,k]] !=  $U[[j1,k]],
-					     $U[[i, k ]] = Missing[];
-					     condition = True;
-				];	
-			,{j0, $NS[i]},{j1, $NS[i]}];
-			If[ !condition,
-				Table[
-					If[ !MissingQ@$U[[j0, k]], 
-						$U[[i,k]]=$U[[j0,k]];
-						If[ $numMissings>0, --$numMissings];
-						flag = True;
-					];
-				,{j0, $NS[i]}];
-			];
-		, {k, $MAS[i]}];
-		
-		(* then, update the containers *)
-		Table[
-			$GM[i,j] = {};
-			Table[
-				If[ !MissingQ@$U[[j,k]],
-					$GM[i,j]=$GM[i,j]~Join~{k}
+					$GM[i,j] = $GM[i,j]~Join~{k};
 				];
 			, {k, 1, m}];
 			If[ Length@$GM[i,j] == 0,
 				$NS[i] = $NS[i]~Join~{j};
 			];
+			];
 		, {j, 1, n}];
+		];
 	];
 ,{i, $MOS}];
 If[ flag,
-	Roustida[]
+	VTRIDA[]
+,   StepThree[]
+];
+];
+
+
+Clear[ROUSTIDA];
+ROUSTIDA[] := Module[
+{condition, n,m, flag },
+
+If[ Length@Dimensions@$U != 2, 
+	Print["Step Two. Invalid $U."];
+	Return[]
+];
+
+{n,m} = Dimensions[$U];
+flag = False;
+
+Table[
+Which[
+	Length@$NS[i] == 1,
+	With[{j = $NS[i][[1]]},
+		$U[[i,k]] = $U[[j,k]];
+        If[ $numMissings>0, --$numMissings];
+	    $MAS[i] = DeleteCases[$MAS[i], k];
+	    flag = True;
+	];
+  , True,
+	condition = False;
+	For[j0=1, j0<=Length@$NS[i] && condition, j0++,
+		For[j1=j0+1, j1 <= Length@$NS[i] && condition, j1++, 
+			If[!MissingQ@$U[[$NS[i][[j0]], k]]
+			&& !MissingQ@$U[[$NS[i][[j1]], k]]
+			&& $U[[$NS[i][[j0]],k]] !=  $U[[$NS[i][[j1]],k]],
+			$U[[i, k ]] = Missing[]; (* sobra *)
+		       condition = True;
+		       Break[]; 
+		     ];
+		  ];
+    ];
+     
+	If[ !condition,
+	  For[jj = 1, jj <= Length@$NS[i], jj++,
+		If[ !MissingQ@$U[[$NS[i][[jj]], k]], 
+			 $U[[i,k]] = $U[[$NS[i][[jj]],k]];
+			 $MAS[i] = DeleteCases[$MAS[i], k];
+			 If[ $numMissings>0, --$numMissings];
+			 flag = True;
+			 Break[];
+		];
+	   ];
+	];
+		
+	(* then, update the containers *)
+	Table[
+	  If[i != j,
+          $GM[i,j] = {};
+		  Table[
+			If[ !MissingQ@$U[[i,kk]]
+			  && !MissingQ@$U[[j,kk]]
+			  && $U[[i,k]]!= $U[[j,kk]],
+				$GM[i,j] = $GM[i,j]~Join~{kk};
+		    ];
+		,{kk, 1, m}];
+		If[ Length@$GM[i,j] == 0,
+			$NS[i] = $NS[i]~Join~{j};
+		];
+	  ];
+	, {j, 1, n}];
+];
+
+If[ $MAS[i] == {},
+	$MOS = DeleteCases[$MOS, i];
+];
+
+,{i, $MOS}, {k, $MAS[i]}];
+
+If[ flag,
+	ROUSTIDA[]
 ,   StepThree[]
 ];
 ];
