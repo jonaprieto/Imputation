@@ -24,6 +24,7 @@ MeanCompleter::usage  = "Mean completer implementation";
 checkMatches::usage   = "Check for the accuracy ratio";
 SetMissings::usage    = "Set randomly missing data value in a dataset";
 FillWith::usage       = "Handy method to fill a position with a set value";
+UpdateData::usage     = "Update every container after changed i,k";
 
 $oldU::usage = "original dataset";
 $U::usage    = "dataset";
@@ -190,11 +191,11 @@ Preprocessing[] := Module[
         , $Mlv[i,j] = $Mlv[i,j] / $V[k];
         ];
      , If[ MissingQ@$U[[j,k]],
-        $Mlv[i,j] = $Mlv[i,j] / $V[k];
-       , If[ $U[[i,k]]!= $U[[j,k]],
+          $Mlv[i,j] = $Mlv[i,j] / $V[k];
+       ,  If[ $U[[i,k]] != $U[[j,k]],
             $Mlv[i,j] = 0;
-            $GM[i,j] = $GM[i,j]~Join~{k};
-         , $Mlv[i,j] = $Mlv[i,j]*1;
+            $GM[i,j]  = $GM[i,j]~Join~{k};
+         ,  $Mlv[i,j] = $Mlv[i,j]*1;
          ];
        ];
      ];
@@ -203,15 +204,18 @@ Preprocessing[] := Module[
   If[ Length@$GM[i,j] == 0,
     $NS[i]  = $NS[i]~Join~{j};
   ];
+
   $Mlv[j,i] = $Mlv[i,j];
   ,{i, 1, n}, {j, i+1, n}];
+
 ];
 
 (* -------------------------------------------------------------------------- *)
+(* TODO update and changed variables *)
 
 Clear[ROUSTIDA];
 ROUSTIDA[] := Module[
-  {condition, n,m, flag},
+  {condition, n,m, flag, changed, val},
 
   If[ Length@Dimensions@$U != 2,
     Print["Step Two. Invalid $U."];
@@ -219,67 +223,35 @@ ROUSTIDA[] := Module[
   ];
 
   {n,m} = Dimensions[$U];
-  flag = False;
+  flag  = False;
 
   Table[
+    changed = False;
     Which[
       Length@$NS[i] == 1,
         With[{j = $NS[i][[1]]},
-          $U[[i,k]] = $U[[j,k]];
-          If[ $numMissings > 0,
-            --$numMissings
-          ];
-          $MAS[i] = DeleteCases[$MAS[i], k];
-          flag = True;
+          changed = FillWith[i, k, $U[[j,k]]];
+          flag    = Or[flag, changed];
         ];
     , Length@$NS[i] >= 2,
-        condition = False;
+        condition = False; (* a flag for check inconsistences *)
         For[j0 = 1, j0 <= Length@$NS[i] && condition, j0++,
           For[j1 = j0+1, j1 <= Length@$NS[i] && condition, j1++,
             If[  !MissingQ@$U[[ $NS[i][[j0]], k]]
               && !MissingQ@$U[[ $NS[i][[j1]], k]]
               && $U[[ $NS[i][[j0]], k]] !=  $U[[ $NS[i][[j1]], k]],
-                $U[[i, k]] = Missing[]; (* sobra *)
                 condition = True;
             ];
           ];
         ];
 
-      If[ !condition,
-        For[jj = 1, jj <= Length@$NS[i], jj++,
-          If[ !MissingQ@$U[[ $NS[i][[jj]], k]],
-            $U[[i,k]] = $U[[ $NS[i][[jj]], k]];
-            $MAS[i] = DeleteCases[$MAS[i], k];
-            If[ $numMissings > 0,
-              --$numMissings
-            ];
-            flag = True;
-            Break[];
-          ];
-         ];
-      ];
-
-      (* then, update the containers *)
-      Table[
-        If[i != j,
-          $GM[i,j] = {};
-          Table[
-            If[  !MissingQ@$U[[i, kk]]
-              && !MissingQ@$U[[j, kk]]
-              && $U[[i,k]]!= $U[[j,kk]],
-              $GM[i,j] = $GM[i,j]~Join~{kk};
-            ];
-          ,{kk, 1, m}];
-
-          If[ Length@$GM[i,j] == 0,
-            $NS[i] = $NS[i]~Join~{j};
-          ];
+        If[ !condition,
+          For[jj = 1, jj <= Length@$NS[i] && !changed, jj++,
+            val     = $U[[ $NS[i][[jj]], k ]];
+            changed  = FillWith[i, k, $U[[ $NS[i][[jj]], k]] ];
+            flag     = Or[flag, changed];
+           ];
         ];
-      , {j, 1, n}];
-    ];
-
-    If[ $MAS[i] == {},
-      $MOS = DeleteCases[$MOS, i];
     ];
 
   ,{i, $MOS}, {k, $MAS[i]}];
@@ -294,7 +266,7 @@ ROUSTIDA[] := Module[
 
 Clear[VTRIDA];
 VTRIDA[] := Module[
-  {valMaxJ,maxJ,n,m,condition,i,j,flag},
+  {valMaxJ, maxJ, n, m, condition, i, j, flag, changed},
 
   If[ Length@Dimensions@$U != 2,
     Print["Step Two. Invalid $U."];
@@ -305,49 +277,24 @@ VTRIDA[] := Module[
   flag = False;
 
   Table[
-    condition = False;
+    changed   = False;
+    (* try to find the j such it has the largest $Mlv[i,j]$ *)
     maxJ      = -1;
-    valMaxJ   = -1;
-    For[j=1, j <= n && !condition, j++,
+    valMaxJ   = 0;  (* this assures that $Mlv[i,j] > 0 *)
+    For[j = 1, j <= n && !condition, j++,
       If[ i != j,
         If[ valMaxJ < $Mlv[i,j],
             valMaxJ = $Mlv[i,j];
-            maxJ = j
-          ];
-        If[ $Mlv[i,j] > 0,
-            condition = True];
+            maxJ    = j
         ];
     ];
-    If[ condition && valMaxJ > 0 && maxJ > 0 && maxJ <= n,
+
+    If[ valMaxJ != 0, (* this condition is suffice for a valid j T(i,j)>0 *)
       Table[
-        $U[[i,k]] = $U[[i,maxJ]];
-        $MAS[i]   = DeleteCases[$MAS[i], k];
-        If[ $numMissings > 0,
-          --$numMissings
-        ];
-        flag = True;
+        changed  = FillWith[i, k, $U[[i, maxJ]] ];
+        flag     = Or[flag, changed];
       ,{k, $MAS[i]}];
     ];
-
-  (* then, update the containers *)
-
-  Table[
-    If[i != j,
-      $Mlv[i, j] = 1;
-      $GM[i, j]  = {};
-      Table[
-      If[ MissingQ@$U[[j, k]],
-        $Mlv[i, j] = $Mlv[i, j] / $V[k];
-      , $Mlv[i, j] = 0;
-        $GM[i, j]  = $GM[i, j]~Join~{k}
-      ];
-      , {k, 1, m}];
-
-      If[ Length@$GM[i, j] == 0,
-        $NS[i] = $NS[i]~Join~{j};
-      ];
-    ];
-   , {j, 1, n}];
 
   ,{i, $MOS}];
 
@@ -357,6 +304,63 @@ VTRIDA[] := Module[
   ];
 ];
 
+
+(* This method supposes that $U[i,k] has been imputed *)
+UpdateData[i_Integer,k_Integer] := Module[
+  {newPkij, oldMlv, oldPkij},
+
+  $MAS[i] = DeleteCases[$MAS[i], k];
+
+  If[ Length@$MAS[i] == 0,
+    $MOS = DeleteCases[$MOS, i];
+  ];
+
+
+  Table[
+    If[i != j,
+      oldMlv = $Mlv[i,j];
+      oldPkij =
+        If[MissingQ@$U[[j, k]]],
+          1 / $V[k]
+        , 1 / $V[k]^2
+      ];
+
+
+      $Mlv[i, j] = 1;
+      $GM[i, j]  = DeleteCases[$G[i,j], k]; (* we first remove, and the check *)
+
+      newPkij =
+        If[ $U[[i,k]] == $U[[j, k]],
+          If[ MissingQ@$U[[j,k]],
+            1 / $V[k]
+          , 1
+          ]
+        , If[ MissingQ@$U[[j,k]],
+            1 / $V[k]
+          ,
+           $G[i,j] = $G[i,j]~Join~{k};
+           0
+          ]
+      ];
+
+      AbortAssert[ oldPkij != 0, {"oldPkij ", i, j, k, " failed" }];
+
+      $Mlv[i,j] = oldMlv * (1/ oldPkij) * newPkij;
+      $Mlv[j,i] = $Mlv[i,j];
+
+      $GM[j,i]  = $G[i,j];
+      $NS[i]    = DeleteCases[$NS[i], j];
+
+      If[ Length@$G[i,j] == 0,
+        $NS[i] = $NS[i]~Join~{j};
+      ];
+
+    , {j, 1, n}];
+
+
+ ];
+
+
 (* -------------------------------------------------------------------------- *)
 (* TODO update the data containers
 *)
@@ -364,7 +368,7 @@ VTRIDA[] := Module[
 Clear[HSI];
 HSI[] := Module[
   {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal, flag
-    ,rowsAll, change},
+    ,rowsAll, changed},
 
   If[ Length@$MOS == 0,
     Return[];
@@ -387,8 +391,8 @@ HSI[] := Module[
     Table[
       If[ Length@$NS[i] == 1,
         With[{  j = $NS[i][[1]]},
-          change  = FillWith[i, k, $U[[j, k]] ];
-          flag    = Or[flag, change];
+          changed  = FillWith[i, k, $U[[j, k]] ];
+          flag     = Or[flag, changed];
         ];
       ];
     , {k, $MAS[i]}];
@@ -397,11 +401,11 @@ HSI[] := Module[
 
       answers = DeleteCases[Union@$U[[All, k]], Missing[]];
       If[ Length@answers == 1,
-        change = FillWith[i, k, answers[[1]] ];
-        flag   = Or[flag, change];
+        changed = FillWith[i, k, answers[[1]] ];
+        flag    = Or[flag, changed];
       ];
       (* if there is not an obvious answer, next step *)
-      If[!change,
+      If[!changed,
 
         base = Complement2[rangeM, $MAS[i]~Join~{m}];
 
@@ -410,11 +414,11 @@ HSI[] := Module[
         rows    = Select[rowsAll, Intersection[$MAS[#], base] == {}  &];
 
         If[ Length@rows == 1,
-            change = FillWith[i, k, $U[[ rows[[1]], k ]] ];
-            flag   = Or[flag, change];
+            changed = FillWith[i, k, $U[[ rows[[1]], k ]] ];
+            flag    = Or[flag, changed];
         ];
 
-        If[ !change && Length@rows > 1,
+        If[ !changed && Length@rows > 1,
           If[ Length@rows >= 0.10*n,
             rows = SortBy[rows, - $Mlv[i,#] &];
             rows = Take[rows, UpTo@Ceiling[0.10*n]];
@@ -435,8 +439,8 @@ HSI[] := Module[
           ans   = clasifier[goal];
 
           If[ MemberQ[answers, ans],
-            change  = FillWith[i, k, ans];
-            flag    = Or[flag, change];
+            changed  = FillWith[i, k, ans];
+            flag     = Or[flag, changed];
           ];
         ];
       ];
@@ -456,10 +460,10 @@ FillWith[i_Integer, k_Integer, val_] := Module[
   {},
   If[ !MissingQ@val,
     $U[[i, k]]  = val;
-    $MAS[i]     = DeleteCases[$MAS[i], k];
     If[ $numMissings > 0,
       --$numMissings
     ];
+    UpdateData[i,k];
     Return[True];
   ];
   Return[False];
