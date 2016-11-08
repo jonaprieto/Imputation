@@ -1,4 +1,5 @@
-(* ::Package::                                                                *)
+(* ::Package:: *)
+
 (* :Title: Imputation                                                         *)
 (* :Context: Imputation`                                                      *)
 (* :Author: Jonathan Prieto-Cubides                                           *)
@@ -293,7 +294,7 @@ ROUSTIDA[] := Module[
 
 Clear[VTRIDA];
 VTRIDA[] := Module[
-  {valMaxJ, maxJ, n,m, condition,i,j, flag},
+  {valMaxJ,maxJ,n,m,condition,i,j,flag},
 
   If[ Length@Dimensions@$U != 2,
     Print["Step Two. Invalid $U."];
@@ -305,16 +306,16 @@ VTRIDA[] := Module[
 
   Table[
     condition = False;
-    maxJ = -1;
-    valMaxJ = -1;
+    maxJ      = -1;
+    valMaxJ   = -1;
     For[j=1, j <= n && !condition, j++,
       If[ i != j,
-        If[valMaxJ < $Mlv[i,j],
-          valMaxJ = $Mlv[i,j];
-          maxJ = j
+        If[ valMaxJ < $Mlv[i,j],
+            valMaxJ = $Mlv[i,j];
+            maxJ = j
           ];
         If[ $Mlv[i,j] > 0,
-          condition = True];
+            condition = True];
         ];
     ];
     If[ condition && valMaxJ > 0 && maxJ > 0 && maxJ <= n,
@@ -360,7 +361,8 @@ VTRIDA[] := Module[
 
 Clear[HSI];
 HSI[lap_Integer:1] := Module[
-  {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal},
+  {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal, flag
+    rowsAll},
 
   If[ Length@$MOS == 0,
     Return[];
@@ -371,12 +373,12 @@ HSI[lap_Integer:1] := Module[
     Return[]
   ];
 
-  {n,m} = Dimensions[$U];
+  {n,m}   = Dimensions[$U];
+  flag    = False;
+  rangeN  = Range[n];
+  rangeM  = Range[m];
+  $MOS    = SortBy[$MOS, Length@$MAS[#] &];
 
-  rangeN = Range[n];
-  rangeM = Range[m];
-
-  $MOS = SortBy[$MOS, Length@$MAS[#] &];
   Table[
 
     $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
@@ -392,6 +394,7 @@ HSI[lap_Integer:1] := Module[
     base = Complement2[rangeM, $MAS[i]~Join~{m}];
 
     Table[
+
       answers = DeleteCases[Union@$U[[All, k]], Missing[]];
       If[ Length@answers == 1,
         FillWith[i, k, answers[[1]] ];
@@ -399,38 +402,44 @@ HSI[lap_Integer:1] := Module[
       ];
 
       (* rows with values at k-col*)
-      rows = Complement2[rangeN, $OMS[k]];
-      rows = Select[rows, Intersection[$MAS[#], base] == {}  &];
+      rowsAll = Complement2[rangeN, $OMS[k]];
+      rows = Select[rowsAll, Intersection[$MAS[#], base] == {}  &];
 
       If[ Length@rows == 1,
           FillWith[i, k, $U[[ rows[[1]], k ]] ];
           flag = True;
       ];
 
-      (* cols with values in the i-row *)
-      cols = Complement2[rangeM, $MAS[i]~Join~{m}];
+      If[ !flag ,
+        If[ Length@rows >= 0.10*n,
+          rows = SortBy[rows, - $Mlv[i,#] &];
+          rows = Take[rows, UpTo@Ceiling[0.10*n]];
+        ];
 
-      AbortAssert[Length@rows > 1, "ClassifyReducedModel"];
-      model = $U[[rows, cols]] -> $U[[rows, k]];
-      clasifier = Classify[model,
-          Method -> "NaiveBayes"
-        , PerformanceGoal -> "Quality"
+        (* cols with values in the i-row *)
+        cols = Complement2[rangeM, $MAS[i]~Join~{m}];
+
+        AbortAssert[Length@rows > 1, "ClassifyReducedModel"];
+        model = $U[[rows, cols]] -> $U[[rows, k]];
+        clasifier = Classify[model,
+            Method -> "NaiveBayes"
+          , PerformanceGoal -> "Quality"
+        ];
+
+        goal = $U[[i, cols]];
+        ans = clasifier[goal];
+
+        If[ MemberQ[answers, ans],
+          FillWith[i, k, ans];
+          flag = True;
+        ];
       ];
-
-      goal = $U[[i, cols]];
-      ans = clasifier[goal];
-
-      If[ MemberQ[answers, ans],
-        FillWith[i, k, ans];
-        flag = True;
-      ];
-
     , {k, $MAS[i]}];
 
   , {i, $MOS}];
 
   If[ flag,
-    HSI[]
+     HSI[]
   ,  MeanCompleter[]
   ];
 ];
