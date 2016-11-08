@@ -329,12 +329,12 @@ StepTwo[lap_] := Module[{},
     $cObject++;
     $J[[i]] = SortBy[$J[[i]], $orderCols * Length@$I[[#]] &];
     Table[
-      AbortAssert[ Length@$R[[i]] > 1, "StepTwo"];
-      $X[[i, j]] = ClassifyReduceModel[i, j];
-      If[ Not@MissingQ[$X[[i, j]]],
-        $R[[i]] = $R[[i]] ~ Join ~ {j};
-        $I[[j]] = Complement2[$I[[j]], {i}];
-      ];
+        AbortAssert[ Length@$R[[i]] > 1, "StepTwo"];
+        $X[[i, j]] = ClassifyReduceModel[i, j];
+        If[ Not@MissingQ[$X[[i, j]]],
+          $R[[i]] = $R[[i]] ~ Join ~ {j};
+          $I[[j]] = Complement2[$I[[j]], {i}];
+        ];
       , {j, $J[[i]]}];
     If[ Length@$R[[i]] == $m,
       $Y = $Y ~ Join ~ {i}; $J[[i]] = {},

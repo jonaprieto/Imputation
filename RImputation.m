@@ -22,6 +22,7 @@ RunAlgorithm::usage   = "RunAlgorithm[]";
 MeanCompleter::usage  = "Mean completer implementation";
 checkMatches::usage   = "Check for the accuracy ratio";
 SetMissings::usage    = "Set randomly missing data value in a dataset";
+FillWith::usage       = "Handy method to fill a position with a set value";
 
 $oldU::usage = "original dataset";
 $U::usage    = "dataset";
@@ -179,8 +180,8 @@ Preprocessing[] := Module[
   ,{i, 1, n}];
 
   Table[
-    $GM[i,j]  = {};
     $Mlv[i,j] = 1;
+    $GM[i,j]  = {};
     Table[
       If[ MissingQ@$U[[i,k]],
         If[ MissingQ@$U[[j,k]],
@@ -209,150 +210,244 @@ Preprocessing[] := Module[
 
 Clear[ROUSTIDA];
 ROUSTIDA[] := Module[
-{condition, n,m, flag},
+  {condition, n,m, flag},
 
-If[ Length@Dimensions@$U != 2,
-  Print["Step Two. Invalid $U."];
-  Return[]
-];
+  If[ Length@Dimensions@$U != 2,
+    Print["Step Two. Invalid $U."];
+    Return[]
+  ];
 
-{n,m} = Dimensions[$U];
-flag = False;
+  {n,m} = Dimensions[$U];
+  flag = False;
 
-Table[
-  Which[
-    Length@$NS[i] == 1,
-      With[{j = $NS[i][[1]]},
-        $U[[i,k]] = $U[[j,k]];
-        If[ $numMissings > 0,
-          --$numMissings
-        ];
-        $MAS[i] = DeleteCases[$MAS[i], k];
-        flag = True;
-      ];
-  , Length@$NS[i] >= 2,
-      condition = False;
-      For[j0 = 1, j0 <= Length@$NS[i] && condition, j0++,
-        For[j1 = j0+1, j1 <= Length@$NS[i] && condition, j1++,
-          If[  !MissingQ@$U[[ $NS[i][[j0]], k]]
-            && !MissingQ@$U[[ $NS[i][[j1]], k]]
-            && $U[[ $NS[i][[j0]], k]] !=  $U[[ $NS[i][[j1]], k]],
-              $U[[i, k]] = Missing[]; (* sobra *)
-              condition = True;
-          ];
-        ];
-      ];
-
-    If[ !condition,
-      For[jj = 1, jj <= Length@$NS[i], jj++,
-        If[ !MissingQ@$U[[ $NS[i][[jj]], k]],
-          $U[[i,k]] = $U[[ $NS[i][[jj]], k]];
-          $MAS[i] = DeleteCases[$MAS[i], k];
+  Table[
+    Which[
+      Length@$NS[i] == 1,
+        With[{j = $NS[i][[1]]},
+          $U[[i,k]] = $U[[j,k]];
           If[ $numMissings > 0,
             --$numMissings
           ];
+          $MAS[i] = DeleteCases[$MAS[i], k];
           flag = True;
-          Break[];
         ];
-       ];
+    , Length@$NS[i] >= 2,
+        condition = False;
+        For[j0 = 1, j0 <= Length@$NS[i] && condition, j0++,
+          For[j1 = j0+1, j1 <= Length@$NS[i] && condition, j1++,
+            If[  !MissingQ@$U[[ $NS[i][[j0]], k]]
+              && !MissingQ@$U[[ $NS[i][[j1]], k]]
+              && $U[[ $NS[i][[j0]], k]] !=  $U[[ $NS[i][[j1]], k]],
+                $U[[i, k]] = Missing[]; (* sobra *)
+                condition = True;
+            ];
+          ];
+        ];
+
+      If[ !condition,
+        For[jj = 1, jj <= Length@$NS[i], jj++,
+          If[ !MissingQ@$U[[ $NS[i][[jj]], k]],
+            $U[[i,k]] = $U[[ $NS[i][[jj]], k]];
+            $MAS[i] = DeleteCases[$MAS[i], k];
+            If[ $numMissings > 0,
+              --$numMissings
+            ];
+            flag = True;
+            Break[];
+          ];
+         ];
+      ];
+
+      (* then, update the containers *)
+      Table[
+        If[i != j,
+          $GM[i,j] = {};
+          Table[
+            If[  !MissingQ@$U[[i, kk]]
+              && !MissingQ@$U[[j, kk]]
+              && $U[[i,k]]!= $U[[j,kk]],
+              $GM[i,j] = $GM[i,j]~Join~{kk};
+            ];
+          ,{kk, 1, m}];
+
+          If[ Length@$GM[i,j] == 0,
+            $NS[i] = $NS[i]~Join~{j};
+          ];
+        ];
+      , {j, 1, n}];
     ];
 
-    (* then, update the containers *)
-    Table[
-      If[i != j,
-        $GM[i,j] = {};
-        Table[
-          If[  !MissingQ@$U[[i, kk]]
-            && !MissingQ@$U[[j, kk]]
-            && $U[[i,k]]!= $U[[j,kk]],
-            $GM[i,j] = $GM[i,j]~Join~{kk};
-          ];
-        ,{kk, 1, m}];
+    If[ $MAS[i] == {},
+      $MOS = DeleteCases[$MOS, i];
+    ];
 
-        If[ Length@$GM[i,j] == 0,
-          $NS[i] = $NS[i]~Join~{j};
-        ];
-      ];
-    , {j, 1, n}];
+  ,{i, $MOS}, {k, $MAS[i]}];
+
+  If[ flag,
+    ROUSTIDA[];
+  , MeanCompleter[];
   ];
-
-  If[ $MAS[i] == {},
-    $MOS = DeleteCases[$MOS, i];
-  ];
-
-,{i, $MOS}, {k, $MAS[i]}];
-
-If[ flag,
-  ROUSTIDA[];
-, MeanCompleter[];
-];
 ];
 
 (* -------------------------------------------------------------------------- *)
 
 Clear[VTRIDA];
 VTRIDA[] := Module[
-{valMaxJ, maxJ, n,m, condition,i,j, flag},
+  {valMaxJ, maxJ, n,m, condition,i,j, flag},
 
-If[ Length@Dimensions@$U != 2,
-  Print["Step Two. Invalid $U."];
-  Return[]
-];
+  If[ Length@Dimensions@$U != 2,
+    Print["Step Two. Invalid $U."];
+    Return[]
+  ];
 
-{n,m} = Dimensions[$U];
-flag = False;
+  {n,m} = Dimensions[$U];
+  flag = False;
 
-Table[
-  condition = False;
-  maxJ = -1;
-  valMaxJ = -1;
-  For[j=1, j <= n && !condition, j++,
-    If[ i != j,
-      If[valMaxJ < $Mlv[i,j],
-        valMaxJ = $Mlv[i,j];
-        maxJ = j
+  Table[
+    condition = False;
+    maxJ = -1;
+    valMaxJ = -1;
+    For[j=1, j <= n && !condition, j++,
+      If[ i != j,
+        If[valMaxJ < $Mlv[i,j],
+          valMaxJ = $Mlv[i,j];
+          maxJ = j
+          ];
+        If[ $Mlv[i,j] > 0,
+          condition = True];
         ];
-      If[ $Mlv[i,j] > 0,
-        condition = True];
-      ];
-  ];
-  If[ condition && valMaxJ > 0 && maxJ > 0 && maxJ <= n,
-    Table[
-      $U[[i,k]] = $U[[i,maxJ]];
-      $MAS[i]   = DeleteCases[$MAS[i], k];
-      If[ $numMissings > 0,
-        --$numMissings
-      ];
-      flag = True;
-    ,{k, $MAS[i]}];
-  ];
-
-(* then, update the containers *)
-
-Table[
-  If[i != j,
-    $Mlv[i, j] = 1;
-    $GM[i, j]  = {};
-    Table[
-    If[ MissingQ@$U[[j, k]],
-      $Mlv[i, j] = $Mlv[i, j] / $V[k];
-    , $Mlv[i, j] = 0;
-      $GM[i, j]  = $GM[i, j]~Join~{k}
     ];
-    , {k, 1, m}];
-
-    If[ Length@$GM[i, j] == 0,
-      $NS[i] = $NS[i]~Join~{j};
+    If[ condition && valMaxJ > 0 && maxJ > 0 && maxJ <= n,
+      Table[
+        $U[[i,k]] = $U[[i,maxJ]];
+        $MAS[i]   = DeleteCases[$MAS[i], k];
+        If[ $numMissings > 0,
+          --$numMissings
+        ];
+        flag = True;
+      ,{k, $MAS[i]}];
     ];
+
+  (* then, update the containers *)
+
+  Table[
+    If[i != j,
+      $Mlv[i, j] = 1;
+      $GM[i, j]  = {};
+      Table[
+      If[ MissingQ@$U[[j, k]],
+        $Mlv[i, j] = $Mlv[i, j] / $V[k];
+      , $Mlv[i, j] = 0;
+        $GM[i, j]  = $GM[i, j]~Join~{k}
+      ];
+      , {k, 1, m}];
+
+      If[ Length@$GM[i, j] == 0,
+        $NS[i] = $NS[i]~Join~{j};
+      ];
+    ];
+   , {j, 1, n}];
+
+  ,{i, $MOS}];
+
+  If[ flag,
+    VTRIDA[]
+  , MeanCompleter[]
   ];
- , {j, 1, n}];
-
-,{i, $MOS}];
-
-If[ flag,
-  VTRIDA[]
-, MeanCompleter[]
 ];
+
+(* -------------------------------------------------------------------------- *)
+
+Clear[HSI];
+HSI[lap_Integer:1] := Module[
+  {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal},
+
+  If[ Length@$MOS == 0,
+    Return[];
+  ];
+
+  If[ Length@Dimensions@$U != 2,
+    Print["Step Two. Invalid $U."];
+    Return[]
+  ];
+
+  {n,m} = Dimensions[$U];
+
+  rangeN = Range[n];
+  rangeM = Range[m];
+
+  $MOS = SortBy[$MOS, Length@$MAS[#] &];
+  Table[
+
+    $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
+    Table[
+      If[ Length@$NS[i] == 1,
+        With[{j = $NS[i][[1]]},
+          FillWith[i, k, $U[[j, k]] ];
+          flag = True;
+        ];
+      ];
+    , {k, $MAS[i]}];
+
+    base = Complement2[rangeM, $MAS[i]~Join~{m}];
+
+    Table[
+      answers = DeleteCases[Union@$U[[All, k]], Missing[]];
+      If[ Length@answers == 1,
+        FillWith[i, k, answers[[1]] ];
+        flag = True;
+      ];
+
+      (* rows with values at k-col*)
+      rows = Complement2[rangeN, $OMS[k]];
+      rows = Select[rows, Intersection[$MAS[#], base] == {}  &];
+
+      If[ Length@rows == 1,
+          FillWith[i, k, $U[[ rows[[1]], k ]] ];
+          flag = True;
+      ];
+
+      (* cols with values in the i-row *)
+      cols = Complement2[rangeM, $MAS[i]~Join~{m}];
+
+      AbortAssert[Length@rows > 1, "ClassifyReducedModel"];
+      model = $U[[rows, cols]] -> $U[[rows, k]];
+      clasifier = Classify[model,
+          Method -> "NaiveBayes"
+        , PerformanceGoal -> "Quality"
+      ];
+
+      goal = $U[[i, cols]];
+      ans = clasifier[goal];
+
+      If[ MemberQ[answers, ans],
+        FillWith[i, k, ans];
+        flag = True;
+      ];
+
+    , {k, $MAS[i]}];
+
+  , {i, $MOS}];
+
+  If[ flag,
+    HSI[]
+  ,  MeanCompleter[]
+  ];
+];
+
+(* -------------------------------------------------------------------------- *)
+
+Clear[FillWith];
+FillWith[i_, k_, val_] := Module[
+  {},
+  If[ !MissingQ@val,
+    $U[[i, k]] = val;
+    $MAS[i] = DeleteCases[$MAS[i], k];
+    If[ $numMissings > 0,
+      --$numMissings
+    ];
+    $GM[i,j] = DeleteCases[$GM[i,j], k];
+  ];
 ];
 
 (* -------------------------------------------------------------------------- *)
