@@ -135,7 +135,7 @@ SetMissings[] := Module[
   ];
 
   AbortAssert[m-1 > 0 && n > 1, "SetMissings"];
-  AbortAssert[$missingRate < 1 && $missingRate > 0, "SetMissings"];
+  AbortAssert[$missingRate < 0.5 && $missingRate > 0,"Rate out of range"];
 
   cant  = Ceiling[n * (m-1) * $missingRate];
   ms    = MakeArrange[{n, m-1}, $missingRate];
@@ -144,6 +144,9 @@ SetMissings[] := Module[
   , {pos, ms}];
   $numMissings = Length[ms];
   $missingU    = $U;
+  $numMeanCompleter = 0;
+  $numAlgo = 0;
+  $numCorrectAlgo = 0;
 ];
 
 (* -------------------------------------------------------------------------- *)
@@ -160,6 +163,12 @@ Preprocessing[] := Module[
   {n, m} = Dimensions[$U];
 
   Clear[$MOS, $MAS, $OMS, $GM, $Mlv, $NS];
+
+  $GM[i_,j_]  := $GM[j,i] /; i > j;
+  $GM[_,_]    := {};
+
+  $Mlv[i_,j_] := $Mlv[j,i] /; i > j;
+  $Mlv[_,_]   := {};
 
   Table[ $OMS[k] = {},{k, 1, m}];
 
@@ -205,7 +214,6 @@ Preprocessing[] := Module[
     $NS[i]  = $NS[i]~Join~{j};
   ];
 
-  $Mlv[j,i] = $Mlv[i,j];
   ,{i, 1, n}, {j, i+1, n}];
 
 ];
@@ -248,8 +256,8 @@ ROUSTIDA[] := Module[
         If[ !condition,
           For[jj = 1, jj <= Length@$NS[i] && !changed, jj++,
             val     = $U[[ $NS[i][[jj]], k ]];
-            changed  = FillWith[i, k, $U[[ $NS[i][[jj]], k]] ];
-            flag     = Or[flag, changed];
+            changed = FillWith[i, k, $U[[ $NS[i][[jj]], k]] ];
+            flag    = Or[flag, changed];
            ];
         ];
     ];
@@ -270,11 +278,11 @@ VTRIDA[] := Module[
 
   If[ Length@Dimensions@$U != 2,
     Print["Step Two. Invalid $U."];
-    Return[]
+    Return[];
   ];
 
   {n,m} = Dimensions[$U];
-  flag = False;
+  flag  = False;
 
   Table[
     changed   = False;
@@ -285,11 +293,12 @@ VTRIDA[] := Module[
       If[ i != j,
         If[ valMaxJ < $Mlv[i,j],
             valMaxJ = $Mlv[i,j];
-            maxJ    = j
+            maxJ    = j;
         ];
+      ];
     ];
 
-    If[ valMaxJ != 0, (* this condition is suffice for a valid j T(i,j)>0 *)
+    If[ maxJ > 0, (* this condition is suffice for a valid j T(i,j)>0 *)
       Table[
         changed  = FillWith[i, k, $U[[i, maxJ]] ];
         flag     = Or[flag, changed];
@@ -304,71 +313,12 @@ VTRIDA[] := Module[
   ];
 ];
 
-
-(* This method supposes that $U[i,k] has been imputed *)
-UpdateData[i_Integer,k_Integer] := Module[
-  {newPkij, oldMlv, oldPkij},
-
-  $MAS[i] = DeleteCases[$MAS[i], k];
-
-  If[ Length@$MAS[i] == 0,
-    $MOS = DeleteCases[$MOS, i];
-  ];
-
-
-  Table[
-    If[i != j,
-      oldMlv = $Mlv[i,j];
-      oldPkij =
-        If[MissingQ@$U[[j, k]]],
-          1 / $V[k]
-        , 1 / $V[k]^2
-      ];
-
-
-      $Mlv[i, j] = 1;
-      $GM[i, j]  = DeleteCases[$G[i,j], k]; (* we first remove, and the check *)
-
-      newPkij =
-        If[ $U[[i,k]] == $U[[j, k]],
-          If[ MissingQ@$U[[j,k]],
-            1 / $V[k]
-          , 1
-          ]
-        , If[ MissingQ@$U[[j,k]],
-            1 / $V[k]
-          ,
-           $G[i,j] = $G[i,j]~Join~{k};
-           0
-          ]
-      ];
-
-      AbortAssert[ oldPkij != 0, {"oldPkij ", i, j, k, " failed" }];
-
-      $Mlv[i,j] = oldMlv * (1/ oldPkij) * newPkij;
-      $Mlv[j,i] = $Mlv[i,j];
-
-      $GM[j,i]  = $G[i,j];
-      $NS[i]    = DeleteCases[$NS[i], j];
-
-      If[ Length@$G[i,j] == 0,
-        $NS[i] = $NS[i]~Join~{j};
-      ];
-
-    , {j, 1, n}];
-
-
- ];
-
-
 (* -------------------------------------------------------------------------- *)
-(* TODO update the data containers
-*)
 
 Clear[HSI];
 HSI[] := Module[
   {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal, flag
-    ,rowsAll, changed},
+    ,rowsAll, changed, classes},
 
   If[ Length@$MOS == 0,
     Return[];
@@ -388,9 +338,11 @@ HSI[] := Module[
   Table[
 
     $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
+    changed = False;
+
     Table[
       If[ Length@$NS[i] == 1,
-        With[{  j = $NS[i][[1]]},
+        With[{  j  = $NS[i][[1]]},
           changed  = FillWith[i, k, $U[[j, k]] ];
           flag     = Or[flag, changed];
         ];
@@ -419,28 +371,46 @@ HSI[] := Module[
         ];
 
         If[ !changed && Length@rows > 1,
+
           If[ Length@rows >= 0.10*n,
             rows = SortBy[rows, - $Mlv[i,#] &];
-            rows = Take[rows, UpTo@Ceiling[0.10*n]];
+            rows = Take[rows, UpTo@Ceiling[0.05*n]];
           ];
-
-          (* cols with values in the i-row *)
-          cols = Complement2[rangeM, $MAS[i]~Join~{m}];
-
           AbortAssert[Length@rows > 1, "ClassifyReducedModel"];
 
-          model     = $U[[rows, cols]] -> $U[[rows, k]];
-          clasifier = Classify[model,
-              Method          -> "NaiveBayes"
-            , PerformanceGoal -> "Quality"
+          (* cols with values in the i-row *)
+          cols  = Complement2[rangeM, $MAS[i]];
+          If[ Length@cols >= 0.8*m,
+            cols = SortBy[cols, Length@$OMS[#] &];
+            cols = Take[cols, UpTo@Ceiling[0.8*m]];
+          ];
+          model = $U[[rows, cols]] -> $U[[rows, k]];
+
+          classes = Union@DeleteCases[$U[[rows, k]], Missing[]];
+
+          (*Print["Model "];
+          PrintData[$U[[rows, cols]]];
+          Print["classes:"];
+          Print[classes];*)
+
+          If[ Length@clases == 1,
+            change = FillWith[i, j, classes[[1]] ];
+            flag = Or[flag, change];
           ];
 
-          goal  = $U[[i, cols]];
-          ans   = clasifier[goal];
+          If[ !change && Length@classes > 1,
+            clasifier = Classify[model,
+                Method          -> "NaiveBayes"
+              , PerformanceGoal -> "Quality"
+            ];
 
-          If[ MemberQ[answers, ans],
-            changed  = FillWith[i, k, ans];
-            flag     = Or[flag, changed];
+            goal  = $U[[i, cols]];
+            ans   = clasifier[goal];
+
+            If[ MemberQ[answers, ans],
+              changed  = FillWith[i, k, ans];
+              flag     = Or[flag, changed];
+            ];
           ];
         ];
       ];
@@ -460,9 +430,13 @@ FillWith[i_Integer, k_Integer, val_] := Module[
   {},
   If[ !MissingQ@val,
     $U[[i, k]]  = val;
+    If[ val == $oldU[[i,k]],
+      $numCorrectAlgo++;
+    ];
     If[ $numMissings > 0,
       --$numMissings
     ];
+    $numAlgo++;
     UpdateData[i,k];
     Return[True];
   ];
@@ -471,25 +445,85 @@ FillWith[i_Integer, k_Integer, val_] := Module[
 
 (* -------------------------------------------------------------------------- *)
 
+(* This method supposes that $U[i,k] has been imputed *)
+Clear[UpdateData];
+UpdateData[i_Integer,k_Integer] := Module[
+  {newPkij, oldMlv, oldPkij, n, m},
+
+  {n,m}   = Dimensions[$U];
+  $MAS[i] = DeleteCases[$MAS[i], k];
+
+  If[ Length@$MAS[i] == 0,
+    $MOS = DeleteCases[$MOS, i];
+  ];
+
+  Table[
+    If[i != j,
+      oldMlv  = $Mlv[i,j];
+      oldPkij =
+        If[MissingQ@$U[[j, k]],
+          1 / $V[k]
+        , 1 / $V[k]^2
+      ];
+
+      $Mlv[i, j] = 1;
+      $GM[i, j]  = DeleteCases[$GM[i,j], k]; (* we first remove, and the check *)
+
+      newPkij =
+        If[ $U[[i,k]] == $U[[j, k]],
+          If[ MissingQ@$U[[j,k]],
+            1 / $V[k]
+          , 1
+          ]
+        , If[ MissingQ@$U[[j,k]],
+            1 / $V[k]
+          , 0
+          ]
+      ];
+
+      If[ $U[[i,k]]!=$U[[j,k]] && !MissingQ@$U[[i,k]] && !MissingQ@$U[[j,k]],
+         $GM[i,j] = $GM[i,j]~Join~{k};
+      ];
+
+      AbortAssert[ oldPkij != 0, {"oldPkij ", oldPkij, i, j, k, " failed" }];
+
+      $Mlv[i,j] = oldMlv * (1/ oldPkij) * newPkij;
+      $Mlv[j,i] = $Mlv[i,j];
+      $NS[i]    = DeleteCases[$NS[i], j];
+
+      If[ Length@$GM[i,j] == 0,
+        $NS[i] = $NS[i]~Join~{j};
+      ];
+    ];
+    , {j, 1, n}];
+ ];
+
+(* -------------------------------------------------------------------------- *)
+
 Clear[MeanCompleter];
 MeanCompleter[]:= Module[
-{n,m, freq},
+  {n,m, freq},
 
-If[Length@Dimensions@$U == 0,
-  Print["MeanCompleter. Invalid $U"];
-  Return[]
-];
+  If[Length@Dimensions@$U == 0,
+    Print["MeanCompleter. Invalid $U"];
+    Return[]
+  ];
 
-{n,m} = Dimensions[$U];
+  {n,m} = Dimensions[$U];
 
-Table[
-  freq = SortBy[Tally@Select[$U[[All, k]],Not@MissingQ[#] & ], Last][[-1,1]];
   Table[
-    If[ MemberQ[$MAS[i], k],
-      $U[[i,k]] = freq;
-    ];
-  ,{i, $MOS}];
-,{k, 1,m}];
+    freq = SortBy[Tally@Select[$U[[All, k]],Not@MissingQ[#] & ], Last][[-1,1]];
+    Table[
+      If[ MemberQ[$MAS[i], k],
+        FillWith[i,k, freq];
+        --$numAlgo;
+        If[ $oldU[[i,k]] == freq,
+          --$numCorrectAlgo
+        ];
+        $numMeanCompleter++;
+      ];
+    ,{i, $MOS}];
+  ,{k, 1, m-1}];
 ];
 
 (* -------------------------------------------------------------------------- *)
@@ -510,7 +544,7 @@ RunAlgorithm[dataset_Association, numIter_Integer, miss_,algo_String]:=
 
 RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
   {oData, name, citer, outcome = <||>, matches, cDataset = 0,
-  res, oldJ, n=0,m=0, numMissing=0, attr, mean, stand, conf},
+  res, oldJ, n=0, m=0, numMissing=0, attr, mean, stand, conf},
 
   SetInitValues[];
   $missingRate = miss;
@@ -523,22 +557,25 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
 
   PrintTemporary@Dynamic@Dataset[
     <|
-      "Algo" -> algo,
-      "No." -> ToString@(cDataset) <> "/" <> ToString@Length@datasets,
-      "Dataset" -> name,
-      "Missing Rate" -> $missingRate,
-      "No. Instances" -> n,
-      "No. Attributes" -> m,
+      "Algo"               -> algo,
+      "No."                -> ToString@(cDataset) <> "/" <> ToString@Length@datasets,
+      "Dataset"            -> name,
+      "Missing Rate"       -> $missingRate,
+      "No. Instances"      -> n,
+      "No. Attributes"     -> m,
       "No. Missing Values" -> ($numMissings - 1),
-      "Current Iteration" -> ToString@citer <> "/" <> ToString@numIter,
-      "Last result" -> ToString@$lastResult,
-      "Min. result" -> $minResult,
-      "Max. result" -> $maxResult
+      "No. Algo imputed"   -> $numAlgo,
+      "No. Algo correct"   -> $numCorrectAlgo,
+      "No. Mean completer" -> $numMeanCompleter,
+      "Current Iteration"  -> ToString@citer <> "/" <> ToString@numIter,
+      "Last result"        -> ToString@$lastResult,
+      "Min. result"        -> $minResult,
+      "Max. result"        -> $maxResult
     |>
   ];
 
   Clear[$verboseOutcome];
-  $verboseOutcome = Association@Table[i-> <||>,{i, 1, Length@datasets}];
+  $verboseOutcome = Association@Table[i -> <||>,{i, 1, Length@datasets}];
 
   cDataset = 1;
   Table[
@@ -562,7 +599,7 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
       AbortAssert[Length@attr == m,
         "attribute file invalid " <>ToString@m<>" vs "<>ToString@Length@attr
       ];
-      Table[$V[k] = attr[[k]], {k, 1, m}];
+      Table[$V[k] = attr[[k, 2]], {k, 1, m}];
 
       SetMissings[];
       Preprocessing[];
@@ -573,7 +610,7 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
       Which[
         algo == "ROUSTIDA", ROUSTIDA[]
       , algo == "VTRIDA", VTRIDA[]
-      , algo == "HSI", HSI[]
+      , algo == "HSI",  HSI[]
       ];
 
       matches = checkMatches[oldJ];
