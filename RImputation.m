@@ -358,11 +358,13 @@ VTRIDA[] := Module[
 ];
 
 (* -------------------------------------------------------------------------- *)
+(* TODO update the data containers
+*)
 
 Clear[HSI];
 HSI[] := Module[
   {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal, flag
-    rowsAll, change},
+    ,rowsAll, change},
 
   If[ Length@$MOS == 0,
     Return[];
@@ -498,8 +500,10 @@ Table[
 Clear[RunAlgorithm];
 RunAlgorithm[dataset_Association] :=
   RunAlgorithm[dataset,$numberIterations,$missingRate, $algorithm];
+
 RunAlgorithm[dataset_Association, numIter_Integer, miss_,algo_String]:=
   RunAlgorithm[{dataset}, numIter, miss, algo]
+
 RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
   {oData, name, citer, outcome = <||>, matches, cDataset = 0,
   res, oldJ, n=0,m=0, numMissing=0, attr, mean, stand, conf},
@@ -583,12 +587,6 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
     stand = StandardDeviation@res;
     conf  = {mean - 2.01*(stand/Sqrt[numIter]), mean + 2.01*(stand/Sqrt[numIter])};
 
-    $verboseOutcome[[cDataset]] =
-      <|  "Dataset" -> name
-      ,   "Size" -> ToString@n <> "x" <> ToString@m
-      ,   "ConfidenceInt" -> conf
-      |>;
-
     Export[FileNameJoin[{dataset[["dir"]], algo<>"-"<>ToString[miss]<>".csv"}],
       { algo
       , name
@@ -600,6 +598,18 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
       , conf
       }
       , "CSV"];
+
+      $verboseOutcome[[cDataset]] =
+        <|  "dataset"     -> name
+        ,   "size"        -> ToString@n <> "x" <> ToString@m
+        ,   "algo"        -> algo
+        ,   "name"        -> name
+        ,   "numIter"     -> numIter
+        ,   "res"         -> res
+        ,   "(min, max)"  -> {$minResult, $maxResult}
+        ,   "mean"        -> mean
+        ,   "interval"    -> conf
+        |>;
 
   cDataset++;
   , {dataset, datasets}];
