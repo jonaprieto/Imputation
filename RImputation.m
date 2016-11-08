@@ -42,7 +42,7 @@ $missingRate::usage     = "Missing rate for the SetMissings method";
 
 Off[AbortAssert];
 AbortAssert::trace = "Assertion failed ``.";
-AbortAssert /: On[AbortAssert] := On[AbortAssert::trace];
+AbortAssert /: On[AbortAssert]  := On[AbortAssert::trace];
 AbortAssert /: Off[AbortAssert] := Off[AbortAssert::trace];
 SetAttributes[AbortAssert, {HoldFirst}];
 AbortAssert[test_, message__] :=
@@ -55,29 +55,27 @@ $FailCompleteSymbol = Missing["Failure"];
 $FailCompleteSymbolPrint =
 "\!\(\* StyleBox[\"*\",\nFontSize->24,\nBackground->RGBColor[1, 0.5, 0.5]]\)";
 
-$missingRate = 0.05;
-$missingSymbol = Missing[];
+$oldU             = {};
+$U                = {};
+$missingU         = {};
+$algorithm        = "ROUSTIDA";
+$numberIterations = 20;
+$missingRate      = 0.05;
+$missingSymbol    = Missing[];
 $missingSymbolPrint =
 "\!\(\* StyleBox[\"?\",\nFontSize->18,\nBackground->RGBColor[1, 1, 0]]\)";
-$missingU = {};
-$oldU = {};
-$U = {};
 
-$numberIterations = 20;
-$algorithm = "ROUSTIDA";
 
 (* -------------------------------------------------------------------------- *)
 
 Clear[SetInitValues]
 SetInitValues[] := Module[{},
-  $U = {};
-  $oldU = {};
-  $missingU = {};
-
+  $oldU               = {};
+  $missingU           = {};
+  $U                  = {};
+  $numMissings        = 0;
+  $numIncompleteRows  = 0;
   Clear[$MOS, $MAS, $V, $OMS, $GM, $Mlv, $NS];
-
-  $numMissings = 0;
-  $numIncompleteRows = 0;
 ];
 SetInitValues[];
 
@@ -88,8 +86,7 @@ PrintData[ex_] := Module[{nX, n, m},
   {n, m} = Dimensions@ex;
   nX = ex;
   Table[
-    nX[[i, j]] =
-        If[ MissingQ[ex[[i, j]]], $missingSymbolPrint , nX[[i, j]]];
+    nX[[i, j]] = If[ MissingQ[ex[[i, j]]], $missingSymbolPrint , nX[[i, j]]];
     , {i, 1, n}, {j, 1, m}];
   Print[TableForm@nX];
 ];
@@ -121,14 +118,16 @@ MakeArrange[{n_, m_}, p_] := Module[
 Clear[SetMissings];
 SetMissings[database_, per_] := (
   $U = database;
-  If[ per > 0 && per < 1, $missingRate = per];
+  If[ per > 0 && per < 1,
+    $missingRate = per
+  ];
   SetMissings[];
 );
 
 SetMissings[] := Module[
   {cant, ms, n, m},
-  $oldU = $U;
 
+  $oldU = $U;
   With[{d = Dimensions@$U},
     AbortAssert[Length@d == 2, "SetMissings"];
     {n, m} = d;
@@ -137,12 +136,13 @@ SetMissings[] := Module[
   AbortAssert[m-1 > 0 && n > 1, "SetMissings"];
   AbortAssert[$missingRate < 1 && $missingRate > 0, "SetMissings"];
 
-  cant = Ceiling[n * (m-1) * $missingRate];
-  ms = MakeArrange[{n, m-1}, $missingRate];
+  cant  = Ceiling[n * (m-1) * $missingRate];
+  ms    = MakeArrange[{n, m-1}, $missingRate];
   Table[
-    $U[[pos[[1]], pos[[2]]]] = $missingSymbol, {pos, ms}];
+    $U[[pos[[1]], pos[[2]]]] = $missingSymbol
+  , {pos, ms}];
   $numMissings = Length[ms];
-  $missingU = $U;
+  $missingU    = $U;
 ];
 
 (* -------------------------------------------------------------------------- *)
@@ -360,9 +360,9 @@ VTRIDA[] := Module[
 (* -------------------------------------------------------------------------- *)
 
 Clear[HSI];
-HSI[lap_Integer:1] := Module[
+HSI[] := Module[
   {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal, flag
-    rowsAll},
+    rowsAll, change},
 
   If[ Length@$MOS == 0,
     Return[];
@@ -384,58 +384,61 @@ HSI[lap_Integer:1] := Module[
     $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
     Table[
       If[ Length@$NS[i] == 1,
-        With[{j = $NS[i][[1]]},
-          FillWith[i, k, $U[[j, k]] ];
-          flag = True;
+        With[{  j = $NS[i][[1]]},
+          change  = FillWith[i, k, $U[[j, k]] ];
+          flag    = Or[flag, change];
         ];
       ];
     , {k, $MAS[i]}];
-
-    base = Complement2[rangeM, $MAS[i]~Join~{m}];
 
     Table[
 
       answers = DeleteCases[Union@$U[[All, k]], Missing[]];
       If[ Length@answers == 1,
-        FillWith[i, k, answers[[1]] ];
-        flag = True;
+        change = FillWith[i, k, answers[[1]] ];
+        flag   = Or[flag, change];
       ];
+      (* if there is not an obvious answer, next step *)
+      If[!change,
 
-      (* rows with values at k-col*)
-      rowsAll = Complement2[rangeN, $OMS[k]];
-      rows = Select[rowsAll, Intersection[$MAS[#], base] == {}  &];
+        base = Complement2[rangeM, $MAS[i]~Join~{m}];
 
-      If[ Length@rows == 1,
-          FillWith[i, k, $U[[ rows[[1]], k ]] ];
-          flag = True;
-      ];
+        (* rows with values at k-col*)
+        rowsAll = Complement2[rangeN, $OMS[k]];
+        rows    = Select[rowsAll, Intersection[$MAS[#], base] == {}  &];
 
-      If[ !flag ,
-        If[ Length@rows >= 0.10*n,
-          rows = SortBy[rows, - $Mlv[i,#] &];
-          rows = Take[rows, UpTo@Ceiling[0.10*n]];
+        If[ Length@rows == 1,
+            change = FillWith[i, k, $U[[ rows[[1]], k ]] ];
+            flag   = Or[flag, change];
         ];
 
-        (* cols with values in the i-row *)
-        cols = Complement2[rangeM, $MAS[i]~Join~{m}];
+        If[ !change && Length@rows > 1,
+          If[ Length@rows >= 0.10*n,
+            rows = SortBy[rows, - $Mlv[i,#] &];
+            rows = Take[rows, UpTo@Ceiling[0.10*n]];
+          ];
 
-        AbortAssert[Length@rows > 1, "ClassifyReducedModel"];
-        model = $U[[rows, cols]] -> $U[[rows, k]];
-        clasifier = Classify[model,
-            Method -> "NaiveBayes"
-          , PerformanceGoal -> "Quality"
-        ];
+          (* cols with values in the i-row *)
+          cols = Complement2[rangeM, $MAS[i]~Join~{m}];
 
-        goal = $U[[i, cols]];
-        ans = clasifier[goal];
+          AbortAssert[Length@rows > 1, "ClassifyReducedModel"];
 
-        If[ MemberQ[answers, ans],
-          FillWith[i, k, ans];
-          flag = True;
+          model     = $U[[rows, cols]] -> $U[[rows, k]];
+          clasifier = Classify[model,
+              Method          -> "NaiveBayes"
+            , PerformanceGoal -> "Quality"
+          ];
+
+          goal  = $U[[i, cols]];
+          ans   = clasifier[goal];
+
+          If[ MemberQ[answers, ans],
+            change  = FillWith[i, k, ans];
+            flag    = Or[flag, change];
+          ];
         ];
       ];
     , {k, $MAS[i]}];
-
   , {i, $MOS}];
 
   If[ flag,
@@ -447,16 +450,17 @@ HSI[lap_Integer:1] := Module[
 (* -------------------------------------------------------------------------- *)
 
 Clear[FillWith];
-FillWith[i_, k_, val_] := Module[
+FillWith[i_Integer, k_Integer, val_] := Module[
   {},
   If[ !MissingQ@val,
-    $U[[i, k]] = val;
-    $MAS[i] = DeleteCases[$MAS[i], k];
+    $U[[i, k]]  = val;
+    $MAS[i]     = DeleteCases[$MAS[i], k];
     If[ $numMissings > 0,
       --$numMissings
     ];
-    $GM[i,j] = DeleteCases[$GM[i,j], k];
+    Return[True];
   ];
+  Return[False];
 ];
 
 (* -------------------------------------------------------------------------- *)
