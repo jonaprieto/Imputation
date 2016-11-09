@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     44441,       1087]
-NotebookOptionsPosition[     41273,        990]
-NotebookOutlinePosition[     41663,       1007]
-CellTagsIndexPosition[     41620,       1004]
+NotebookDataLength[     73248,       1719]
+NotebookOptionsPosition[     70149,       1628]
+NotebookOutlinePosition[     70538,       1645]
+CellTagsIndexPosition[     70495,       1642]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -57,12 +57,11 @@ Cell[BoxData[{
 
 Cell[BoxData["\<\"/Users/jonaprieto/Imputation/databases/all\"\>"], "Output",
  CellChangeTimes->{3.68756829263822*^9, 3.6876223075076017`*^9, 
-  3.687622453316593*^9}],
+  3.687622453316593*^9, 3.687623554263214*^9, 3.6876545249230337`*^9}],
 
 Cell[BoxData[
  RowBox[{"{", 
-  RowBox[{"\<\"/Users/jonaprieto/Imputation/databases/all/balance-scale\"\>", 
-   ",", "\<\"/Users/jonaprieto/Imputation/databases/all/breast-cancer\"\>", 
+  RowBox[{"\<\"/Users/jonaprieto/Imputation/databases/all/breast-cancer\"\>", 
    ",", "\<\"/Users/jonaprieto/Imputation/databases/all/example\"\>", 
    ",", "\<\"/Users/jonaprieto/Imputation/databases/all/lymphography\"\>", 
    ",", "\<\"/Users/jonaprieto/Imputation/databases/all/soybean\"\>", 
@@ -71,7 +70,7 @@ Cell[BoxData[
    ",", "\<\"/Users/jonaprieto/Imputation/databases/all/zoo\"\>"}], 
   "}"}]], "Output",
  CellChangeTimes->{3.68756829263822*^9, 3.6876223075076017`*^9, 
-  3.687622453349535*^9}]
+  3.687622453316593*^9, 3.687623554263214*^9, 3.6876545249523783`*^9}]
 }, Open  ]],
 
 Cell[BoxData[
@@ -235,17 +234,41 @@ Cell[BoxData[
     DynamicModuleBox[{
      TypeSystem`NestedGrid`PackagePrivate`$state$$ = 
       Data`UnorderedAssociation[
-       "RowCount" -> 0, "Length" -> 0, "InitialType" -> 
-        TypeSystem`Assoc[TypeSystem`UnknownType, TypeSystem`UnknownType, 0], 
-        "Shape" -> TypeSystem`PackageScope`Limited[
-          TypeSystem`PackageScope`ColumnShape[
-           TypeSystem`PackageScope`KeyValueShape[
-           TypeSystem`PackageScope`UnknownShape, 
-            TypeSystem`PackageScope`UnknownShape]], 0, {}], "InitialData" -> 
-        TypeSystem`PackageScope`CacheHandle[795548875], "Type" -> 
-        TypeSystem`Assoc[TypeSystem`UnknownType, TypeSystem`UnknownType, 0], 
-        "HandleQ" -> True, "RowTarget" -> 20, "Data" -> 
-        TypeSystem`PackageScope`CacheHandle[795548875]], 
+       "RowCount" -> 7, "Length" -> 7, "InitialType" -> TypeSystem`Assoc[
+          TypeSystem`Atom[Integer], 
+          
+          TypeSystem`Struct[{
+           "Dataset", "Instances", "NAttributes", "Concepts"}, {
+           TypeSystem`AnyType, 
+            TypeSystem`Atom[Integer], 
+            TypeSystem`Atom[Integer], 
+            TypeSystem`Atom[Integer]}], 7], "Shape" -> 
+        TypeSystem`PackageScope`HeaderShape[
+          Association[{All, 
+             TypeSystem`PackageScope`KeyDummy[0]} -> 1, {All, "Dataset"} -> 
+           1, {All, "Instances"} -> 1, {All, "NAttributes"} -> 
+           1, {All, "Concepts"} -> 1], 
+          TypeSystem`PackageScope`Limited[
+           TypeSystem`PackageScope`ColumnShape[
+            TypeSystem`PackageScope`KeyValueShape[
+             TypeSystem`PackageScope`AtomShape[34], 
+             TypeSystem`PackageScope`RowShape[
+              Association[
+              "Dataset" -> TypeSystem`PackageScope`UnknownShape, "Instances" -> 
+               TypeSystem`PackageScope`AtomShape[34], "NAttributes" -> 
+               TypeSystem`PackageScope`AtomShape[34], "Concepts" -> 
+               TypeSystem`PackageScope`AtomShape[34]]]]], 7, {}]], 
+        "InitialData" -> TypeSystem`PackageScope`CacheHandle[1792885221], 
+        "Type" -> TypeSystem`Assoc[
+          TypeSystem`Atom[Integer], 
+          
+          TypeSystem`Struct[{
+           "Dataset", "Instances", "NAttributes", "Concepts"}, {
+           TypeSystem`AnyType, 
+            TypeSystem`Atom[Integer], 
+            TypeSystem`Atom[Integer], 
+            TypeSystem`Atom[Integer]}], 7], "HandleQ" -> True, "RowTarget" -> 
+        20, "Data" -> TypeSystem`PackageScope`CacheHandle[1792885221]], 
       TypeSystem`NestedGrid`PackagePrivate`$path$$ = {}, 
       TypeSystem`NestedGrid`PackagePrivate`$pos$$ = 1, 
       TypeSystem`NestedGrid`PackagePrivate`$grid$$ = 
@@ -258,9 +281,21 @@ Cell[BoxData[
                  EventHandler[
                   MouseAppearance[
                    Mouseover[
-                    Spacer[10], 
+                    Pane[
                     Style[
-                    Spacer[10], FontColor -> 
+                    RawBoxes[
+                    StyleBox["\"\"", FontColor -> GrayLevel[0.4]]], Italic, 
+                    GrayLevel[0.7]], {{20, Full}, 15}], 
+                    Style[
+                    Pane[
+                    Style[
+                    RawBoxes[
+                    StyleBox[
+                    "\"\"", FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], Italic, 
+                    GrayLevel[0.7]], {{20, Full}, 15}], FontColor -> 
                     RGBColor[
                     0.27450980392156865`, 0.5372549019607843, 
                     0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
@@ -268,12 +303,576 @@ Cell[BoxData[
                    TypeSystem`NestedGrid`PackagePrivate`$state$$, 
                     TypeSystem`NestedGrid`PackagePrivate`$path$$, 
                     TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
-                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 
-                    2034511461][{}]], 
-                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[
-                 2034511461][Identity], "Mouse"], BaseStyle -> {
-                  GrayLevel[0.5], 8}], SpanFromLeft}}, 
-             BaseStyle -> {ContextMenu -> {
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    All, Keys}]], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[All, Keys]], "Mouse"], Background -> 
+                GrayLevel[0.95], Alignment -> {Left, Baseline}], 
+               Item[
+                Annotation[
+                 EventHandler[
+                  MouseAppearance[
+                   Mouseover[
+                    Pane[
+                    RawBoxes[
+                    StyleBox["\"Dataset\"", FontColor -> GrayLevel[0.4]]], {{
+                    20, Full}, 15}], 
+                    Style[
+                    Pane[
+                    RawBoxes[
+                    StyleBox[
+                    "\"Dataset\"", FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], {{20, Full}, 15}], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                  TypeSystem`NestedGrid`PackagePrivate`updateState[
+                   TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    All, "Dataset"}]], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[All, "Dataset"]], "Mouse"], 
+                Background -> GrayLevel[0.95], Alignment -> {Left, Baseline}], 
+               Item[
+                Annotation[
+                 EventHandler[
+                  MouseAppearance[
+                   Mouseover[
+                    Pane[
+                    RawBoxes[
+                    StyleBox[
+                    "\"Instances\"", FontColor -> GrayLevel[0.4]]], {{
+                    20, Full}, 15}], 
+                    Style[
+                    Pane[
+                    RawBoxes[
+                    StyleBox[
+                    "\"Instances\"", FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], {{20, Full}, 15}], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                  TypeSystem`NestedGrid`PackagePrivate`updateState[
+                   TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    All, "Instances"}]], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[All, "Instances"]], "Mouse"], 
+                Background -> GrayLevel[0.95], Alignment -> {Left, Baseline}], 
+               Item[
+                Annotation[
+                 EventHandler[
+                  MouseAppearance[
+                   Mouseover[
+                    Pane[
+                    RawBoxes[
+                    StyleBox[
+                    "\"NAttributes\"", FontColor -> GrayLevel[0.4]]], {{
+                    20, Full}, 15}], 
+                    Style[
+                    Pane[
+                    RawBoxes[
+                    StyleBox[
+                    "\"NAttributes\"", FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], {{20, Full}, 15}], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                  TypeSystem`NestedGrid`PackagePrivate`updateState[
+                   TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    All, "NAttributes"}]], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[All, "NAttributes"]], "Mouse"], 
+                Background -> GrayLevel[0.95], Alignment -> {Left, Baseline}], 
+               Item[
+                Annotation[
+                 EventHandler[
+                  MouseAppearance[
+                   Mouseover[
+                    Pane[
+                    RawBoxes[
+                    StyleBox["\"Concepts\"", FontColor -> GrayLevel[0.4]]], {{
+                    20, Full}, 15}], 
+                    Style[
+                    Pane[
+                    RawBoxes[
+                    StyleBox[
+                    "\"Concepts\"", FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], {{20, Full}, 15}], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                  TypeSystem`NestedGrid`PackagePrivate`updateState[
+                   TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    All, "Concepts"}]], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[All, "Concepts"]], "Mouse"], 
+                Background -> GrayLevel[0.95], 
+                Alignment -> {Left, Baseline}]}, {
+               Item[
+                Pane[
+                 Annotation[
+                  EventHandler[
+                   MouseAppearance[
+                    Mouseover[
+                    RawBoxes["6"], 
+                    Style[
+                    RawBoxes["6"], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                   TypeSystem`NestedGrid`PackagePrivate`updateState[
+                    TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    Key[6]}]], 
+                  TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  
+                   GeneralUtilities`Slice[
+                    Key[6]]], "Mouse"], ImageSize -> {{34, Full}, Automatic}],
+                 Background -> GrayLevel[0.95], 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes[
+                  StyleBox[
+                   RowBox[{"\"vote\"", " ", "\.1c"}], FontFamily -> "Courier",
+                    FontSize -> 13, ShowStringCharacters -> True]], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[6], 
+                   Key["Dataset"]]], "Mouse"], 
+                ImageSize -> {{60, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["300"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[6], 
+                   Key["Instances"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["16"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[6], 
+                   Key["NAttributes"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["2"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[6], 
+                   Key["Concepts"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}]}, {
+               Item[
+                Pane[
+                 Annotation[
+                  EventHandler[
+                   MouseAppearance[
+                    Mouseover[
+                    RawBoxes["1"], 
+                    Style[
+                    RawBoxes["1"], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                   TypeSystem`NestedGrid`PackagePrivate`updateState[
+                    TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    Key[1]}]], 
+                  TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  
+                   GeneralUtilities`Slice[
+                    Key[1]]], "Mouse"], ImageSize -> {{34, Full}, Automatic}],
+                 Background -> GrayLevel[0.95], 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes[
+                  StyleBox[
+                   RowBox[{"\"breast-cancer\"", " ", "\.1c"}], FontFamily -> 
+                   "Courier", FontSize -> 13, ShowStringCharacters -> True]], 
+                 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[1], 
+                   Key["Dataset"]]], "Mouse"], 
+                ImageSize -> {{60, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["277"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[1], 
+                   Key["Instances"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["10"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[1], 
+                   Key["NAttributes"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["2"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[1], 
+                   Key["Concepts"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}]}, {
+               Item[
+                Pane[
+                 Annotation[
+                  EventHandler[
+                   MouseAppearance[
+                    Mouseover[
+                    RawBoxes["5"], 
+                    Style[
+                    RawBoxes["5"], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                   TypeSystem`NestedGrid`PackagePrivate`updateState[
+                    TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    Key[5]}]], 
+                  TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  
+                   GeneralUtilities`Slice[
+                    Key[5]]], "Mouse"], ImageSize -> {{34, Full}, Automatic}],
+                 Background -> GrayLevel[0.95], 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes[
+                  StyleBox[
+                   RowBox[{"\"spect\"", " ", "\.1c"}], FontFamily -> 
+                   "Courier", FontSize -> 13, ShowStringCharacters -> True]], 
+                 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[5], 
+                   Key["Dataset"]]], "Mouse"], 
+                ImageSize -> {{60, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["267"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[5], 
+                   Key["Instances"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["23"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[5], 
+                   Key["NAttributes"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["2"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[5], 
+                   Key["Concepts"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}]}, {
+               Item[
+                Pane[
+                 Annotation[
+                  EventHandler[
+                   MouseAppearance[
+                    Mouseover[
+                    RawBoxes["3"], 
+                    Style[
+                    RawBoxes["3"], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                   TypeSystem`NestedGrid`PackagePrivate`updateState[
+                    TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    Key[3]}]], 
+                  TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  
+                   GeneralUtilities`Slice[
+                    Key[3]]], "Mouse"], ImageSize -> {{34, Full}, Automatic}],
+                 Background -> GrayLevel[0.95], 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes[
+                  StyleBox[
+                   RowBox[{"\"lymphography\"", " ", "\.1c"}], FontFamily -> 
+                   "Courier", FontSize -> 13, ShowStringCharacters -> True]], 
+                 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[3], 
+                   Key["Dataset"]]], "Mouse"], 
+                ImageSize -> {{60, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["148"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[3], 
+                   Key["Instances"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["19"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[3], 
+                   Key["NAttributes"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["4"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[3], 
+                   Key["Concepts"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}]}, {
+               Item[
+                Pane[
+                 Annotation[
+                  EventHandler[
+                   MouseAppearance[
+                    Mouseover[
+                    RawBoxes["7"], 
+                    Style[
+                    RawBoxes["7"], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                   TypeSystem`NestedGrid`PackagePrivate`updateState[
+                    TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    Key[7]}]], 
+                  TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  
+                   GeneralUtilities`Slice[
+                    Key[7]]], "Mouse"], ImageSize -> {{34, Full}, Automatic}],
+                 Background -> GrayLevel[0.95], 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes[
+                  StyleBox[
+                   RowBox[{"\"zoo\"", " ", "\.1c"}], FontFamily -> "Courier", 
+                   FontSize -> 13, ShowStringCharacters -> True]], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[7], 
+                   Key["Dataset"]]], "Mouse"], 
+                ImageSize -> {{60, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["101"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[7], 
+                   Key["Instances"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["17"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[7], 
+                   Key["NAttributes"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["7"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[7], 
+                   Key["Concepts"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}]}, {
+               Item[
+                Pane[
+                 Annotation[
+                  EventHandler[
+                   MouseAppearance[
+                    Mouseover[
+                    RawBoxes["4"], 
+                    Style[
+                    RawBoxes["4"], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                   TypeSystem`NestedGrid`PackagePrivate`updateState[
+                    TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    Key[4]}]], 
+                  TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  
+                   GeneralUtilities`Slice[
+                    Key[4]]], "Mouse"], ImageSize -> {{34, Full}, Automatic}],
+                 Background -> GrayLevel[0.95], 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes[
+                  StyleBox[
+                   RowBox[{"\"soybean\"", " ", "\.1c"}], FontFamily -> 
+                   "Courier", FontSize -> 13, ShowStringCharacters -> True]], 
+                 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[4], 
+                   Key["Dataset"]]], "Mouse"], 
+                ImageSize -> {{60, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["63"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[4], 
+                   Key["Instances"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["36"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[4], 
+                   Key["NAttributes"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["4"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[4], 
+                   Key["Concepts"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}]}, {
+               Item[
+                Pane[
+                 Annotation[
+                  EventHandler[
+                   MouseAppearance[
+                    Mouseover[
+                    RawBoxes["2"], 
+                    Style[
+                    RawBoxes["2"], FontColor -> 
+                    RGBColor[
+                    0.27450980392156865`, 0.5372549019607843, 
+                    0.792156862745098]]], "LinkHand"], {"MouseClicked", 1} :> 
+                   TypeSystem`NestedGrid`PackagePrivate`updateState[
+                    TypeSystem`NestedGrid`PackagePrivate`$state$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$path$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
+                    TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][{
+                    Key[2]}]], 
+                  TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  
+                   GeneralUtilities`Slice[
+                    Key[2]]], "Mouse"], ImageSize -> {{34, Full}, Automatic}],
+                 Background -> GrayLevel[0.95], 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes[
+                  StyleBox[
+                   RowBox[{"\"example\"", " ", "\.1c"}], FontFamily -> 
+                   "Courier", FontSize -> 13, ShowStringCharacters -> True]], 
+                 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[2], 
+                   Key["Dataset"]]], "Mouse"], 
+                ImageSize -> {{60, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["6"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[2], 
+                   Key["Instances"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["1"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[2], 
+                   Key["NAttributes"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}], 
+               Pane[
+                Annotation[
+                 RawBoxes["2"], 
+                 TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
+                  GeneralUtilities`Slice[
+                   Key[2], 
+                   Key["Concepts"]]], "Mouse"], 
+                ImageSize -> {{34, Full}, Automatic}, 
+                Alignment -> {Left, Baseline}]}}, BaseStyle -> {ContextMenu -> {
                  MenuItem["Copy position to clipboard", 
                   KernelExecute[
                    TypeSystem`NestedGrid`PackagePrivate`toCurrentPosition[
@@ -320,7 +919,7 @@ Cell[BoxData[
                 TypeSystem`NestedGrid`PackagePrivate`$state$$, 
                  TypeSystem`NestedGrid`PackagePrivate`$path$$, 
                  TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
-                 TypeSystem`NestedGrid`PackagePrivate`$grid$$, 2034511461][
+                 TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459][
                 TypeSystem`NestedGrid`PackagePrivate`tmpData$]]; If[
                Not[
                 FailureQ[TypeSystem`NestedGrid`PackagePrivate`tmpGrid$]], 
@@ -355,14 +954,14 @@ Cell[BoxData[
           TypeSystem`NestedGrid`PackagePrivate`$state$$, 
            TypeSystem`NestedGrid`PackagePrivate`$path$$, 
            TypeSystem`NestedGrid`PackagePrivate`$pos$$, 
-           TypeSystem`NestedGrid`PackagePrivate`$grid$$, 2034511461]]], 
+           TypeSystem`NestedGrid`PackagePrivate`$grid$$, 29313459]]], 
         TrackedSymbols :> {TypeSystem`NestedGrid`PackagePrivate`$path$$}], 
       TypeSystem`NestedGrid`PackagePrivate`$bottomBar$$ = Framed[
         Dynamic[
          Replace[
           MouseAnnotation[Null], {
-          TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[2034511461][Null] -> 
-           "", TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[2034511461][
+          TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][Null] -> 
+           "", TypeSystem`NestedGrid`PackagePrivate`$SliceMarker[29313459][
              Pattern[TypeSystem`NestedGrid`PackagePrivate`path, 
               Blank[]]] :> (
             TypeSystem`NestedGrid`PackagePrivate`$lastPath = 
@@ -403,12 +1002,13 @@ Cell[BoxData[
   InterpretationFunction->("Dataset[<>]"& )]], "Output",
  CellChangeTimes->{
   3.687568513803073*^9, 3.687622321952322*^9, {3.687623077309778*^9, 
-   3.687623092990634*^9}}]
+   3.687623092990634*^9}, 3.687623576620973*^9, 3.6876545314594183`*^9}]
 }, Open  ]],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"$iter", " ", "=", " ", "50"}], ";"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"$iter", " ", "=", " ", "50"}], ";"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872998934087067`*^9, 3.687299902115172*^9}}]
 }, Open  ]],
 
@@ -418,12 +1018,13 @@ Cell["5", "Subsection",
  CellChangeTimes->{{3.6872988955560856`*^9, 3.6872989132458053`*^9}}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968926589184`*^9, 3.687296923787522*^9}, {
    3.687299507436753*^9, 3.687299513894904*^9}, {3.687299596842914*^9, 
    3.687299627700527*^9}, {3.687299669150133*^9, 3.6872996870280457`*^9}, {
@@ -431,182 +1032,186 @@ Cell[BoxData[
    3.687299888510495*^9}, 3.6872999185569396`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296844084897*^9, 3.687296860129378*^9}, 
    3.6872968976078963`*^9, 3.6872969297192554`*^9, 3.687299604907804*^9, {
    3.6872996387137036`*^9, 3.6872996497736783`*^9}, 3.6872996947185497`*^9, 
    3.6872999185569396`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.68729686253167*^9, 3.6872968642319937`*^9}, 
    3.6872968989026384`*^9, 3.6872969312167883`*^9, 3.6872996062493525`*^9, {
    3.6872996408352222`*^9, 3.687299648322934*^9}, 3.6872996959509025`*^9, 
    3.687299918572539*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{
   3.687296865760725*^9, 3.6872969016793137`*^9, 3.6872969322307434`*^9, 
    3.6872996086828585`*^9, {3.6872996431595325`*^9, 3.6872996469501867`*^9}, 
    3.687299699335972*^9, 3.687299918572539*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296867102265*^9, 3.6872969035668287`*^9}, 
    3.6872969335720844`*^9, {3.687299633659498*^9, 3.6872996457022347`*^9}, 
    3.6872997009271107`*^9, 3.6872999185881386`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968802368755`*^9, 3.6872969355375957`*^9}, 
    3.687299702159464*^9, 3.6872999185881386`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{3.6872968869621735`*^9, 3.68729693678554*^9, 
   3.6872997034386144`*^9, 3.6872999185881386`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872990851359944`*^9, 3.687299085635175*^9}, 
    3.687299704670967*^9, 3.687299918619337*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968926589184`*^9, 3.687296923787522*^9}, {
    3.687298677260681*^9, 3.6872986781966453`*^9}, 3.687299705762925*^9, 
    3.6872999186349363`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296844084897*^9, 3.687296860129378*^9}, 
    3.6872968976078963`*^9, 3.6872969297192554`*^9, 3.687298684186815*^9, 
    3.6872997086332145`*^9, 3.6872999186349363`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.68729686253167*^9, 3.6872968642319937`*^9}, 
    3.6872968989026384`*^9, 3.6872969312167883`*^9, 3.6872986863239326`*^9, 
    3.687299709615977*^9, 3.687299918650536*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{3.687296865760725*^9, 3.6872969016793137`*^9, 
   3.6872969322307434`*^9, 3.6872986884298515`*^9, 3.6872997114099073`*^9, 
   3.687299918650536*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.05", ",", " ", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296867102265*^9, 3.6872969035668287`*^9}, 
    3.6872969335720844`*^9, 3.687298690582569*^9, 3.6872997128450527`*^9, 
    3.6872999186661353`*^9}],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968802368755`*^9, 3.6872969355375957`*^9}, 
    3.6872986927196865`*^9, 3.687299714889574*^9, 3.6872999186661353`*^9}],
 
-Cell[BoxData["$Aborted"], "Output",
- CellChangeTimes->{3.6873000248098383`*^9}]
-}, Open  ]],
-
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872991168827734`*^9, 3.6872991174755507`*^9}, 
    3.687299716355918*^9, 3.687299918681735*^9, {3.6873000012397594`*^9, 
    3.687300002191323*^9}}],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.05", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{
   3.687299717713065*^9, 3.687299918681735*^9, {3.687300004219245*^9, 
    3.6873000052176065`*^9}}],
 
-Cell[BoxData["$Aborted"], "Output",
- CellChangeTimes->{3.68730004638235*^9}]
-}, Open  ]],
-
-Cell[BoxData[""], "Input",
+Cell[BoxData[
+ RowBox[{"(*", "*)"}]], "Input",
  CellChangeTimes->{{3.687299481555348*^9, 3.6872994991690707`*^9}}],
 
 Cell[CellGroupData[{
@@ -615,180 +1220,196 @@ Cell["10", "Subsubsection",
  CellChangeTimes->{{3.687298862030975*^9, 3.6872988683955297`*^9}}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968926589184`*^9, 3.687296923787522*^9}, {
    3.687298677260681*^9, 3.6872986781966453`*^9}, {3.6872987083834844`*^9, 
    3.6872987339976993`*^9}, 3.6872997195849934`*^9, 3.6872999186973343`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296844084897*^9, 3.687296860129378*^9}, 
    3.6872968976078963`*^9, 3.6872969297192554`*^9, {3.687298684186815*^9, 
    3.6872987410184293`*^9}, 3.687299720583355*^9, 3.6872999186973343`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.68729686253167*^9, 3.6872968642319937`*^9}, 
    3.6872968989026384`*^9, 3.6872969312167883`*^9, {3.6872986863239326`*^9, 
    3.687298744185107*^9}, 3.6872997215037193`*^9, 3.6872999186973343`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{
   3.687296865760725*^9, 3.6872969016793137`*^9, 3.6872969322307434`*^9, {
    3.6872986884298515`*^9, 3.687298747570177*^9}, 3.687299722548879*^9, 
    3.6872999187129335`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296867102265*^9, 3.6872969035668287`*^9}, 
    3.6872969335720844`*^9, 3.687298690582569*^9, {3.6872987212841883`*^9, 
    3.6872987497852917`*^9}, 3.6872997235316415`*^9, 3.6872999187129335`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968802368755`*^9, 3.6872969355375957`*^9}, 
    3.6872986927196865`*^9, {3.687298724638059*^9, 3.687298751797614*^9}, 
    3.6872997255595636`*^9, 3.687299918728533*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.68729913050305*^9, 3.687299139457105*^9}, 
    3.687299726557925*^9, 3.687299918728533*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872991416566205`*^9, 3.687299142748578*^9}, 
    3.6872997274782896`*^9, 3.687299918728533*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968926589184`*^9, 3.687296923787522*^9}, {
    3.687298677260681*^9, 3.6872986781966453`*^9}, {3.6872987083834844`*^9, 
    3.6872987339976993`*^9}, 3.6872987900181446`*^9, 3.6872997282426605`*^9, 
    3.6872999187441325`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296844084897*^9, 3.687296860129378*^9}, 
    3.6872968976078963`*^9, 3.6872969297192554`*^9, {3.687298684186815*^9, 
    3.6872987410184293`*^9}, 3.687298791905672*^9, 3.6872997301145887`*^9, 
    3.6872999187441325`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.68729686253167*^9, 3.6872968642319937`*^9}, 
    3.6872968989026384`*^9, 3.6872969312167883`*^9, {3.6872986863239326`*^9, 
    3.687298744185107*^9}, 3.687298794980754*^9, 3.6872997310661516`*^9, 
    3.6872999187597313`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{
   3.687296865760725*^9, 3.6872969016793137`*^9, 3.6872969322307434`*^9, {
    3.6872986884298515`*^9, 3.687298747570177*^9}, 3.6872987973830614`*^9, 
    3.687299731861721*^9, 3.6872999187597313`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.10", ",", " ", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296867102265*^9, 3.6872969035668287`*^9}, 
    3.6872969335720844`*^9, 3.687298690582569*^9, {3.6872987212841883`*^9, 
    3.6872987497852917`*^9}, 3.6872987993641853`*^9, 3.687299732688489*^9, 
    3.6872999187753315`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968802368755`*^9, 3.6872969355375957`*^9}, 
    3.6872986927196865`*^9, {3.687298724638059*^9, 3.687298751797614*^9}, 
    3.6872988013297095`*^9, 3.6872997336088543`*^9, 3.6872999187753315`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872991493003263`*^9, 3.687299162296627*^9}, 
    3.687299734732011*^9, 3.6872999187753315`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.10", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872991691915617`*^9, 3.687299195993331*^9}, 
    3.6872997361047583`*^9, 3.6872999187909307`*^9}]
 }, Open  ]],
@@ -799,197 +1420,214 @@ Cell["20", "Subsubsection",
  CellChangeTimes->{{3.6872988463047795`*^9, 3.6872988549800463`*^9}}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968926589184`*^9, 3.687296923787522*^9}, {
    3.687298677260681*^9, 3.6872986781966453`*^9}, {3.6872987083834844`*^9, 
    3.6872987339976993`*^9}, {3.6872989397823844`*^9, 3.68729893990718*^9}, 
    3.687299737446306*^9, 3.6872999187909307`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296844084897*^9, 3.687296860129378*^9}, 
    3.6872968976078963`*^9, 3.6872969297192554`*^9, {3.687298684186815*^9, 
    3.6872987410184293`*^9}, 3.687298942091096*^9, 3.687299738148279*^9, 
    3.68729991880653*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.68729686253167*^9, 3.6872968642319937`*^9}, 
    3.6872968989026384`*^9, 3.6872969312167883`*^9, {3.6872986863239326`*^9, 
    3.687298744185107*^9}, 3.687298943307849*^9, 3.687299739099843*^9, 
    3.68729991880653*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{
   3.687296865760725*^9, 3.6872969016793137`*^9, 3.6872969322307434`*^9, {
    3.6872986884298515`*^9, 3.687298747570177*^9}, 3.6872989445402017`*^9, 
    3.687299740191801*^9, 3.6872999188221292`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296867102265*^9, 3.6872969035668287`*^9}, 
    3.6872969335720844`*^9, 3.687298690582569*^9, {3.6872987212841883`*^9, 
    3.6872987497852917`*^9}, 3.6872989459617467`*^9, 3.6872997416425447`*^9, 
    3.6872999188221292`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968802368755`*^9, 3.6872969355375957`*^9}, 
    3.6872986927196865`*^9, {3.687298724638059*^9, 3.687298751797614*^9}, 
    3.6872989475840845`*^9, 3.687299742687705*^9, 3.6872999188221292`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872991493003263`*^9, 3.687299162296627*^9}, {
    3.687299206179739*^9, 3.6872992232786813`*^9}, 3.687299743639268*^9, 
    3.6872999188377285`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<ROUSTIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872991691915617`*^9, 3.687299226226968*^9}, 
    3.687299744575232*^9, 3.6872999188533278`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968926589184`*^9, 3.687296923787522*^9}, {
    3.687298677260681*^9, 3.6872986781966453`*^9}, {3.6872987083834844`*^9, 
    3.6872987339976993`*^9}, 3.6872987900181446`*^9, 3.6872989494404135`*^9, 
    3.6872997454175997`*^9, 3.6872999188533278`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296844084897*^9, 3.687296860129378*^9}, 
    3.6872968976078963`*^9, 3.6872969297192554`*^9, {3.687298684186815*^9, 
    3.6872987410184293`*^9}, 3.687298791905672*^9, 3.6872989520143137`*^9, 
    3.687299747260329*^9, 3.6872999188533278`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "3", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.68729686253167*^9, 3.6872968642319937`*^9}, 
    3.6872968989026384`*^9, 3.6872969312167883`*^9, {3.6872986863239326`*^9, 
    3.687298744185107*^9}, 3.687298794980754*^9, 3.6872989537146487`*^9, 
    3.6872997485394793`*^9, 3.687299918868928*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "4", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{
   3.687296865760725*^9, 3.6872969016793137`*^9, 3.6872969322307434`*^9, {
    3.6872986884298515`*^9, 3.687298747570177*^9}, 3.6872987973830614`*^9, 
    3.6872989556021757`*^9, 3.6872997497718325`*^9, 3.687299918868928*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "5", "]"}], "]"}], ",", "$iter", ",", "0.20", ",", " ", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.687296867102265*^9, 3.6872969035668287`*^9}, 
    3.6872969335720844`*^9, 3.687298690582569*^9, {3.6872987212841883`*^9, 
    3.6872987497852917`*^9}, 3.6872987993641853`*^9, 3.6872989580044837`*^9, 
    3.687299750926188*^9, 3.6872999188845267`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "6", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872968802368755`*^9, 3.6872969355375957`*^9}, 
    3.6872986927196865`*^9, {3.687298724638059*^9, 3.687298751797614*^9}, 
    3.6872988013297095`*^9, 3.6872989594240294`*^9, 3.6872997520805435`*^9, 
    3.6872999188845267`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "7", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872991493003263`*^9, 3.687299162296627*^9}, {
    3.6872992171149187`*^9, 3.687299217302111*^9}, 3.687299753188101*^9, 
    3.6872999189001265`*^9}],
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"TestAlgorithm", "[", 
-   RowBox[{
-    RowBox[{"fileSet", "[", 
-     RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
-    "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}]], "Input",
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"TestAlgorithm", "[", 
+    RowBox[{
+     RowBox[{"fileSet", "[", 
+      RowBox[{"[", "8", "]"}], "]"}], ",", "$iter", ",", " ", "0.20", ",", 
+     "\"\<VTRIDA\>\""}], "]"}], "//", "notificar"}], "*)"}]], "Input",
  CellChangeTimes->{{3.6872991691915617`*^9, 3.687299219985208*^9}, 
    3.6872997541864624`*^9, 3.6872999189001265`*^9}],
 
-Cell[BoxData[""], "Input",
+Cell[BoxData[
+ RowBox[{"(*", "*)"}]], "Input",
  CellChangeTimes->{3.687298696993922*^9, 3.687298775229913*^9}]
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1440, 851},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{720, 851},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
 Magnification:>1.25 Inherited,
 FrontEndVersion->"11.0 para Mac OS X x86 (32-bit, 64-bit Kernel) (September \
 21, 2016)",
@@ -1011,82 +1649,76 @@ Cell[750, 26, 305, 5, 39, "Input"],
 Cell[CellGroupData[{
 Cell[1080, 35, 101, 1, 43, "Subsubsection"],
 Cell[CellGroupData[{
-Cell[1206, 40, 633, 15, 92, "Input"],
-Cell[1842, 57, 167, 2, 39, "Output"],
-Cell[2012, 61, 718, 12, 152, "Output"]
+Cell[1206, 40, 633, 15, 144, "Input"],
+Cell[1842, 57, 213, 2, 39, "Output"],
+Cell[2058, 61, 687, 11, 196, "Output"]
 }, Open  ]],
-Cell[2745, 76, 1732, 38, 308, "Input"],
-Cell[4480, 116, 210, 4, 39, "Input"],
-Cell[4693, 122, 1161, 16, 39, "Input"],
+Cell[2760, 75, 1732, 38, 274, "Input"],
+Cell[4495, 115, 210, 4, 39, "Input"],
+Cell[4708, 121, 1161, 16, 39, "Input"],
 Cell[CellGroupData[{
-Cell[5879, 142, 3754, 88, 638, "Input"],
-Cell[9636, 232, 9553, 173, 90, "Output"]
+Cell[5894, 141, 3754, 88, 638, "Input"],
+Cell[9651, 231, 37137, 773, 290, "Output"]
 }, Open  ]],
-Cell[19204, 408, 150, 3, 39, "Input"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[19391, 416, 93, 1, 54, "Subsection"],
-Cell[19487, 419, 580, 11, 39, "Input"],
-Cell[20070, 432, 482, 10, 39, "Input"],
-Cell[20555, 444, 481, 10, 39, "Input"],
-Cell[21039, 456, 455, 10, 39, "Input"],
-Cell[21497, 468, 432, 9, 39, "Input"],
-Cell[21932, 479, 356, 8, 39, "Input"],
-Cell[22291, 489, 352, 8, 39, "Input"],
-Cell[22646, 499, 352, 8, 39, "Input"],
-Cell[23001, 509, 404, 9, 39, "Input"],
-Cell[23408, 520, 426, 9, 39, "Input"],
-Cell[23837, 531, 425, 9, 39, "Input"],
-Cell[24265, 542, 400, 9, 39, "Input"],
-Cell[24668, 553, 404, 9, 39, "Input"],
-Cell[CellGroupData[{
-Cell[25097, 566, 378, 8, 39, "Input"],
-Cell[25478, 576, 79, 1, 39, "Output"]
-}, Open  ]],
-Cell[25572, 580, 404, 9, 39, "Input"],
-Cell[CellGroupData[{
-Cell[26001, 593, 353, 9, 39, "Input"],
-Cell[26357, 604, 76, 1, 48, "Output"]
-}, Open  ]],
-Cell[26448, 608, 94, 1, 71, "Input"],
-Cell[CellGroupData[{
-Cell[26567, 613, 95, 1, 95, "Subsubsection"],
-Cell[26665, 616, 458, 9, 71, "Input"],
-Cell[27126, 627, 452, 9, 71, "Input"],
-Cell[27581, 638, 455, 9, 71, "Input"],
-Cell[28039, 649, 431, 10, 71, "Input"],
-Cell[28473, 661, 456, 9, 71, "Input"],
-Cell[28932, 672, 430, 9, 71, "Input"],
-Cell[29365, 683, 349, 8, 71, "Input"],
-Cell[29717, 693, 354, 8, 71, "Input"],
-Cell[30074, 703, 484, 10, 71, "Input"],
-Cell[30561, 715, 478, 10, 71, "Input"],
-Cell[31042, 727, 479, 10, 71, "Input"],
-Cell[31524, 739, 453, 10, 71, "Input"],
-Cell[31980, 751, 480, 10, 71, "Input"],
-Cell[32463, 763, 454, 9, 71, "Input"],
-Cell[32920, 774, 352, 8, 71, "Input"],
-Cell[33275, 784, 354, 8, 71, "Input"]
+Cell[46803, 1007, 176, 4, 39, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[33666, 797, 97, 1, 95, "Subsubsection"],
-Cell[33766, 800, 507, 10, 71, "Input"],
-Cell[34276, 812, 475, 10, 71, "Input"],
-Cell[34754, 824, 476, 10, 71, "Input"],
-Cell[35233, 836, 455, 10, 71, "Input"],
-Cell[35691, 848, 484, 10, 71, "Input"],
-Cell[36178, 860, 454, 9, 71, "Input"],
-Cell[36635, 871, 406, 9, 71, "Input"],
-Cell[37044, 882, 354, 8, 71, "Input"],
-Cell[37401, 892, 508, 10, 71, "Input"],
-Cell[37912, 904, 500, 10, 71, "Input"],
-Cell[38415, 916, 501, 10, 71, "Input"],
-Cell[38919, 928, 477, 10, 71, "Input"],
-Cell[39399, 940, 504, 10, 71, "Input"],
-Cell[39906, 952, 482, 10, 71, "Input"],
-Cell[40391, 964, 404, 9, 71, "Input"],
-Cell[40798, 975, 354, 8, 71, "Input"],
-Cell[41155, 985, 90, 1, 71, "Input"]
+Cell[47016, 1016, 93, 1, 54, "Subsection"],
+Cell[47112, 1019, 610, 12, 66, "Input"],
+Cell[47725, 1033, 512, 11, 66, "Input"],
+Cell[48240, 1046, 511, 11, 66, "Input"],
+Cell[48754, 1059, 485, 11, 66, "Input"],
+Cell[49242, 1072, 462, 10, 66, "Input"],
+Cell[49707, 1084, 386, 9, 66, "Input"],
+Cell[50096, 1095, 382, 9, 66, "Input"],
+Cell[50481, 1106, 382, 9, 66, "Input"],
+Cell[50866, 1117, 434, 10, 66, "Input"],
+Cell[51303, 1129, 456, 10, 66, "Input"],
+Cell[51762, 1141, 455, 10, 66, "Input"],
+Cell[52220, 1153, 430, 10, 66, "Input"],
+Cell[52653, 1165, 434, 10, 66, "Input"],
+Cell[53090, 1177, 408, 9, 66, "Input"],
+Cell[53501, 1188, 434, 10, 66, "Input"],
+Cell[53938, 1200, 383, 10, 66, "Input"],
+Cell[54324, 1212, 114, 2, 39, "Input"],
+Cell[CellGroupData[{
+Cell[54463, 1218, 95, 1, 43, "Subsubsection"],
+Cell[54561, 1221, 488, 10, 66, "Input"],
+Cell[55052, 1233, 482, 10, 66, "Input"],
+Cell[55537, 1245, 485, 10, 66, "Input"],
+Cell[56025, 1257, 461, 11, 66, "Input"],
+Cell[56489, 1270, 486, 10, 66, "Input"],
+Cell[56978, 1282, 460, 10, 66, "Input"],
+Cell[57441, 1294, 379, 9, 66, "Input"],
+Cell[57823, 1305, 384, 9, 66, "Input"],
+Cell[58210, 1316, 514, 11, 66, "Input"],
+Cell[58727, 1329, 508, 11, 66, "Input"],
+Cell[59238, 1342, 509, 11, 66, "Input"],
+Cell[59750, 1355, 483, 11, 66, "Input"],
+Cell[60236, 1368, 510, 11, 66, "Input"],
+Cell[60749, 1381, 484, 10, 66, "Input"],
+Cell[61236, 1393, 382, 9, 66, "Input"],
+Cell[61621, 1404, 384, 9, 66, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[62042, 1418, 97, 1, 43, "Subsubsection"],
+Cell[62142, 1421, 537, 11, 66, "Input"],
+Cell[62682, 1434, 505, 11, 66, "Input"],
+Cell[63190, 1447, 506, 11, 66, "Input"],
+Cell[63699, 1460, 485, 11, 66, "Input"],
+Cell[64187, 1473, 514, 11, 66, "Input"],
+Cell[64704, 1486, 484, 10, 66, "Input"],
+Cell[65191, 1498, 436, 10, 66, "Input"],
+Cell[65630, 1510, 384, 9, 66, "Input"],
+Cell[66017, 1521, 538, 11, 66, "Input"],
+Cell[66558, 1534, 530, 11, 66, "Input"],
+Cell[67091, 1547, 531, 11, 66, "Input"],
+Cell[67625, 1560, 507, 11, 66, "Input"],
+Cell[68135, 1573, 534, 11, 66, "Input"],
+Cell[68672, 1586, 512, 11, 66, "Input"],
+Cell[69187, 1599, 434, 10, 66, "Input"],
+Cell[69624, 1611, 384, 9, 66, "Input"],
+Cell[70011, 1622, 110, 2, 39, "Input"]
 }, Open  ]]
 }, Open  ]]
 }

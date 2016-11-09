@@ -165,10 +165,12 @@ Preprocessing[] := Module[
   Clear[$MOS, $MAS, $OMS, $GM, $Mlv, $NS];
 
   $GM[i_,j_]  := $GM[j,i] /; i > j;
+  $GM[i_,j_]  := {} /; i == j;
   $GM[_,_]    := {};
 
   $Mlv[i_,j_] := $Mlv[j,i] /; i > j;
-  $Mlv[_,_]   := {};
+  $Mlv[i_,j_] := 1 /; i == j;
+  $Mlv[_,_]   := 0;
 
   Table[ $OMS[k] = {},{k, 1, m}];
 
@@ -186,8 +188,8 @@ Preprocessing[] := Module[
     If[ Length@$MAS[i] > 0,
       $MOS = $MOS~Join~{i}
     ];
-    $Mlv[i,i] = 1;
-    $GM[i,i]  = {};
+    (*$Mlv[i,i] = 1;*)
+    (*$GM[i,i]  = {};*)
   ,{i, 1, n}];
 
   Table[
@@ -288,7 +290,7 @@ VTRIDA[] := Module[
     changed   = False;
     (* try to find the j such it has the largest $Mlv[i,j]$ *)
     maxJ      = -1;
-    valMaxJ   = 0;  (* this assures that $Mlv[i,j] > 0 *)
+    valMaxJ   = -1;  (* this assures that $Mlv[i,j] > 0 *)
     For[j = 1, j <= n && !condition, j++,
       If[ i != j,
         If[ valMaxJ < $Mlv[i,j],
@@ -359,8 +361,7 @@ HSI[] := Module[
       (* if there is not an obvious answer, next step *)
       If[!changed,
 
-        base = Complement2[rangeM, $MAS[i]~Join~{m}];
-
+        base = Complement2[rangeM, $MAS[i]];
         (* rows with values at k-col*)
         rowsAll = Complement2[rangeN, $OMS[k]];
         rows    = Select[rowsAll, Intersection[$MAS[#], base] == {}  &];
@@ -372,44 +373,44 @@ HSI[] := Module[
 
         If[ !changed && Length@rows > 1,
 
-          If[ Length@rows >= 0.10*n,
+          If[ Length@rows >= $missingRate*n,
             rows = SortBy[rows, - $Mlv[i,#] &];
-            rows = Take[rows, UpTo@Ceiling[0.05*n]];
-          ];
-          AbortAssert[Length@rows > 1, "ClassifyReducedModel"];
-
-          (* cols with values in the i-row *)
-          cols  = Complement2[rangeM, $MAS[i]];
-          If[ Length@cols >= 0.8*m,
-            cols = SortBy[cols, Length@$OMS[#] &];
-            cols = Take[cols, UpTo@Ceiling[0.8*m]];
-          ];
-          model = $U[[rows, cols]] -> $U[[rows, k]];
-
-          classes = Union@DeleteCases[$U[[rows, k]], Missing[]];
-
-          (*Print["Model "];
-          PrintData[$U[[rows, cols]]];
-          Print["classes:"];
-          Print[classes];*)
-
-          If[ Length@clases == 1,
-            change = FillWith[i, j, classes[[1]] ];
-            flag = Or[flag, change];
+            rows = Take[rows, UpTo@Ceiling[ $missingRate*n ]];
           ];
 
-          If[ !change && Length@classes > 1,
-            clasifier = Classify[model,
-                Method          -> "NaiveBayes"
-              , PerformanceGoal -> "Quality"
+          If[Length@rows > 1,
+            (* cols with values in the i-row *)
+            cols  = Complement2[rangeM, $MAS[i]];
+            If[ Length@cols >= 0.8*m,
+              cols = SortBy[cols, Length@$OMS[#] &];
+              cols = Take[cols, UpTo@Ceiling[0.8*m]];
+            ];
+            model   = $U[[rows, cols]] -> $U[[rows, k]];
+            classes = Union@DeleteCases[$U[[rows, k]], Missing[]];
+
+            (*Print["Model "];
+            PrintData[$U[[rows, cols]]];
+            Print["classes:"];
+            Print[classes];*)
+
+            If[ Length@clases == 1,
+              change = FillWith[i, j, classes[[1]] ];
+              flag   = Or[flag, change];
             ];
 
-            goal  = $U[[i, cols]];
-            ans   = clasifier[goal];
+            If[ !change && Length@classes > 1,
+              clasifier = Classify[model,
+                  Method          -> "NaiveBayes"
+                , PerformanceGoal -> "Quality"
+              ];
 
-            If[ MemberQ[answers, ans],
-              changed  = FillWith[i, k, ans];
-              flag     = Or[flag, changed];
+              goal  = $U[[i, cols]];
+              ans   = clasifier[goal];
+
+              If[ MemberQ[answers, ans],
+                changed  = FillWith[i, k, ans];
+                flag     = Or[flag, changed];
+              ];
             ];
           ];
         ];
@@ -419,7 +420,8 @@ HSI[] := Module[
 
   If[ flag,
      HSI[]
-  ,  MeanCompleter[]
+  ,  Return[]
+  (*MeanCompleter[]*)
   ];
 ];
 
@@ -460,17 +462,14 @@ UpdateData[i_Integer,k_Integer] := Module[
   Table[
     If[i != j,
       oldMlv  = $Mlv[i,j];
-      oldPkij =
-        If[MissingQ@$U[[j, k]],
+      oldPkij = If[MissingQ@$U[[j, k]],
           1 / $V[k]
         , 1 / $V[k]^2
       ];
 
-      $Mlv[i, j] = 1;
       $GM[i, j]  = DeleteCases[$GM[i,j], k]; (* we first remove, and the check *)
 
-      newPkij =
-        If[ $U[[i,k]] == $U[[j, k]],
+      newPkij = If[ SameQ[ $U[[i,k]], $U[[j, k]] ],
           If[ MissingQ@$U[[j,k]],
             1 / $V[k]
           , 1
@@ -487,8 +486,7 @@ UpdateData[i_Integer,k_Integer] := Module[
 
       AbortAssert[ oldPkij != 0, {"oldPkij ", oldPkij, i, j, k, " failed" }];
 
-      $Mlv[i,j] = oldMlv * (1/ oldPkij) * newPkij;
-      $Mlv[j,i] = $Mlv[i,j];
+      $Mlv[i,j] = oldMlv*(1/oldPkij)*newPkij;
       $NS[i]    = DeleteCases[$NS[i], j];
 
       If[ Length@$GM[i,j] == 0,
