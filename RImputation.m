@@ -56,6 +56,7 @@ $FailCompleteSymbol = Missing["Failure"];
 $FailCompleteSymbolPrint =
 "\!\(\* StyleBox[\"*\",\nFontSize->24,\nBackground->RGBColor[1, 0.5, 0.5]]\)";
 
+$classifier       = "NaiveBayes";
 $oldU             = {};
 $U                = {};
 $missingU         = {};
@@ -212,8 +213,12 @@ Preprocessing[] := Module[
      ];
   ,{k, 1, m}];
 
+  $NS[i]    = DeleteCases[$NS[i], j];
+  $NS[j]    = DeleteCases[$NS[j], i];
+
   If[ Length@$GM[i,j] == 0,
     $NS[i]  = $NS[i]~Join~{j};
+    $NS[j]  = $NS[j]~Join~{i};
   ];
 
   ,{i, 1, n}, {j, i+1, n}];
@@ -221,7 +226,6 @@ Preprocessing[] := Module[
 ];
 
 (* -------------------------------------------------------------------------- *)
-(* TODO update and changed variables *)
 
 Clear[ROUSTIDA];
 ROUSTIDA[] := Module[
@@ -400,7 +404,7 @@ HSI[] := Module[
 
             If[ !change && Length@classes > 1,
               clasifier = Classify[model,
-                  Method          -> "NaiveBayes"
+                  Method          -> $classifier
                 , PerformanceGoal -> "Quality"
               ];
 
@@ -420,10 +424,11 @@ HSI[] := Module[
 
   If[ flag,
      HSI[]
-  ,  Return[]
-  (*MeanCompleter[]*)
+  ,  ROUSTIDA[]
   ];
 ];
+
+
 
 (* -------------------------------------------------------------------------- *)
 
@@ -488,9 +493,11 @@ UpdateData[i_Integer,k_Integer] := Module[
 
       $Mlv[i,j] = oldMlv*(1/oldPkij)*newPkij;
       $NS[i]    = DeleteCases[$NS[i], j];
+      $NS[j]    = DeleteCases[$NS[j], i];
 
       If[ Length@$GM[i,j] == 0,
-        $NS[i] = $NS[i]~Join~{j};
+        $NS[i]  = $NS[i]~Join~{j};
+        $NS[j]  = $NS[j]~Join~{i};
       ];
     ];
     , {j, 1, n}];
