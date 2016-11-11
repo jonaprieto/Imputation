@@ -77,6 +77,9 @@ SetInitValues[] := Module[{},
   $U                  = {};
   $numMissings        = 0;
   $numIncompleteRows  = 0;
+  $numMeanCompleter   = 0;
+  $numAlgo            = 0;
+  $numCorrectAlgo     = 0;
   Clear[$MOS, $MAS, $V, $OMS, $GM, $Mlv, $NS];
 ];
 SetInitValues[];
@@ -154,7 +157,7 @@ SetMissings[] := Module[
 
 Clear[Preprocessing];
 Preprocessing[] := Module[
-  {n=0,m=0, symetric = True, flag},
+  {n=0,m=0, symetric = True, flag, equals},
 
   If[Length@Dimensions[$U] != 2,
     Print["Step One, invalid $U"];
@@ -178,11 +181,48 @@ Preprocessing[] := Module[
   $Mlv[i_,j_] := 1 /; i == j;
   $Mlv[_,_]   := 0;
 
-  $S[i_, j_]  := True ;/ i == j;
-  $S[_, _]    := False;
+  (*$S[i_, j_]  := True ;/ i == j;
+  $S[_, _]    := False;*)
+
+  Table[If[ i != j,
+    $Mlv[i,j] = 1;
+    symetric = True;
+    Table[
+      If[ MissingQ@$U[[i,k]],
+        If[ MissingQ@$U[[j,k]],
+          $Mlv[i,j] = $Mlv[i,j] / $V[k]^2;
+        , $Mlv[i,j] = $Mlv[i,j] / $V[k];
+        ];
+     , (* $U[[i,k]] != "*" *)
+      equals = SameQ[$U[[i,k]],$U[[j,k]]];
+      symetric = And[symetric, equals];
+       If[ MissingQ@$U[[j,k]],
+          $Mlv[i,j]  = $Mlv[i,j] / $V[k];
+       ,  If[ !equals,
+            $Mlv[i,j] = 0;
+            $GM[i,j]  = {$GM[i,j],k};
+          ];
+       ];
+     ];
+  ,{k, 1, m}];
+
+  If[ symetric,
+    (*$S[i,j] = True;*)
+    $R[j]   = {$R[j],i};
+  ];
+
+  $GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
+
+  If[ Length@$GM[i,j] == 0,
+    $NS[i]  = {$NS[i], j};
+    $NS[j]  = {$NS[j], i};
+  ];
+
+  ],{i, 1, n}, {j, 1, n}];
+
+  (* simplification of the data containers *)
 
   $MOS = {};
-
   Table[
     flag = False;
     Table[
@@ -197,62 +237,16 @@ Preprocessing[] := Module[
       $MOS = {$MOS,i};
     ];
 
-    $MAS[i] = Flatten[$MAS[i], Infinity];
+    $MAS[i] = Union@Flatten[$MAS[i], Infinity];
+    $R[i]   = Union@Flatten[$R[i], Infinity];
+    $NS[i]  = Union@Flatten[$NS[i], Infinity];
   ,{i, 1, n}];
 
   $MOS = Flatten[$MOS, Infinity];
+
   Table[
     $OMS[k] = Flatten[$OMS[k], Infinity];
   ,{k,1, m}];
-
-  Table[If[ i != j,
-    $Mlv[i,j] = 1;
-    Table[
-      If[ MissingQ@$U[[i,k]],
-        If[ MissingQ@$U[[j,k]],
-          $Mlv[i,j] = $Mlv[i,j] / $V[k]^2;
-        , $Mlv[i,j] = $Mlv[i,j] / $V[k];
-        ];
-     ,
-     If[ MissingQ@$U[[j,k]],
-          $Mlv[i,j]  = $Mlv[i,j] / $V[k];
-       ,  If[ !SameQ[$U[[i,k]],$U[[j,k]]],
-            $Mlv[i,j] = 0;
-            $GM[i,j]  = {$GM[i,j],k};
-          ];
-       ];
-     ];
-  ,{k, 1, m}];
-
-  symetric = And@@Table[
-    If[ !MissingQ@$U[[i,k]],
-      SameQ[$U[[i,k]],$U[[j,k]]]
-    , Nothing
-    ]
-  ,{k,1,m}];
-
-  If[ symetric || $S[i,j],
-    $S[i,j] = True;
-    $R[j]   = $R[j]~Join~{i};
-  ];
-
-  $NS[i]   = DeleteCases[$NS[i], j];
-  $NS[j]   = DeleteCases[$NS[j], i];
-
-  $GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
-
-  If[ Length@$GM[i,j] == 0,
-    $NS[i]  = $NS[i]~Join~{j};
-    $NS[j]  = $NS[j]~Join~{i};
-  ];
-
-  ],{i, 1, n}, {j, 1, n}];
-
-  (*Table[
-    $MAS[i] = Union@$MAS[i];
-    $R[i]   = Union@$R[i];
-    $NS[i]  = Union@$NS[i];
-  ,{i,1, n}];*)
 
 ];
 
@@ -278,9 +272,7 @@ ROUSTIDA[] := Module[
           changed = FillWith[i, k, $U[[j,k]]];
           flag    = Or[flag, changed];
         ];
-    , True,
-      condition = False;
-      (*Length@$NS[i] >= 2,
+    , Length@$NS[i] >= 2,
         condition = False;
         For[j0 = 1, j0 <= Length@$NS[i] && condition, j0++,
           For[j1 = j0+1, j1 <= Length@$NS[i] && condition, j1++,
@@ -298,14 +290,14 @@ ROUSTIDA[] := Module[
             changed = FillWith[i, k, $U[[ $NS[i][[jj]], k]] ];
             flag    = Or[flag, changed];
            ];
-        ];*)
+        ];
     ];
 
   ,{i, $MOS}, {k, $MAS[i]}];
 
   If[ flag,
     ROUSTIDA[];
-  , Return[];
+  , MeanCompleter[];
   ];
 ];
 
@@ -314,7 +306,7 @@ ROUSTIDA[] := Module[
 Clear[HSI];
 HSI[] := Module[
   {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal, flag
-    ,rowsAll, changed, classes},
+    ,rowsAll, changed, classes, entro =0},
 
   If[ Length@$MOS == 0,
     Return[];
@@ -329,11 +321,11 @@ HSI[] := Module[
   flag    = False;
   rangeN  = Range[n];
   rangeM  = Range[m];
-  $MOS    = SortBy[$MOS, Length@$MAS[#] &];
+  $MOS    = SortBy[$MOS, Length@$MAS[#]*(Length@$R[#]+1) &];
 
   Table[
 
-    $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
+    $MAS[i] = SortBy[$MAS[i], Length@$OMS[#]&];
     changed = False;
 
     Table[
@@ -404,6 +396,7 @@ HSI[] := Module[
               If[ MemberQ[answers, ans],
                 changed  = FillWith[i, k, ans];
                 flag     = Or[flag, changed];
+                Print["entro", entro++];
               ];
             ];
           ];
@@ -414,7 +407,7 @@ HSI[] := Module[
 
   If[ flag,
      HSI[]
-  ,  Return[]
+  ,  MeanCompleter[]
   ];
 ];
 
@@ -465,9 +458,11 @@ VTRIDA[] := Module[
 
 Clear[FillWith];
 FillWith[i_Integer, k_Integer, val_] := Module[
-  {},
-  If[ !MissingQ@val,
+  {change = False},
+  change = !SameQ[$U[[i,k]], val];
+  If[ change,
     $U[[i, k]]  = val;
+    UpdateData[i,k];
     If[ SameQ[ val, $oldU[[i,k]] ],
       $numCorrectAlgo++;
     ];
@@ -475,10 +470,8 @@ FillWith[i_Integer, k_Integer, val_] := Module[
       --$numMissings
     ];
     $numAlgo++;
-    UpdateData[i,k];
-    Return[True];
   ];
-  Return[False];
+  Return[change];
 ];
 
 (* -------------------------------------------------------------------------- *)
@@ -486,52 +479,74 @@ FillWith[i_Integer, k_Integer, val_] := Module[
 (* This method supposes that $U[i,k] has been imputed *)
 Clear[UpdateData];
 UpdateData[i_Integer,k_Integer] := Module[
-  {newPkij, oldMlv, oldPkij, n, m},
+  {newPkij, oldMlv, oldPkij, n, m, oldGM, oldNS, oldR, symetric},
+
+  Print[i,k];
 
   {n,m}   = Dimensions[$U];
-  $MAS[i] = DeleteCases[$MAS[i], k];
 
-  If[ Length@$MAS[i] == 0,
-    $MOS = DeleteCases[$MOS, i];
+  If[ !MissingQ@$U[[i, k]],
+      $MAS[i] = DeleteCases[$MAS[i], k];
+    , $MAS[i] = Union[$MAS[i]~Join~{k}];
   ];
 
-  Table[
-    If[i != j,
-      oldMlv  = $Mlv[i,j];
-      oldPkij = If[MissingQ@$U[[j, k]],
-          1 / $V[k]
-        , 1 / $V[k]^2
+  If[ Length@$MAS[i] > 0,
+      $MOS = Union[$MOS~Join~{i}]
+  ,   $MOS = DeleteCases[$MOS, i];
+      $OMS[k] = DeleteCases[$OMS[k], i];
+  ];
+
+  Table[If[i != j,
+
+      symetric = And@@Table[
+        If[ !MissingQ@$U[[i,kk]],
+            SameQ[ $U[[j,kk]], $U[[i, kk]] ]
+          , Nothing
+        ]
+      , {kk,1, m}];
+
+      If[symetric,
+        $R[j] = Union[$R[j]~Join~{i}];
       ];
 
-      $GM[i, j]  = DeleteCases[$GM[i,j], k]; (* we first remove, and the check *)
+      If[MissingQ@$U[[i, k]],
+        $GM[i,j] = DeleteCases[$GM[i,j], k];
+        $GM[j,i] = DeleteCases[$GM[j,i], k];
+        If[ Length@$GM[i,j] == 0,
+          $NS[i] = Union[$NS[i]~Join~{j}];
+          $NS[j] = Union[$NS[j]~Join~{i}];
+        ];
+        If[!MissingQ@$U[[j,k]],
+          $R[j] = DeleteCases[$R[j], i];
+        ];
+      , (* I know here $U[[i,k]] != "*" *)
 
-      newPkij = If[ SameQ[ $U[[i,k]], $U[[j, k]] ],
-          If[ MissingQ@$U[[j,k]],
-            1 / $V[k]
-          , 1
-          ]
-        , If[ MissingQ@$U[[j,k]],
-            1 / $V[k]
-          , 0
-          ]
+        equals = SameQ[ $U[[i,k]], $U[[j,k]] ];
+        If[ equals,
+            $GM[i,j] = DeleteCases[$GM[i,j], k];
+            $GM[j,i] = DeleteCases[$GM[j,i], k];
+            If[ Length@$GM[i,j] == 0,
+              $NS[i] = Union[$NS[i]~Join~{j}];
+              $NS[j] = Union[$NS[j]~Join~{i}];
+            ];
+
+        ,  $R[j] = DeleteCases[$R[j], i];
+           If[ !MissingQ@$U[[j,k]],
+              $GM[i,j]  = Union[$GM[i,j]~Join~{k}];
+              $GM[j,i]  = Union[$GM[j,i]~Join~{k}];
+              $NS[i]    = DeleteCases[$NS[i], j];
+              $NS[j]    = DeleteCases[$NS[j], i];
+            ];
+        ];
+
       ];
+    ], {j, 1, n}];
 
-      If[ !SameQ[$U[[i,k]], $U[[j,k]]] && !MissingQ@$U[[i,k]] && !MissingQ@$U[[j,k]],
-         $GM[i,j] = $GM[i,j]~Join~{k};
-      ];
-
-      AbortAssert[ oldPkij != 0, {"oldPkij ", oldPkij, i, j, k, " failed" }];
-
-      $Mlv[i,j] = oldMlv*(1/oldPkij)*newPkij;
-      $NS[i]    = DeleteCases[$NS[i], j];
-      $NS[j]    = DeleteCases[$NS[j], i];
-
-      If[ Length@$GM[i,j] == 0,
-        $NS[i]  = $NS[i]~Join~{j};
-        $NS[j]  = $NS[j]~Join~{i};
-      ];
-    ];
-    , {j, 1, n}];
+    Table[
+      $NS[i]  = Union@$NS[i];
+      $MAS[i] = Union@$MAS[i];
+      $R[i]   = Union@$R[i];
+    ,{j, 1, n}];
  ];
 
 (* -------------------------------------------------------------------------- *)
@@ -650,6 +665,7 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
       ];
 
       matches = checkMatches[oldJ];
+      Print[ToString@cDataset<>" Algo: "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter];
 
       With[{stat = N[Total@matches /numMissing]},
         $lastResult = stat;
@@ -730,21 +746,22 @@ $e21 = {
  };
 
 $mlvE21 =   {
-  {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1/64, 1/4}
-, {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-, {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-, {0, 0, 0, 1, 1/256, 0, 0, 0, 0, 1/1024, 1/1024, 1/64}
-, {0, 0, 0, 1/256, 1, 0, 0, 0, 0, 1/1024, 1/1024, 1/64}
-, {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0}
-, {0, 0, 0, 0, 0, 0, 1, 1/256, 1/16, 0, 1/1024, 1/64}
-, {0, 0, 0, 0, 0, 0, 1/256, 1, 0, 1/1024, 0, 0}
-, {0, 0, 0, 0, 0, 0, 1/16, 0, 1, 0, 1/64, 1/4}
-, {0, 0, 0, 1/1024, 1/1024, 0, 0, 1/1024, 0, 1, 1/4096, 0}
-, {1/64, 0, 0, 1/1024, 1/1024, 0, 1/1024, 0, 1/64, 1/4096, 1, 1/256}
-, {1/4, 0, 0, 1/64, 1/64, 0, 1/64, 0, 1/4, 0, 1/256, 1}
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1/64, 1/4}
+  , {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+  , {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+  , {0, 0, 0, 1, 1/256, 0, 0, 0, 0, 1/1024, 1/1024, 1/64}
+  , {0, 0, 0, 1/256, 1, 0, 0, 0, 0, 1/1024, 1/1024, 1/64}
+  , {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0}
+  , {0, 0, 0, 0, 0, 0, 1, 1/256, 1/16, 0, 1/1024, 1/64}
+  , {0, 0, 0, 0, 0, 0, 1/256, 1, 0, 1/1024, 0, 0}
+  , {0, 0, 0, 0, 0, 0, 1/16, 0, 1, 0, 1/64, 1/4}
+  , {0, 0, 0, 1/1024, 1/1024, 0, 0, 1/1024, 0, 1, 1/4096, 0}
+  , {1/64, 0, 0, 1/1024, 1/1024, 0, 1/1024, 0, 1/64, 1/4096, 1, 1/256}
+  , {1/4, 0, 0, 1/64, 1/64, 0, 1/64, 0, 1/4, 0, 1/256, 1}
 };
 
-$gmE21[i_,j_]   := $gmE21[j,i] /; i > j;
+
+$gmE21[i_,j_] := $gmE21[j,i] /; i > j;
 $gmE21[_,_]   := {};
 $gmE21[1,2]   = {1,2,3};
 $gmE21[1,3]   = {1,2,3};
@@ -822,7 +839,7 @@ Table[
 $U = $oldU = $e21;
 Preprocessing[];
 
-$reportE21 = TestReport[{
+$reportE21 = {
     VerificationTest[$MOS, {4,5,7,8,10,11,12}]
   , VerificationTest[$OMS[1], {4,5,8,11}]
   , VerificationTest[$OMS[2], {7,10}]
@@ -865,16 +882,56 @@ $reportE21 = TestReport[{
   , VerificationTest[$R[10], {}]
   , VerificationTest[$R[11], {}]
   , VerificationTest[$R[12], {11}]
-}~Join~Flatten@Table[
-    VerificationTest[ {{i,j}, $Mlv[i,j]}, {{i,j},$mlvE21[[i,j]]} ]
-  ,{i,1,$n},{j,1,$n}]
-~Join~Flatten@Table[
-    VerificationTest[ {{i,j}, $GM[i,j]}, {{i,j},$gmE21[i,j]} ]
-  ,{i,1,$n},{j,1,$n}]
-];
+  }~Join~Flatten@Table[
+      VerificationTest[ {{i,j}, $Mlv[i,j]}, {{i,j},$mlvE21[[i,j]]} ]
+    ,{i,1,$n},{j,1,$n}]~Join~Flatten@Table[
+        VerificationTest[ {{i,j}, $GM[i,j]}, {{i,j},$gmE21[i,j]} ]
+      ,{i,1,$n},{j,1,$n}];
 
+Table[
+  $oldNS[i]   = $NS[i];
+  $oldR[i]    = $R[i];
+  $oldMAS[i]  = $MAS[i];
+,{i, 1, $n}];
+
+$e21 = {
+ {3, 2, 1, 0},
+ {2, 3, 2, 0},
+ {2, 3, 2, 0},
+ {3, 2, Missing[], 1},
+ {Missing[], 2, Missing[], 1},
+ {2, 3, 2, 1},
+ {3, Missing[], Missing[], 3},
+ {Missing[], 0, 0, Missing[]},
+ {3, 2, 1, 3},
+ {1, Missing[], Missing[], Missing[]},
+ {Missing[], 2, Missing[], Missing[]},
+ {3, 2, 1, Missing[]}
+};
+
+$U = $oldU = $e21;
+Preprocessing[];
+(*PrintData[$e21];*)
+$change = FillWith[4,1, Missing[]];
+(*Print["after"];*)
+(*PrintData[$e21];*)
+
+
+$reportE21 = $reportE21~Join~Flatten@Table[
+{ VerificationTest[{i, $NS[i]},{i, $oldNS[i]}]
+, VerificationTest[{i, $R[i]}, {i, $oldR[i]}]
+, VerificationTest[{i, $MAS[i]}, {i, $oldMAS[i]}]
+}
+,{i,1, $n}]~Join~Flatten@Table[
+  VerificationTest[ {{i,j}, $GM[i,j]}, {{i,j},$gmE21[i,j]} ]
+,{i,1,$n},{j,1,$n}];
+
+$reportE21 = TestReport[$reportE21];
 Print[$reportE21];
 Print[Column /@ (Normal /@ $reportE21["TestsFailed"]) // TabView];
 Print[$reportE21["TimeElapsed"]];
+
+(* END of Tests ------------------------------------------------------------- *)
+
 
 EndPackage[];
