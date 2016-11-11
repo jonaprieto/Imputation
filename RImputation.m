@@ -154,7 +154,7 @@ SetMissings[] := Module[
 
 Clear[Preprocessing];
 Preprocessing[] := Module[
-  {n=0,m=0, symetric = True},
+  {n=0,m=0, symetric = True, flag},
 
   If[Length@Dimensions[$U] != 2,
     Print["Step One, invalid $U"];
@@ -165,41 +165,48 @@ Preprocessing[] := Module[
 
   Clear[$MOS, $MAS, $OMS, $GM, $Mlv, $NS, $S, $R];
 
-  (*$GM[i_,j_]  := $GM[j,i] /; i > j;*)
-  (*$GM[i_,j_]  := {} /; i == j;*)
+  $MAS[_] := {};
+  $NS[_]  := {};
+  $R[_]   := {};
+  $OMS[_] := {};
+
+  $GM[i_,j_]  := $GM[j,i] /; i > j;
+  $GM[i_,j_]  := {} /; i == j;
   $GM[_,_]    := {};
 
-  (*$Mlv[i_,j_] := $Mlv[j,i] /; i > j;*)
-  (*$Mlv[i_,j_] := 1 /; i == j;*)
+  $Mlv[i_,j_] := $Mlv[j,i] /; i > j;
+  $Mlv[i_,j_] := 1 /; i == j;
   $Mlv[_,_]   := 0;
+
   $S[i_, j_]  := True ;/ i == j;
   $S[_, _]    := False;
-
-  Table[ $OMS[k] = {},{k, 1, m}];
 
   $MOS = {};
 
   Table[
-    $MAS[i] = {};
-    $NS[i]  = {};
-    $R[i]   = {};
+    flag = False;
     Table[
       If[ MissingQ@$U[[i,k]],
-        $MAS[i] = $MAS[i]~Join~{k};
-        $OMS[k] = $OMS[k]~Join~{i};
+        $MAS[i] = {$MAS[i],k};
+        $OMS[k] = {$OMS[k],i};
+        flag = True;
       ];
     ,{k, 1, m}];
-    If[ Length@$MAS[i] > 0,
-      $MOS = $MOS~Join~{i}
+
+    If[ flag, (* Length@$MAS[i] > 0, *)
+      $MOS = {$MOS,i};
     ];
+
+    $MAS[i] = Flatten[$MAS[i], Infinity];
   ,{i, 1, n}];
 
-
+  $MOS = Flatten[$MOS, Infinity];
   Table[
+    $OMS[k] = Flatten[$OMS[k], Infinity];
+  ,{k,1, m}];
 
+  Table[If[ i != j,
     $Mlv[i,j] = 1;
-    $GM[i,j]  = {};
-
     Table[
       If[ MissingQ@$U[[i,k]],
         If[ MissingQ@$U[[j,k]],
@@ -211,9 +218,8 @@ Preprocessing[] := Module[
           $Mlv[i,j]  = $Mlv[i,j] / $V[k];
        ,  If[ !SameQ[$U[[i,k]],$U[[j,k]]],
             $Mlv[i,j] = 0;
-            $GM[i,j]  = $GM[i,j]~Join~{k};
-         ,  $Mlv[i,j] = $Mlv[i,j]*1;
-         ]
+            $GM[i,j]  = {$GM[i,j],k};
+          ];
        ];
      ];
   ,{k, 1, m}];
@@ -232,20 +238,21 @@ Preprocessing[] := Module[
 
   $NS[i]   = DeleteCases[$NS[i], j];
   $NS[j]   = DeleteCases[$NS[j], i];
-  $GM[i,j] = Union@$GM[i,j];
+
+  $GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
 
   If[ Length@$GM[i,j] == 0,
     $NS[i]  = $NS[i]~Join~{j};
     $NS[j]  = $NS[j]~Join~{i};
   ];
 
-  ,{i, 1, n}, {j, 1, n}];
+  ],{i, 1, n}, {j, 1, n}];
 
-  Table[
+  (*Table[
     $MAS[i] = Union@$MAS[i];
     $R[i]   = Union@$R[i];
     $NS[i]  = Union@$NS[i];
-  ,{i,1, n}];
+  ,{i,1, n}];*)
 
 ];
 
@@ -266,13 +273,15 @@ ROUSTIDA[] := Module[
   Table[
     changed = False;
     Which[
-      Length@$R[i] == 1,
+      Length@$NS[i] == 1,
         With[{j = $NS[i][[1]]},
           changed = FillWith[i, k, $U[[j,k]]];
           flag    = Or[flag, changed];
         ];
-    , Length@$NS[i] >= 2,
-        condition = False; (* a flag for check inconsistences *)
+    , True,
+      condition = False;
+      (*Length@$NS[i] >= 2,
+        condition = False;
         For[j0 = 1, j0 <= Length@$NS[i] && condition, j0++,
           For[j1 = j0+1, j1 <= Length@$NS[i] && condition, j1++,
             If[  !MissingQ@$U[[ $NS[i][[j0]], k]]
@@ -289,14 +298,14 @@ ROUSTIDA[] := Module[
             changed = FillWith[i, k, $U[[ $NS[i][[jj]], k]] ];
             flag    = Or[flag, changed];
            ];
-        ];
+        ];*)
     ];
 
   ,{i, $MOS}, {k, $MAS[i]}];
 
   If[ flag,
     ROUSTIDA[];
-  , MeanCompleter[];
+  , Return[];
   ];
 ];
 
@@ -701,5 +710,171 @@ checkMatches[oldJ_List] := Module[
 ];
 
 (* -------------------------------------------------------------------------- *)
+
+(* TEST --------------------------------------------------------------------- *)
+(* Example taken from the Stefanowski Paper                                   *)
+
+$e21 = {
+   {3, 2, 1, 0},
+   {2, 3, 2, 0},
+   {2, 3, 2, 0},
+   {Missing[], 2, Missing[], 1},
+   {Missing[], 2, Missing[], 1},
+   {2, 3, 2, 1},
+   {3, Missing[], Missing[], 3},
+   {Missing[], 0, 0, Missing[]},
+   {3, 2, 1, 3},
+   {1, Missing[], Missing[], Missing[]},
+   {Missing[], 2, Missing[], Missing[]},
+   {3, 2, 1, Missing[]}
+ };
+
+$mlvE21 =   {
+  {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1/64, 1/4}
+, {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+, {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+, {0, 0, 0, 1, 1/256, 0, 0, 0, 0, 1/1024, 1/1024, 1/64}
+, {0, 0, 0, 1/256, 1, 0, 0, 0, 0, 1/1024, 1/1024, 1/64}
+, {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0}
+, {0, 0, 0, 0, 0, 0, 1, 1/256, 1/16, 0, 1/1024, 1/64}
+, {0, 0, 0, 0, 0, 0, 1/256, 1, 0, 1/1024, 0, 0}
+, {0, 0, 0, 0, 0, 0, 1/16, 0, 1, 0, 1/64, 1/4}
+, {0, 0, 0, 1/1024, 1/1024, 0, 0, 1/1024, 0, 1, 1/4096, 0}
+, {1/64, 0, 0, 1/1024, 1/1024, 0, 1/1024, 0, 1/64, 1/4096, 1, 1/256}
+, {1/4, 0, 0, 1/64, 1/64, 0, 1/64, 0, 1/4, 0, 1/256, 1}
+};
+
+$gmE21[i_,j_]   := $gmE21[j,i] /; i > j;
+$gmE21[_,_]   := {};
+$gmE21[1,2]   = {1,2,3};
+$gmE21[1,3]   = {1,2,3};
+$gmE21[1,4]   = {4};
+$gmE21[1,5]   = {4};
+$gmE21[1,6]   = {1,2,3,4};
+$gmE21[1,7]   = {4};
+$gmE21[1,8]   = {2,3};
+$gmE21[1,9]   = {4};
+$gmE21[1,10]  = {1};
+$gmE21[1,11]  = {};
+$gmE21[1,12]  = {};
+$gmE21[2,3]   = {};
+$gmE21[2,4]   = {2,4};
+$gmE21[2,5]   = {2,4};
+$gmE21[2,6]   = {4};
+$gmE21[2,7]   = {1,4};
+$gmE21[2,8]   = {2,3};
+$gmE21[2,9]   = {1,2,3,4};
+$gmE21[2,10]  = {1};
+$gmE21[2,11]  = {2};
+$gmE21[2,12]  = {1,2,3};
+$gmE21[3,4]   = {2,4};
+$gmE21[3,5]   = {2,4};
+$gmE21[3,6]   = {4};
+$gmE21[3,7]   = {1,4};
+$gmE21[3,8]   = {2,3};
+$gmE21[3,9]   = {1,2,3,4};
+$gmE21[3,10]  = {1};
+$gmE21[3,11]  = {2};
+$gmE21[3,12]  = {1,2,3};
+$gmE21[4,5]   = {};
+$gmE21[4,6]   = {2};
+$gmE21[4,7]   = {4};
+$gmE21[4,8]   = {2};
+$gmE21[4,9]   = {4};
+$gmE21[4,10]  = {};
+$gmE21[4,11]  = {};
+$gmE21[4,12]  = {};
+$gmE21[5,6]   = {2};
+$gmE21[5,7]   = {4};
+$gmE21[5,8]   = {2};
+$gmE21[5,9]   = {4};
+$gmE21[5,10]  = {};
+$gmE21[5,11]  = {};
+$gmE21[5,12]  = {};
+$gmE21[6,7]   = {1,4};
+$gmE21[6,8]   = {2,3};
+$gmE21[6,9]   = {1,2,3,4};
+$gmE21[6,10]  = {1};
+$gmE21[6,11]  = {2};
+$gmE21[6,12]  = {1,2,3};
+$gmE21[7,8]   = {};
+$gmE21[7,9]   = {};
+$gmE21[7,10]  = {1};
+$gmE21[7,11]  = {};
+$gmE21[7,12]  = {};
+$gmE21[8,9]   = {2,3};
+$gmE21[8,10]  = {};
+$gmE21[8,11]  = {2};
+$gmE21[8,12]  = {2,3};
+$gmE21[9,10]  = {1};
+$gmE21[9,11]  = {};
+$gmE21[9,12]  = {};
+$gmE21[10,11] = {};
+$gmE21[10,12] = {1};
+$gmE21[11,12] = {};
+
+{$n, $m} = Dimensions[$e21];
+Table[
+  $V[k] = 4;
+  , {k, 1, 4}
+  ];
+
+$U = $oldU = $e21;
+Preprocessing[];
+
+$reportE21 = TestReport[{
+    VerificationTest[$MOS, {4,5,7,8,10,11,12}]
+  , VerificationTest[$OMS[1], {4,5,8,11}]
+  , VerificationTest[$OMS[2], {7,10}]
+  , VerificationTest[$OMS[3], {4,5,7,10,11}]
+  , VerificationTest[$OMS[4], {8,10,11,12}]
+  , VerificationTest[$MAS[1], {}]
+  , VerificationTest[$MAS[2], {}]
+  , VerificationTest[$MAS[3], {}]
+  , VerificationTest[$MAS[4], {1,3}]
+  , VerificationTest[$MAS[5], {1,3}]
+  , VerificationTest[$MAS[6], {}]
+  , VerificationTest[$MAS[7], {2,3}]
+  , VerificationTest[$MAS[8], {1,4}]
+  , VerificationTest[$MAS[9], {}]
+  , VerificationTest[$MAS[10], {2,3,4}]
+  , VerificationTest[$MAS[11], {1,3,4}]
+  , VerificationTest[$MAS[12], {4}]
+  , VerificationTest[And@@Flatten@Table[$GM[i,j]==$GM[j,i],{i,1,$n},{j,1,$n}], True]
+  , VerificationTest[$NS[1], {11,12}]
+  , VerificationTest[$NS[2], {3}]
+  , VerificationTest[$NS[3], {2}]
+  , VerificationTest[$NS[4], {5,10,11,12}]
+  , VerificationTest[$NS[5], {4,10,11,12}]
+  , VerificationTest[$NS[6], {}]
+  , VerificationTest[$NS[7], {8, 9, 11, 12}]
+  , VerificationTest[$NS[8], {7,10}]
+  , VerificationTest[$NS[9], {7,11, 12}]
+  , VerificationTest[$NS[10], {4,5,8,11}]
+  , VerificationTest[$NS[11], {1,4,5,7,9,10,12}]
+  , VerificationTest[$NS[12], {1,4,5,7,9,11}]
+  , VerificationTest[$R[1], {11,12}]
+  , VerificationTest[$R[2], {3}]
+  , VerificationTest[$R[3], {2}]
+  , VerificationTest[$R[4], {5,11}]
+  , VerificationTest[$R[5], {4, 11}]
+  , VerificationTest[$R[6], {}]
+  , VerificationTest[$R[7], {}]
+  , VerificationTest[$R[8], {}]
+  , VerificationTest[$R[9], {7, 11, 12}]
+  , VerificationTest[$R[10], {}]
+  , VerificationTest[$R[11], {}]
+  , VerificationTest[$R[12], {11}]
+}~Join~Flatten@Table[
+    VerificationTest[ {{i,j}, $Mlv[i,j]}, {{i,j},$mlvE21[[i,j]]} ]
+  ,{i,1,$n},{j,1,$n}]
+~Join~Flatten@Table[
+    VerificationTest[ {{i,j}, $GM[i,j]}, {{i,j},$gmE21[i,j]} ]
+  ,{i,1,$n},{j,1,$n}]
+];
+
+Print[$reportE21];
+Print[Column /@ (Normal /@ $reportE21["TestsFailed"]) // TabView];
+Print[$reportE21["TimeElapsed"]];
 
 EndPackage[];
