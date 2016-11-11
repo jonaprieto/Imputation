@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     73248,       1719]
-NotebookOptionsPosition[     70149,       1628]
-NotebookOutlinePosition[     70538,       1645]
-CellTagsIndexPosition[     70495,       1642]
+NotebookDataLength[     72272,       1696]
+NotebookOptionsPosition[     69287,       1609]
+NotebookOutlinePosition[     69676,       1626]
+CellTagsIndexPosition[     69633,       1623]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -36,42 +36,23 @@ Cell[CellGroupData[{
 Cell["Datasets", "Subsubsection",
  CellChangeTimes->{{3.6856293258595257`*^9, 3.685629326980784*^9}}],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[{
- RowBox[{"dirDatasets", "=", " ", 
-  RowBox[{"FileNameJoin", "[", 
-   RowBox[{"{", 
-    RowBox[{
-     RowBox[{"Directory", "[", "]"}], ",", " ", "\"\<databases\>\"", ",", " ",
-      "$size"}], "}"}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"dirDatasets", "=", " ", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Directory", "[", "]"}], ",", " ", "\"\<databases\>\"", ",", 
+      " ", "$size"}], "}"}], "]"}]}], ";"}], "\n", 
  RowBox[{
   RowBox[{"pathsDatasets", "=", " ", 
    RowBox[{"FileNames", "[", 
     RowBox[{
      RowBox[{"RegularExpression", "[", "\"\<[^.]*\>\"", "]"}], ",", " ", 
-     "dirDatasets"}], "]"}]}], " "}], "\[IndentingNewLine]"}], "Input",
+     "dirDatasets"}], "]"}]}], " ", ";"}], "\[IndentingNewLine]"}], "Input",
  CellChangeTimes->{{3.685628681659595*^9, 3.685628704738326*^9}, {
   3.685629223028886*^9, 3.685629227552968*^9}, {3.6870506669841137`*^9, 
-  3.687050673532262*^9}}],
-
-Cell[BoxData["\<\"/Users/jonaprieto/Imputation/databases/all\"\>"], "Output",
- CellChangeTimes->{3.68756829263822*^9, 3.6876223075076017`*^9, 
-  3.687622453316593*^9, 3.687623554263214*^9, 3.6876545249230337`*^9}],
-
-Cell[BoxData[
- RowBox[{"{", 
-  RowBox[{"\<\"/Users/jonaprieto/Imputation/databases/all/breast-cancer\"\>", 
-   ",", "\<\"/Users/jonaprieto/Imputation/databases/all/example\"\>", 
-   ",", "\<\"/Users/jonaprieto/Imputation/databases/all/lymphography\"\>", 
-   ",", "\<\"/Users/jonaprieto/Imputation/databases/all/soybean\"\>", 
-   ",", "\<\"/Users/jonaprieto/Imputation/databases/all/spect\"\>", 
-   ",", "\<\"/Users/jonaprieto/Imputation/databases/all/vote\"\>", 
-   ",", "\<\"/Users/jonaprieto/Imputation/databases/all/zoo\"\>"}], 
-  "}"}]], "Output",
- CellChangeTimes->{3.68756829263822*^9, 3.6876223075076017`*^9, 
-  3.687622453316593*^9, 3.687623554263214*^9, 3.6876545249523783`*^9}]
-}, Open  ]],
+  3.687050673532262*^9}, {3.6878316130884047`*^9, 3.6878316219119473`*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -1648,77 +1629,73 @@ Cell[558, 20, 189, 4, 39, "Input"],
 Cell[750, 26, 305, 5, 39, "Input"],
 Cell[CellGroupData[{
 Cell[1080, 35, 101, 1, 43, "Subsubsection"],
+Cell[1184, 38, 711, 16, 144, "Input"],
+Cell[1898, 56, 1732, 38, 274, "Input"],
+Cell[3633, 96, 210, 4, 39, "Input"],
+Cell[3846, 102, 1161, 16, 39, "Input"],
 Cell[CellGroupData[{
-Cell[1206, 40, 633, 15, 144, "Input"],
-Cell[1842, 57, 213, 2, 39, "Output"],
-Cell[2058, 61, 687, 11, 196, "Output"]
+Cell[5032, 122, 3754, 88, 638, "Input"],
+Cell[8789, 212, 37137, 773, 290, "Output"]
 }, Open  ]],
-Cell[2760, 75, 1732, 38, 274, "Input"],
-Cell[4495, 115, 210, 4, 39, "Input"],
-Cell[4708, 121, 1161, 16, 39, "Input"],
-Cell[CellGroupData[{
-Cell[5894, 141, 3754, 88, 638, "Input"],
-Cell[9651, 231, 37137, 773, 290, "Output"]
-}, Open  ]],
-Cell[46803, 1007, 176, 4, 39, "Input"]
+Cell[45941, 988, 176, 4, 39, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[47016, 1016, 93, 1, 54, "Subsection"],
-Cell[47112, 1019, 610, 12, 66, "Input"],
-Cell[47725, 1033, 512, 11, 66, "Input"],
-Cell[48240, 1046, 511, 11, 66, "Input"],
-Cell[48754, 1059, 485, 11, 66, "Input"],
-Cell[49242, 1072, 462, 10, 66, "Input"],
-Cell[49707, 1084, 386, 9, 66, "Input"],
-Cell[50096, 1095, 382, 9, 66, "Input"],
-Cell[50481, 1106, 382, 9, 66, "Input"],
-Cell[50866, 1117, 434, 10, 66, "Input"],
-Cell[51303, 1129, 456, 10, 66, "Input"],
-Cell[51762, 1141, 455, 10, 66, "Input"],
-Cell[52220, 1153, 430, 10, 66, "Input"],
-Cell[52653, 1165, 434, 10, 66, "Input"],
-Cell[53090, 1177, 408, 9, 66, "Input"],
-Cell[53501, 1188, 434, 10, 66, "Input"],
-Cell[53938, 1200, 383, 10, 66, "Input"],
-Cell[54324, 1212, 114, 2, 39, "Input"],
+Cell[46154, 997, 93, 1, 54, "Subsection"],
+Cell[46250, 1000, 610, 12, 66, "Input"],
+Cell[46863, 1014, 512, 11, 66, "Input"],
+Cell[47378, 1027, 511, 11, 66, "Input"],
+Cell[47892, 1040, 485, 11, 66, "Input"],
+Cell[48380, 1053, 462, 10, 66, "Input"],
+Cell[48845, 1065, 386, 9, 66, "Input"],
+Cell[49234, 1076, 382, 9, 66, "Input"],
+Cell[49619, 1087, 382, 9, 66, "Input"],
+Cell[50004, 1098, 434, 10, 66, "Input"],
+Cell[50441, 1110, 456, 10, 66, "Input"],
+Cell[50900, 1122, 455, 10, 66, "Input"],
+Cell[51358, 1134, 430, 10, 66, "Input"],
+Cell[51791, 1146, 434, 10, 66, "Input"],
+Cell[52228, 1158, 408, 9, 66, "Input"],
+Cell[52639, 1169, 434, 10, 66, "Input"],
+Cell[53076, 1181, 383, 10, 66, "Input"],
+Cell[53462, 1193, 114, 2, 39, "Input"],
 Cell[CellGroupData[{
-Cell[54463, 1218, 95, 1, 43, "Subsubsection"],
-Cell[54561, 1221, 488, 10, 66, "Input"],
-Cell[55052, 1233, 482, 10, 66, "Input"],
-Cell[55537, 1245, 485, 10, 66, "Input"],
-Cell[56025, 1257, 461, 11, 66, "Input"],
-Cell[56489, 1270, 486, 10, 66, "Input"],
-Cell[56978, 1282, 460, 10, 66, "Input"],
-Cell[57441, 1294, 379, 9, 66, "Input"],
-Cell[57823, 1305, 384, 9, 66, "Input"],
-Cell[58210, 1316, 514, 11, 66, "Input"],
-Cell[58727, 1329, 508, 11, 66, "Input"],
-Cell[59238, 1342, 509, 11, 66, "Input"],
-Cell[59750, 1355, 483, 11, 66, "Input"],
-Cell[60236, 1368, 510, 11, 66, "Input"],
-Cell[60749, 1381, 484, 10, 66, "Input"],
-Cell[61236, 1393, 382, 9, 66, "Input"],
-Cell[61621, 1404, 384, 9, 66, "Input"]
+Cell[53601, 1199, 95, 1, 43, "Subsubsection"],
+Cell[53699, 1202, 488, 10, 66, "Input"],
+Cell[54190, 1214, 482, 10, 66, "Input"],
+Cell[54675, 1226, 485, 10, 66, "Input"],
+Cell[55163, 1238, 461, 11, 66, "Input"],
+Cell[55627, 1251, 486, 10, 66, "Input"],
+Cell[56116, 1263, 460, 10, 66, "Input"],
+Cell[56579, 1275, 379, 9, 66, "Input"],
+Cell[56961, 1286, 384, 9, 66, "Input"],
+Cell[57348, 1297, 514, 11, 66, "Input"],
+Cell[57865, 1310, 508, 11, 66, "Input"],
+Cell[58376, 1323, 509, 11, 66, "Input"],
+Cell[58888, 1336, 483, 11, 82, "Input"],
+Cell[59374, 1349, 510, 11, 82, "Input"],
+Cell[59887, 1362, 484, 10, 82, "Input"],
+Cell[60374, 1374, 382, 9, 82, "Input"],
+Cell[60759, 1385, 384, 9, 82, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[62042, 1418, 97, 1, 43, "Subsubsection"],
-Cell[62142, 1421, 537, 11, 66, "Input"],
-Cell[62682, 1434, 505, 11, 66, "Input"],
-Cell[63190, 1447, 506, 11, 66, "Input"],
-Cell[63699, 1460, 485, 11, 66, "Input"],
-Cell[64187, 1473, 514, 11, 66, "Input"],
-Cell[64704, 1486, 484, 10, 66, "Input"],
-Cell[65191, 1498, 436, 10, 66, "Input"],
-Cell[65630, 1510, 384, 9, 66, "Input"],
-Cell[66017, 1521, 538, 11, 66, "Input"],
-Cell[66558, 1534, 530, 11, 66, "Input"],
-Cell[67091, 1547, 531, 11, 66, "Input"],
-Cell[67625, 1560, 507, 11, 66, "Input"],
-Cell[68135, 1573, 534, 11, 66, "Input"],
-Cell[68672, 1586, 512, 11, 66, "Input"],
-Cell[69187, 1599, 434, 10, 66, "Input"],
-Cell[69624, 1611, 384, 9, 66, "Input"],
-Cell[70011, 1622, 110, 2, 39, "Input"]
+Cell[61180, 1399, 97, 1, 53, "Subsubsection"],
+Cell[61280, 1402, 537, 11, 66, "Input"],
+Cell[61820, 1415, 505, 11, 66, "Input"],
+Cell[62328, 1428, 506, 11, 66, "Input"],
+Cell[62837, 1441, 485, 11, 66, "Input"],
+Cell[63325, 1454, 514, 11, 66, "Input"],
+Cell[63842, 1467, 484, 10, 66, "Input"],
+Cell[64329, 1479, 436, 10, 66, "Input"],
+Cell[64768, 1491, 384, 9, 66, "Input"],
+Cell[65155, 1502, 538, 11, 66, "Input"],
+Cell[65696, 1515, 530, 11, 66, "Input"],
+Cell[66229, 1528, 531, 11, 66, "Input"],
+Cell[66763, 1541, 507, 11, 66, "Input"],
+Cell[67273, 1554, 534, 11, 66, "Input"],
+Cell[67810, 1567, 512, 11, 66, "Input"],
+Cell[68325, 1580, 434, 10, 66, "Input"],
+Cell[68762, 1592, 384, 9, 66, "Input"],
+Cell[69149, 1603, 110, 2, 39, "Input"]
 }, Open  ]]
 }, Open  ]]
 }

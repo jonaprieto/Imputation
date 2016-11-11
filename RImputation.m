@@ -154,7 +154,7 @@ SetMissings[] := Module[
 
 Clear[Preprocessing];
 Preprocessing[] := Module[
-  {n=0,m=0},
+  {n=0,m=0, symetric = True},
 
   If[Length@Dimensions[$U] != 2,
     Print["Step One, invalid $U"];
@@ -163,15 +163,17 @@ Preprocessing[] := Module[
 
   {n, m} = Dimensions[$U];
 
-  Clear[$MOS, $MAS, $OMS, $GM, $Mlv, $NS];
+  Clear[$MOS, $MAS, $OMS, $GM, $Mlv, $NS, $S, $R];
 
-  $GM[i_,j_]  := $GM[j,i] /; i > j;
-  $GM[i_,j_]  := {} /; i == j;
+  (*$GM[i_,j_]  := $GM[j,i] /; i > j;*)
+  (*$GM[i_,j_]  := {} /; i == j;*)
   $GM[_,_]    := {};
 
-  $Mlv[i_,j_] := $Mlv[j,i] /; i > j;
-  $Mlv[i_,j_] := 1 /; i == j;
+  (*$Mlv[i_,j_] := $Mlv[j,i] /; i > j;*)
+  (*$Mlv[i_,j_] := 1 /; i == j;*)
   $Mlv[_,_]   := 0;
+  $S[i_, j_]  := True ;/ i == j;
+  $S[_, _]    := False;
 
   Table[ $OMS[k] = {},{k, 1, m}];
 
@@ -180,6 +182,7 @@ Preprocessing[] := Module[
   Table[
     $MAS[i] = {};
     $NS[i]  = {};
+    $R[i]   = {};
     Table[
       If[ MissingQ@$U[[i,k]],
         $MAS[i] = $MAS[i]~Join~{k};
@@ -189,39 +192,60 @@ Preprocessing[] := Module[
     If[ Length@$MAS[i] > 0,
       $MOS = $MOS~Join~{i}
     ];
-    (*$Mlv[i,i] = 1;*)
-    (*$GM[i,i]  = {};*)
   ,{i, 1, n}];
 
+
   Table[
+
     $Mlv[i,j] = 1;
     $GM[i,j]  = {};
+
     Table[
       If[ MissingQ@$U[[i,k]],
         If[ MissingQ@$U[[j,k]],
-          $Mlv[i,j] = $Mlv[i,j] / ($V[k]^2);
+          $Mlv[i,j] = $Mlv[i,j] / $V[k]^2;
         , $Mlv[i,j] = $Mlv[i,j] / $V[k];
         ];
-     , If[ MissingQ@$U[[j,k]],
-          $Mlv[i,j] = $Mlv[i,j] / $V[k];
-       ,  If[ $U[[i,k]] != $U[[j,k]],
+     ,
+     If[ MissingQ@$U[[j,k]],
+          $Mlv[i,j]  = $Mlv[i,j] / $V[k];
+       ,  If[ !SameQ[$U[[i,k]],$U[[j,k]]],
             $Mlv[i,j] = 0;
             $GM[i,j]  = $GM[i,j]~Join~{k};
          ,  $Mlv[i,j] = $Mlv[i,j]*1;
-         ];
+         ]
        ];
      ];
   ,{k, 1, m}];
 
-  $NS[i]    = DeleteCases[$NS[i], j];
-  $NS[j]    = DeleteCases[$NS[j], i];
+  symetric = And@@Table[
+    If[ !MissingQ@$U[[i,k]],
+      SameQ[$U[[i,k]],$U[[j,k]]]
+    , Nothing
+    ]
+  ,{k,1,m}];
+
+  If[ symetric || $S[i,j],
+    $S[i,j] = True;
+    $R[j]   = $R[j]~Join~{i};
+  ];
+
+  $NS[i]   = DeleteCases[$NS[i], j];
+  $NS[j]   = DeleteCases[$NS[j], i];
+  $GM[i,j] = Union@$GM[i,j];
 
   If[ Length@$GM[i,j] == 0,
     $NS[i]  = $NS[i]~Join~{j};
     $NS[j]  = $NS[j]~Join~{i};
   ];
 
-  ,{i, 1, n}, {j, i+1, n}];
+  ,{i, 1, n}, {j, 1, n}];
+
+  Table[
+    $MAS[i] = Union@$MAS[i];
+    $R[i]   = Union@$R[i];
+    $NS[i]  = Union@$NS[i];
+  ,{i,1, n}];
 
 ];
 
@@ -242,7 +266,7 @@ ROUSTIDA[] := Module[
   Table[
     changed = False;
     Which[
-      Length@$NS[i] == 1,
+      Length@$R[i] == 1,
         With[{j = $NS[i][[1]]},
           changed = FillWith[i, k, $U[[j,k]]];
           flag    = Or[flag, changed];
@@ -253,7 +277,7 @@ ROUSTIDA[] := Module[
           For[j1 = j0+1, j1 <= Length@$NS[i] && condition, j1++,
             If[  !MissingQ@$U[[ $NS[i][[j0]], k]]
               && !MissingQ@$U[[ $NS[i][[j1]], k]]
-              && $U[[ $NS[i][[j0]], k]] !=  $U[[ $NS[i][[j1]], k]],
+              && !SameQ[ $U[[ $NS[i][[j0]], k]], $U[[ $NS[i][[j1]], k]] ],
                 condition = True;
             ];
           ];
@@ -273,49 +297,6 @@ ROUSTIDA[] := Module[
   If[ flag,
     ROUSTIDA[];
   , MeanCompleter[];
-  ];
-];
-
-(* -------------------------------------------------------------------------- *)
-
-Clear[VTRIDA];
-VTRIDA[] := Module[
-  {valMaxJ, maxJ, n, m, condition, i, j, flag, changed},
-
-  If[ Length@Dimensions@$U != 2,
-    Print["Step Two. Invalid $U."];
-    Return[];
-  ];
-
-  {n,m} = Dimensions[$U];
-  flag  = False;
-
-  Table[
-    changed   = False;
-    (* try to find the j such it has the largest $Mlv[i,j]$ *)
-    maxJ      = -1;
-    valMaxJ   = -1;  (* this assures that $Mlv[i,j] > 0 *)
-    For[j = 1, j <= n && !condition, j++,
-      If[ i != j,
-        If[ valMaxJ < $Mlv[i,j],
-            valMaxJ = $Mlv[i,j];
-            maxJ    = j;
-        ];
-      ];
-    ];
-
-    If[ maxJ > 0, (* this condition is suffice for a valid j T(i,j)>0 *)
-      Table[
-        changed  = FillWith[i, k, $U[[i, maxJ]] ];
-        flag     = Or[flag, changed];
-      ,{k, $MAS[i]}];
-    ];
-
-  ,{i, $MOS}];
-
-  If[ flag,
-    VTRIDA[]
-  , MeanCompleter[]
   ];
 ];
 
@@ -424,11 +405,52 @@ HSI[] := Module[
 
   If[ flag,
      HSI[]
-  ,  ROUSTIDA[]
+  ,  Return[]
   ];
 ];
 
+(* -------------------------------------------------------------------------- *)
 
+Clear[VTRIDA];
+VTRIDA[] := Module[
+  {valMaxJ, maxJ, n, m, condition, i, j, flag, changed},
+
+  If[ Length@Dimensions@$U != 2,
+    Print["Step Two. Invalid $U."];
+    Return[];
+  ];
+
+  {n,m} = Dimensions[$U];
+  flag  = False;
+
+  Table[
+    changed   = False;
+    (* try to find the j such it has the largest $Mlv[i,j]$ *)
+    maxJ      = -1;
+    valMaxJ   = -1;  (* this assures that $Mlv[i,j] > 0 *)
+    For[j = 1, j <= n && !condition, j++,
+      If[ i != j,
+        If[ valMaxJ < $Mlv[i,j],
+            valMaxJ = $Mlv[i,j];
+            maxJ    = j;
+        ];
+      ];
+    ];
+
+    If[ maxJ > 0, (* this condition is suffice for a valid j T(i,j)>0 *)
+      Table[
+        changed  = FillWith[i, k, $U[[i, maxJ]] ];
+        flag     = Or[flag, changed];
+      ,{k, $MAS[i]}];
+    ];
+
+  ,{i, $MOS}];
+
+  If[ flag,
+    VTRIDA[]
+  , MeanCompleter[]
+  ];
+];
 
 (* -------------------------------------------------------------------------- *)
 
@@ -437,7 +459,7 @@ FillWith[i_Integer, k_Integer, val_] := Module[
   {},
   If[ !MissingQ@val,
     $U[[i, k]]  = val;
-    If[ val == $oldU[[i,k]],
+    If[ SameQ[ val, $oldU[[i,k]] ],
       $numCorrectAlgo++;
     ];
     If[ $numMissings > 0,
@@ -485,7 +507,7 @@ UpdateData[i_Integer,k_Integer] := Module[
           ]
       ];
 
-      If[ $U[[i,k]]!=$U[[j,k]] && !MissingQ@$U[[i,k]] && !MissingQ@$U[[j,k]],
+      If[ !SameQ[$U[[i,k]], $U[[j,k]]] && !MissingQ@$U[[i,k]] && !MissingQ@$U[[j,k]],
          $GM[i,j] = $GM[i,j]~Join~{k};
       ];
 
