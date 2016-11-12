@@ -25,6 +25,7 @@ checkMatches::usage   = "Check for the accuracy ratio";
 SetMissings::usage    = "Set randomly missing data value in a dataset";
 FillWith::usage       = "Handy method to fill a position with a set value";
 UpdateData::usage     = "Update every container after changed i,k";
+pValuedToleranceRel::usage            = "The probability of the valued tolerance relation";
 
 $oldU::usage = "original dataset";
 $U::usage    = "dataset";
@@ -461,8 +462,7 @@ FillWith[i_Integer, k_Integer, val_] := Module[
   {change = False},
   change = !SameQ[$U[[i,k]], val];
   If[ change,
-    $U[[i, k]]  = val;
-    UpdateData[i,k];
+    UpdateData[i,k,val];
     If[ SameQ[ val, $oldU[[i,k]] ],
       $numCorrectAlgo++;
     ];
@@ -478,14 +478,16 @@ FillWith[i_Integer, k_Integer, val_] := Module[
 
 (* This method supposes that $U[i,k] has been imputed *)
 Clear[UpdateData];
-UpdateData[i_Integer,k_Integer] := Module[
-  {newPkij, oldMlv, oldPkij, n, m, oldGM, oldNS, oldR, symetric},
-
-  Print[i,k];
+UpdateData[i_Integer,k_Integer, val_] := Module[
+  {newPkij, oldMlv, oldPkij, n, m,
+    oldGM, oldNS, oldR, symetric, missingJ, missingI, oldValue},
 
   {n,m}   = Dimensions[$U];
 
-  If[ !MissingQ@$U[[i, k]],
+  oldValue = $U[[i,k]];
+  $U[[i, k]]  = val;
+  missingI = MissingQ@$U[[i, k]];
+  If[ !missingI,
       $MAS[i] = DeleteCases[$MAS[i], k];
     , $MAS[i] = Union[$MAS[i]~Join~{k}];
   ];
@@ -498,6 +500,9 @@ UpdateData[i_Integer,k_Integer] := Module[
 
   Table[If[i != j,
 
+      missingI = MissingQ@$U[[i, k]];
+      missingJ = MissingQ@$U[[j, k]];
+
       symetric = And@@Table[
         If[ !MissingQ@$U[[i,kk]],
             SameQ[ $U[[j,kk]], $U[[i, kk]] ]
@@ -505,23 +510,23 @@ UpdateData[i_Integer,k_Integer] := Module[
         ]
       , {kk,1, m}];
 
-      If[symetric,
+      If[symetric, (* I could avoid this, checking R[j]*)
         $R[j] = Union[$R[j]~Join~{i}];
       ];
 
-      If[MissingQ@$U[[i, k]],
-        $GM[i,j] = DeleteCases[$GM[i,j], k];
-        $GM[j,i] = DeleteCases[$GM[j,i], k];
-        If[ Length@$GM[i,j] == 0,
-          $NS[i] = Union[$NS[i]~Join~{j}];
-          $NS[j] = Union[$NS[j]~Join~{i}];
-        ];
-        If[!MissingQ@$U[[j,k]],
-          $R[j] = DeleteCases[$R[j], i];
-        ];
-      , (* I know here $U[[i,k]] != "*" *)
+      equals = SameQ[ $U[[i,k]], $U[[j,k]] ];
 
-        equals = SameQ[ $U[[i,k]], $U[[j,k]] ];
+      If[missingI,
+          $GM[i,j] = DeleteCases[$GM[i,j], k];
+          $GM[j,i] = DeleteCases[$GM[j,i], k];
+          If[ Length@$GM[i,j] == 0,
+            $NS[i] = Union[$NS[i]~Join~{j}];
+            $NS[j] = Union[$NS[j]~Join~{i}];
+          ];
+          If[!missingJ,
+            $R[j] = DeleteCases[$R[j], i];
+          ];
+        , (* I know here $U[[i,k]] != "*" *)
         If[ equals,
             $GM[i,j] = DeleteCases[$GM[i,j], k];
             $GM[j,i] = DeleteCases[$GM[j,i], k];
@@ -529,17 +534,33 @@ UpdateData[i_Integer,k_Integer] := Module[
               $NS[i] = Union[$NS[i]~Join~{j}];
               $NS[j] = Union[$NS[j]~Join~{i}];
             ];
-
-        ,  $R[j] = DeleteCases[$R[j], i];
-           If[ !MissingQ@$U[[j,k]],
-              $GM[i,j]  = Union[$GM[i,j]~Join~{k}];
-              $GM[j,i]  = Union[$GM[j,i]~Join~{k}];
-              $NS[i]    = DeleteCases[$NS[i], j];
-              $NS[j]    = DeleteCases[$NS[j], i];
+          ,  $R[j] = DeleteCases[$R[j], i];
+             If[ !missingJ,
+                $GM[i,j]  = Union[$GM[i,j]~Join~{k}];
+                $GM[j,i]  = $GM[i,j];
+                $NS[i]    = DeleteCases[$NS[i], j];
+                $NS[j]    = DeleteCases[$NS[j], i];
             ];
         ];
-
       ];
+
+      oldMlv      = $Mlv[i,j];
+      $U[[i, k]]  = oldValue;
+      oldPkij     = pValuedToleranceRel[k,i,j];
+      $U[[i,k]]   = val;
+
+      If[ oldPkij != 0,
+        $Mlv[i,j] = $Mlv[i,j] * (1/oldPkij) *  pValuedToleranceRel[k,i,j];
+      , $Mlv[i,j] = 1;
+      Table[$Mlv[i,j] = $Mlv[i,j]*pValuedToleranceRel[kk,i,j], {kk, 1, m}];
+      ];
+
+      (*$Mlv[i,j] = 1;
+      Table[$Mlv[i,j] = $Mlv[i,j]*pValuedToleranceRel[kk,i,j], {kk, 1, m}];*)
+      (*Print[$Mlv[i,j]];*)
+
+      (*Abort[];*)
+      $Mlv[j,i] = $Mlv[i,j];
     ], {j, 1, n}];
 
     Table[
@@ -548,6 +569,21 @@ UpdateData[i_Integer,k_Integer] := Module[
       $R[i]   = Union@$R[i];
     ,{j, 1, n}];
  ];
+
+(* -------------------------------------------------------------------------- *)
+Clear[pValuedToleranceRel];
+pValuedToleranceRel[k_, i_,j_]:=Module[
+  {equals, missingI, missingJ},
+  equals    = SameQ[$U[[i,k]], $U[[j,k]]];
+  missingI  = MissingQ@$U[[i,k]];
+  missingJ  = MissingQ@$U[[j,k]];
+  Which[
+    equals && !missingI && !missingJ, 1,
+    !equals && !missingI && !missingJ, 0,
+    (missingI && !missingJ) || (!missingI && missingJ), 1/$V[k],
+    missingI && missingJ, 1/$V[k]^2
+  ]
+];
 
 (* -------------------------------------------------------------------------- *)
 
@@ -882,6 +918,18 @@ $reportE21 = {
   , VerificationTest[$R[10], {}]
   , VerificationTest[$R[11], {}]
   , VerificationTest[$R[12], {11}]
+  , VerificationTest[pValuedToleranceRel[1, 12,1], 1]
+  , VerificationTest[pValuedToleranceRel[2, 12,1], 1]
+  , VerificationTest[pValuedToleranceRel[3, 12,1], 1]
+  , VerificationTest[pValuedToleranceRel[4, 12,1], 1/4]
+  , VerificationTest[pValuedToleranceRel[1, 11,1], 1/4]
+  , VerificationTest[pValuedToleranceRel[2, 11,1], 1]
+  , VerificationTest[pValuedToleranceRel[3, 11,1], 1/4]
+  , VerificationTest[pValuedToleranceRel[4, 11,1], 1/4]
+  , VerificationTest[pValuedToleranceRel[1, 11,12], 1/4]
+  , VerificationTest[pValuedToleranceRel[2, 11,12], 1]
+  , VerificationTest[pValuedToleranceRel[3, 11,12], 1/4]
+  , VerificationTest[pValuedToleranceRel[4, 11,12], 1/16]
   }~Join~Flatten@Table[
       VerificationTest[ {{i,j}, $Mlv[i,j]}, {{i,j},$mlvE21[[i,j]]} ]
     ,{i,1,$n},{j,1,$n}]~Join~Flatten@Table[
@@ -924,6 +972,8 @@ $reportE21 = $reportE21~Join~Flatten@Table[
 }
 ,{i,1, $n}]~Join~Flatten@Table[
   VerificationTest[ {{i,j}, $GM[i,j]}, {{i,j},$gmE21[i,j]} ]
+,{i,1,$n},{j,1,$n}]~Join~Flatten@Table[
+  VerificationTest[ {{i,j}, $Mlv[i,j]}, {{i,j},$mlvE21[[i,j]]} ]
 ,{i,1,$n},{j,1,$n}];
 
 $reportE21 = TestReport[$reportE21];
