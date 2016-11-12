@@ -25,7 +25,9 @@ checkMatches::usage   = "Check for the accuracy ratio";
 SetMissings::usage    = "Set randomly missing data value in a dataset";
 FillWith::usage       = "Handy method to fill a position with a set value";
 UpdateData::usage     = "Update every container after changed i,k";
-pValuedToleranceRel::usage            = "The probability of the valued tolerance relation";
+pValuedToleranceRel::usage = "The probability of the valued tolerance relation";
+checkR::usage = "check using R set";
+checkNS::usage = "check using NS set";
 
 $oldU::usage = "original dataset";
 $U::usage    = "dataset";
@@ -167,11 +169,12 @@ Preprocessing[] := Module[
 
   {n, m} = Dimensions[$U];
 
-  Clear[$MOS, $MAS, $OMS, $GM, $Mlv, $NS, $S, $R];
+  Clear[$MOS, $MAS, $OMS, $GM, $Mlv, $NS, $S, $R, $RInv];
 
   $MAS[_] := {};
   $NS[_]  := {};
   $R[_]   := {};
+  $RInv[_]   := {}; (* RInv *)
   $OMS[_] := {};
 
   $GM[i_,j_]  := $GM[j,i] /; i > j;
@@ -209,7 +212,8 @@ Preprocessing[] := Module[
 
   If[ symetric,
     (*$S[i,j] = True;*)
-    $R[j]   = {$R[j],i};
+    $R[j]    = {$R[j],i};
+    $RInv[i] = {$RInv[i], j};
   ];
 
   $GM[i,j] = Union@Flatten[$GM[i,j], Infinity];
@@ -240,6 +244,7 @@ Preprocessing[] := Module[
 
     $MAS[i] = Union@Flatten[$MAS[i], Infinity];
     $R[i]   = Union@Flatten[$R[i], Infinity];
+    $RInv[i]   = Union@Flatten[$RInv[i], Infinity];
     $NS[i]  = Union@Flatten[$NS[i], Infinity];
   ,{i, 1, n}];
 
@@ -301,6 +306,64 @@ ROUSTIDA[] := Module[
   , MeanCompleter[];
   ];
 ];
+
+Clear[checkR];
+checkR[] := Module[
+  {condition, n,m, flag, changed, val},
+
+  If[ Length@Dimensions@$U != 2,
+    Print["Step Two. Invalid $U."];
+    Return[]
+  ];
+
+  {n,m} = Dimensions[$U];
+  flag  = False;
+
+  Table[
+    changed = False;
+    If[Length@$RInv[i] == 1,
+      (*Print["entro", {i, $RInv[i]}];*)
+        With[{j = $RInv[i][[1]]},
+          changed = FillWith[i, k, $U[[j,k]]];
+          flag    = Or[flag, changed];
+        ];
+    ];
+  ,{i, $MOS}, {k, $MAS[i]}];
+
+  If[ flag,
+    checkR[];
+  , Return[];
+  ];
+];
+
+Clear[checkNS];
+checkNS[] := Module[
+  {condition, n,m, flag, changed, val},
+
+  If[ Length@Dimensions@$U != 2,
+    Print["Step Two. Invalid $U."];
+    Return[]
+  ];
+
+  {n,m} = Dimensions[$U];
+  flag  = False;
+
+  Table[
+    changed = False;
+    If[Length@$NS[i] == 1,
+        With[{j = $NS[i][[1]]},
+          changed = FillWith[i, k, $U[[j,k]]];
+          flag    = Or[flag, changed];
+        ];
+    ];
+  ,{i, $MOS}, {k, $MAS[i]}];
+
+  If[ flag,
+    checkNS[];
+  , Return[];
+  ];
+];
+
 
 (* -------------------------------------------------------------------------- *)
 
@@ -470,6 +533,7 @@ FillWith[i_Integer, k_Integer, val_] := Module[
       --$numMissings
     ];
     $numAlgo++;
+    (*, Print["do not need change at all"];*)
   ];
   Return[change];
 ];
@@ -698,6 +762,8 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
         algo == "ROUSTIDA", ROUSTIDA[]
       , algo == "VTRIDA", VTRIDA[]
       , algo == "HSI",  HSI[]
+      , algo == "checkR",  checkR[]
+      , algo == "checkNS",  checkNS[]
       ];
 
       matches = checkMatches[oldJ];
@@ -709,7 +775,6 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
         $maxResult = Max[$maxResult, stat];
       ];
       $lastResult
-
     , {numIter}];
 
     mean  = Mean@res;
@@ -766,19 +831,21 @@ checkMatches[oldJ_List] := Module[
 (* TEST --------------------------------------------------------------------- *)
 (* Example taken from the Stefanowski Paper                                   *)
 
+SeedRandom[1014221091, Method->All];
+
 $e21 = {
-   {3, 2, 1, 0},
-   {2, 3, 2, 0},
-   {2, 3, 2, 0},
-   {Missing[], 2, Missing[], 1},
-   {Missing[], 2, Missing[], 1},
-   {2, 3, 2, 1},
-   {3, Missing[], Missing[], 3},
-   {Missing[], 0, 0, Missing[]},
-   {3, 2, 1, 3},
-   {1, Missing[], Missing[], Missing[]},
-   {Missing[], 2, Missing[], Missing[]},
-   {3, 2, 1, Missing[]}
+     {3, 2, 1, 0}
+   , {2, 3, 2, 0}
+   , {2, 3, 2, 0}
+   , {Missing[], 2, Missing[], 1}
+   , {Missing[], 2, Missing[], 1}
+   , {2, 3, 2, 1}
+   , {3, Missing[], Missing[], 3}
+   , {Missing[], 0, 0, Missing[]}
+   , {3, 2, 1, 3}
+   , {1, Missing[], Missing[], Missing[]}
+   , {Missing[], 2, Missing[], Missing[]}
+   , {3, 2, 1, Missing[]}
  };
 
 $mlvE21 =   {
@@ -918,6 +985,18 @@ $reportE21 = {
   , VerificationTest[$R[10], {}]
   , VerificationTest[$R[11], {}]
   , VerificationTest[$R[12], {11}]
+  , VerificationTest[$RInv[1], {}]
+  , VerificationTest[$RInv[2], {3}]
+  , VerificationTest[$RInv[3], {2}]
+  , VerificationTest[$RInv[4], {5}]
+  , VerificationTest[$RInv[5], {4}]
+  , VerificationTest[$RInv[6], {}]
+  , VerificationTest[$RInv[7], {9}]
+  , VerificationTest[$RInv[8], {}]
+  , VerificationTest[$RInv[9], {}]
+  , VerificationTest[$RInv[10], {}]
+  , VerificationTest[$RInv[11], {1,4,5,9,12}]
+  , VerificationTest[$RInv[12], {1,9}]
   , VerificationTest[pValuedToleranceRel[1, 12,1], 1]
   , VerificationTest[pValuedToleranceRel[2, 12,1], 1]
   , VerificationTest[pValuedToleranceRel[3, 12,1], 1]
@@ -943,30 +1022,27 @@ Table[
 ,{i, 1, $n}];
 
 $e21 = {
- {3, 2, 1, 0},
- {2, 3, 2, 0},
- {2, 3, 2, 0},
- {3, 2, Missing[], 1},
- {Missing[], 2, Missing[], 1},
- {2, 3, 2, 1},
- {3, Missing[], Missing[], 3},
- {Missing[], 0, 0, Missing[]},
- {3, 2, 1, 3},
- {1, Missing[], Missing[], Missing[]},
- {Missing[], 2, Missing[], Missing[]},
- {3, 2, 1, Missing[]}
-};
+     {3, 2, 1, 0}
+   , {2, 3, 2, 0}
+   , {2, 3, 2, 0}
+   , {3, 2, Missing[], 1}
+   , {Missing[], 2, Missing[], 1}
+   , {2, 3, 2, 1}
+   , {3, Missing[], Missing[], 3}
+   , {Missing[], 0, 0, Missing[]}
+   , {3, 2, 1, 3}
+   , {1, Missing[], Missing[], Missing[]}
+   , {Missing[], 2, Missing[], Missing[]}
+   , {3, 2, 1, Missing[]}
+ };
 
+(* testing an update of data-value *)
 $U = $oldU = $e21;
 Preprocessing[];
-(*PrintData[$e21];*)
 $change = FillWith[4,1, Missing[]];
-(*Print["after"];*)
-(*PrintData[$e21];*)
 
-
-$reportE21 = $reportE21~Join~Flatten@Table[
-{ VerificationTest[{i, $NS[i]},{i, $oldNS[i]}]
+$reportE21 = $reportE21~Join~Flatten@Table[{
+  VerificationTest[{i, $NS[i]},{i, $oldNS[i]}]
 , VerificationTest[{i, $R[i]}, {i, $oldR[i]}]
 , VerificationTest[{i, $MAS[i]}, {i, $oldMAS[i]}]
 }
@@ -982,6 +1058,5 @@ Print[Column /@ (Normal /@ $reportE21["TestsFailed"]) // TabView];
 Print[$reportE21["TimeElapsed"]];
 
 (* END of Tests ------------------------------------------------------------- *)
-
 
 EndPackage[];
