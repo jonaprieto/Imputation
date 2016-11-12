@@ -1,5 +1,4 @@
 (* ::Package:: *)
-
 (* :Title: Imputation                                                         *)
 (* :Context: Imputation`                                                      *)
 (* :Author: Jonathan Prieto-Cubides                                           *)
@@ -308,40 +307,120 @@ ROUSTIDA[] := Module[
 
 Clear[checkR];
 checkR[] := Module[
-  {condition, n,m, flag, changed, val, setVal},
-
+  {condition, n,m, flag, changed, val, setVal
+  , rangeN, rangeM, otherwise=True
+  , base, rowsWithK, rows, III=0, model, correct =0, total=0},
   If[ Length@Dimensions@$U != 2,
     Print["Step Two. Invalid $U."];
     Return[]
   ];
 
-  {n,m} = Dimensions[$U];
-  flag  = False;
+  {n,m}   = Dimensions[$U];
+  rangeN  = Range[n];
+  rangeM  = Range[m];
+  flag    = False;
+
   $MOS    = SortBy[$MOS, Length@$MAS[#]*(Length@$R[#]+1) &];
 
   Table[
+
    $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
+
    Table[
     changed = False;
+
     setVal1 = DeleteCases[Union@Table[$U[[j,k]], {j, $RInv[i]}], Missing[]];
     setVal2 = DeleteCases[Union@Table[$U[[j,k]], {j, $NS[i]}], Missing[]];
 
     Which[
       Length@setVal1 == 1 ,
         changes = FillWith[i,k, First@setVal1];
-        flag = Or[flag, changed];
-    ,   Length@setVal2 ==1 ,
+        flag    = Or[flag, changed];
+    , Length@setVal2 == 1 ,
         changes = FillWith[i,k, First@setVal2];
-        flag = Or[flag, changed];
+        flag    = Or[flag, changed];
     ];
-    (*If[Length@$RInv[i] == 1,
-        With[{j = $RInv[i][[1]]},
-          changed = FillWith[i, k, $U[[j,k]]];
-          flag    = Or[flag, changed];
-        ];
-    ];*)
     , {k, $MAS[i]}];
   ,{i, $MOS}];
+
+  (*Table[
+    change = Or[change, False];
+
+    base      = Complement2[rangeM, $MAS[i]];
+    rowsWithK = Complement2[rangeN, $OMS[k]];
+    rows      = Select[rowsWithK, SameQ[Intersection[$MAS[#], base],{}] &];
+
+    (*Print["rowsWithK:", rowsWithK];
+    Print["rows:", rows];
+    Print["base:", base];*)
+
+    If[ Length@rows == 1,
+        Print["entro1"];
+        changed = FillWith[i, k, $U[[ rows[[1]], k ]] ];
+        flag    = Or[flag, changed];
+    ];
+
+    If[ Length@rows >= 2*$missingRate*n,
+      rows = SortBy[rows, - $Mlv[i,#] &];
+      rows = Take[rows, UpTo@Ceiling[ 2*$missingRate*n ]];
+      (*Print["rows refinamiento"];*)
+    ];
+    (*Print["rows 2:", rows];*)
+
+    If[ Length@rows > 1,
+      (* cols with values in the i-row *)
+      If[ Length@base >= 0.8*m,
+        base = SortBy[base, Length@$OMS[#] &];
+        base = Take[base, UpTo@Ceiling[0.8*m]];
+      ];
+
+      model   = $U[[rows, base]] -> $U[[rows, k]];
+      classes = Union@DeleteCases[$U[[rows, k]], Missing[]];
+
+      (*Print["Model "];*)
+      (*PrintData[$U[[rows, base]]];*)
+      (*Print["classes:"];*)
+      (*Print[classes];*)
+
+      If[ Length@classes == 1,
+        (*Print["ans     :", classes[[1]] ];*)
+        (*Print["correct :", $oldU[[i,k]] ];*)
+        change = FillWith[i, j, classes[[1]] ];
+        flag   = Or[flag, change];
+        If[ SameQ[ans, $oldU[[i,k]]],
+          correct++;
+        ];
+        total++;
+      ];
+
+      If[ Length@classes > 1,
+        clasifier = Classify[model
+          , Method          -> $classifier
+          , PerformanceGoal -> "Quality"
+        ];
+        (*Print["using classifier"];*)
+        (*Print["i,k :", {i,k}];*)
+        goal  = $U[[i, base]];
+        (*Print["goal:", goal];*)
+        ans   = clasifier[goal];
+        (*Print["ans     :", ans];*)
+        (*Print["correct :", $oldU[[i,k]] ];*)
+
+        changed  = FillWith[i, k, ans];
+        flag     = Or[flag, changed];
+
+        If[ SameQ[ans, $oldU[[i,k]]],
+          correct++;
+        ];
+        total++;
+      ];
+
+      ];
+
+  ,{i, $MOS}, {k, $MAS[i]}];*)
+
+  (*Print["correct:", correct];
+  Print["total:", total];*)
 
   If[ flag,
     checkR[];
@@ -377,7 +456,6 @@ checkNS[] := Module[
   ];
 ];
 
-
 (* -------------------------------------------------------------------------- *)
 
 Clear[HSI];
@@ -411,7 +489,7 @@ HSI[] := Module[
     ];
   ,{i, $MOS}, {k, $MAS[i]}];
 
-  Print["correct:", $numCorrectAlgo];
+  (*Print["correct:", $numCorrectAlgo];*)
 
 
   $MOS    = SortBy[$MOS, Length@$MAS[#]*(Length@$R[#]+1) &];
@@ -440,16 +518,6 @@ VTRIDA[] := Module[
 
   {n,m} = Dimensions[$U];
   flag  = False;
-
-  (*Table[
-    change = False;
-    setVal = Table[If[!MissingQ@$U[[j,k]] && $Mlv[i,j] > 0,j,Nothing], {j, $NS[i]}];
-    If[ Length@setVal > 0,
-      maxJ = Last@SortBy[setVal, $Mlv[i,#] &];
-      changed = FillWith[i, k, $U[[maxJ,k]]];
-      flag    = Or[flag, changed];
-    ];
-  ,{i, $MOS}, {k, $MAS[i]}];*)
 
   Table[
     change = False;
@@ -709,7 +777,7 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
 
       oldJ = Table[$MAS[i], {i, 1, n}];
       numMissing = $numMissings;
-
+      PrintTemporary["Starting "<>algo];
       Which[
         algo == "ROUSTIDA", ROUSTIDA[]
       , algo == "VTRIDA", VTRIDA[]
@@ -719,7 +787,7 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
       ];
 
       matches = checkMatches[oldJ];
-      Print[ToString@cDataset<>" Algo: "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter];
+      PrintTemporary[ToString@cDataset<>" Algo: "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter];
 
       With[{stat = N[Total@matches /numMissing]},
         $lastResult = stat;
@@ -749,9 +817,7 @@ RunAlgorithm[datasets_List, numIter_Integer:30, miss_, algo_String] := Module[
         <|  "dataset"     -> name
         ,   "size"        -> ToString@n <> "x" <> ToString@m
         ,   "algo"        -> algo
-        ,   "name"        -> name
         ,   "numIter"     -> numIter
-        ,   "res"         -> res
         ,   "(min, max)"  -> {$minResult, $maxResult}
         ,   "mean"        -> mean
         ,   "interval"    -> conf
@@ -998,7 +1064,7 @@ $reportE21 = $reportE21~Join~Flatten@Table[{
 , VerificationTest[{i, $R[i]}, {i, $oldR[i]}]
 , VerificationTest[{i, $MAS[i]}, {i, $oldMAS[i]}]
 }
-,{i,1, $n}]~Join~Flatten@Table[
+,{i,1,$n}]~Join~Flatten@Table[
   VerificationTest[ {{i,j}, $GM[i,j]}, {{i,j},$gmE21[i,j]} ]
 ,{i,1,$n},{j,1,$n}]~Join~Flatten@Table[
   VerificationTest[ {{i,j}, $Mlv[i,j]}, {{i,j},$mlvE21[[i,j]]} ]
