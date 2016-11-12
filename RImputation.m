@@ -289,7 +289,6 @@ ROUSTIDA[] := Module[
             ];
           ];
         ];
-
         If[ !condition,
           For[jj = 1, jj <= Length@$NS[i] && !changed, jj++,
             val     = $U[[ $NS[i][[jj]], k ]];
@@ -309,7 +308,7 @@ ROUSTIDA[] := Module[
 
 Clear[checkR];
 checkR[] := Module[
-  {condition, n,m, flag, changed, val},
+  {condition, n,m, flag, changed, val, setVal},
 
   If[ Length@Dimensions@$U != 2,
     Print["Step Two. Invalid $U."];
@@ -318,21 +317,35 @@ checkR[] := Module[
 
   {n,m} = Dimensions[$U];
   flag  = False;
+  $MOS    = SortBy[$MOS, Length@$MAS[#]*(Length@$R[#]+1) &];
 
   Table[
+   $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
+   Table[
     changed = False;
-    If[Length@$RInv[i] == 1,
-      (*Print["entro", {i, $RInv[i]}];*)
+    setVal1 = DeleteCases[Union@Table[$U[[j,k]], {j, $RInv[i]}], Missing[]];
+    setVal2 = DeleteCases[Union@Table[$U[[j,k]], {j, $NS[i]}], Missing[]];
+
+    Which[
+      Length@setVal1 == 1 ,
+        changes = FillWith[i,k, First@setVal1];
+        flag = Or[flag, changed];
+    ,   Length@setVal2 ==1 ,
+        changes = FillWith[i,k, First@setVal2];
+        flag = Or[flag, changed];
+    ];
+    (*If[Length@$RInv[i] == 1,
         With[{j = $RInv[i][[1]]},
           changed = FillWith[i, k, $U[[j,k]]];
           flag    = Or[flag, changed];
         ];
-    ];
-  ,{i, $MOS}, {k, $MAS[i]}];
+    ];*)
+    , {k, $MAS[i]}];
+  ,{i, $MOS}];
 
   If[ flag,
     checkR[];
-  , Return[];
+  , MeanCompleter[];
   ];
 ];
 
@@ -385,93 +398,32 @@ HSI[] := Module[
   flag    = False;
   rangeN  = Range[n];
   rangeM  = Range[m];
-  $MOS    = SortBy[$MOS, Length@$MAS[#]*(Length@$R[#]+1) &];
+
+
 
   Table[
-
-    $MAS[i] = SortBy[$MAS[i], Length@$OMS[#]&];
     changed = False;
-
-    Table[
-      If[ Length@$NS[i] == 1,
-        With[{  j  = $NS[i][[1]]},
-          changed  = FillWith[i, k, $U[[j, k]] ];
-          flag     = Or[flag, changed];
+    If[Length@$R[i] == 1,
+        With[{j = $R[i][[1]]},
+          changed = FillWith[i, k, $U[[j,k]]];
+          flag    = Or[flag, changed];
         ];
-      ];
-    , {k, $MAS[i]}];
+    ];
+  ,{i, $MOS}, {k, $MAS[i]}];
 
-    Table[
+  Print["correct:", $numCorrectAlgo];
 
-      answers = DeleteCases[Union@$U[[All, k]], Missing[]];
-      If[ Length@answers == 1,
-        changed = FillWith[i, k, answers[[1]] ];
-        flag    = Or[flag, changed];
-      ];
-      (* if there is not an obvious answer, next step *)
-      If[!changed,
 
-        base = Complement2[rangeM, $MAS[i]];
-        (* rows with values at k-col*)
-        rowsAll = Complement2[rangeN, $OMS[k]];
-        rows    = Select[rowsAll, Intersection[$MAS[#], base] == {}  &];
+  $MOS    = SortBy[$MOS, Length@$MAS[#]*(Length@$R[#]+1) &];
+  Table[
 
-        If[ Length@rows == 1,
-            changed = FillWith[i, k, $U[[ rows[[1]], k ]] ];
-            flag    = Or[flag, changed];
-        ];
-
-        If[ !changed && Length@rows > 1,
-
-          If[ Length@rows >= $missingRate*n,
-            rows = SortBy[rows, - $Mlv[i,#] &];
-            rows = Take[rows, UpTo@Ceiling[ $missingRate*n ]];
-          ];
-
-          If[Length@rows > 1,
-            (* cols with values in the i-row *)
-            cols  = Complement2[rangeM, $MAS[i]];
-            If[ Length@cols >= 0.8*m,
-              cols = SortBy[cols, Length@$OMS[#] &];
-              cols = Take[cols, UpTo@Ceiling[0.8*m]];
-            ];
-            model   = $U[[rows, cols]] -> $U[[rows, k]];
-            classes = Union@DeleteCases[$U[[rows, k]], Missing[]];
-
-            (*Print["Model "];
-            PrintData[$U[[rows, cols]]];
-            Print["classes:"];
-            Print[classes];*)
-
-            If[ Length@clases == 1,
-              change = FillWith[i, j, classes[[1]] ];
-              flag   = Or[flag, change];
-            ];
-
-            If[ !change && Length@classes > 1,
-              clasifier = Classify[model,
-                  Method          -> $classifier
-                , PerformanceGoal -> "Quality"
-              ];
-
-              goal  = $U[[i, cols]];
-              ans   = clasifier[goal];
-
-              If[ MemberQ[answers, ans],
-                changed  = FillWith[i, k, ans];
-                flag     = Or[flag, changed];
-                Print["entro", entro++];
-              ];
-            ];
-          ];
-        ];
-      ];
-    , {k, $MAS[i]}];
+    $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
   , {i, $MOS}];
 
   If[ flag,
      HSI[]
-  ,  MeanCompleter[]
+  ,  Return[];
+  (*MeanCompleter[]*)
   ];
 ];
 
@@ -479,7 +431,7 @@ HSI[] := Module[
 
 Clear[VTRIDA];
 VTRIDA[] := Module[
-  {valMaxJ, maxJ, n, m, condition, i, j, flag, changed},
+  {valMaxJ, maxJ, n, m, condition, i, j, flag, changed, setVal, maxVal},
 
   If[ Length@Dimensions@$U != 2,
     Print["Step Two. Invalid $U."];
@@ -489,27 +441,27 @@ VTRIDA[] := Module[
   {n,m} = Dimensions[$U];
   flag  = False;
 
+  (*Table[
+    change = False;
+    setVal = Table[If[!MissingQ@$U[[j,k]] && $Mlv[i,j] > 0,j,Nothing], {j, $NS[i]}];
+    If[ Length@setVal > 0,
+      maxJ = Last@SortBy[setVal, $Mlv[i,#] &];
+      changed = FillWith[i, k, $U[[maxJ,k]]];
+      flag    = Or[flag, changed];
+    ];
+  ,{i, $MOS}, {k, $MAS[i]}];*)
+
   Table[
-    changed   = False;
-    (* try to find the j such it has the largest $Mlv[i,j]$ *)
-    maxJ      = -1;
-    valMaxJ   = -1;  (* this assures that $Mlv[i,j] > 0 *)
-    For[j = 1, j <= n && !condition, j++,
-      If[ i != j,
-        If[ valMaxJ < $Mlv[i,j],
-            valMaxJ = $Mlv[i,j];
-            maxJ    = j;
-        ];
-      ];
-    ];
-
-    If[ maxJ > 0, (* this condition is suffice for a valid j T(i,j)>0 *)
+    change = False;
+    setVal = Table[If[i!=j && $Mlv[i,j] > 0,j,Nothing], {j, 1, n}];
+    If[ Length@setVal > 0,
+      maxJ = Last@SortBy[setVal, $Mlv[i,#] &];
       Table[
-        changed  = FillWith[i, k, $U[[i, maxJ]] ];
-        flag     = Or[flag, changed];
+        changed = FillWith[i, k, $U[[maxJ,k]]];
+        flag    = Or[flag, changed];
       ,{k, $MAS[i]}];
-    ];
 
+    ];
   ,{i, $MOS}];
 
   If[ flag,
