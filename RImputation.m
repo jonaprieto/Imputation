@@ -739,10 +739,10 @@ setDatasets[datasets_]:=Module[{name, f},
 ];
 
 Clear[RunAlgorithm];
-RunAlgorithm[algo_String, namedataset_String, numIter_:30] :=
+RunAlgorithm[algo_String, namedataset_String, numIter_Integer:30] :=
   RunAlgorithm[algo, {namedataset}, numIter]
 
-RunAlgorithm[algo_String, namedatasets_List:{}, numIter_:30] := Module[
+RunAlgorithm[algo_String, namedatasets_List:{}, numIter_Integer:30] := Module[
   {name, citer, outcome = <||>, matches, cDataset = 0
     , resCal, oldJ, n=0, m=0, numMissing=0, attr, mean, stand, conf,f, stat, datasets},
 
