@@ -11,45 +11,47 @@
 
 BeginPackage["RImputation`"];
 
+(* -------------------------------------------------------------------------- *)
+
 ImputeVersion::usage = "ImputateVersion";
 ImputeVersion        = "Imputation Package v0.2";
 
+CRINS::usage      = "CRINS algorithm implementation";
 ROUSTIDA::usage   = "ROUSTIDA algorithm implementation";
 VTRIDA::usage     = "VTRIDA algorithm implemenation";
-CRINS::usage        = "CRINS algorithm implementation";
-Impute::usage     = "Impute function";
-RunAlgorithm::usage   = "RunAlgorithm[]";
-MeanCompleter::usage  = "Mean completer implementation";
+RINS::usage       = "check using RInv and NS sets";
 checkMatches::usage   = "Check for the accuracy ratio";
-SetMissings::usage    = "Set randomly missing data value in a dataset";
 FillWith::usage       = "Handy method to fill a position with a set value";
+MeanCompleter::usage  = "Mean completer implementation";
+RunAlgorithm::usage   = "RunAlgorithm[]";
+SetMissings::usage    = "Set randomly missing data value in a dataset";
 UpdateData::usage     = "Update every container after changed i,k";
+checkNS::usage        = "check using NS set";
 pValuedToleranceRel::usage = "The probability of the valued tolerance relation";
-RINS::usage = "check using R set";
-checkNS::usage = "check using NS set";
 
 $oldU::usage = "original dataset";
 $U::usage    = "dataset";
+$missingU::usage     = "dataset with random missing values";
 Preprocessing::usage = "";
 setDatasets::usage   = "setup the dataset for runnings";
-$missingU::usage     = "dataset with random missing values";
 
-$V::usage     = "Number of possible values that an attribute can take";
-$MOS::usage   = "Missing object set in the dataset";
-$MAS::usage   = "Missing attribute set per each row";
-$NS::usage    = "Set of no distinguishible object with a row";
 $GM::usage    = "Generalized descirnibility matrix";
-$Mlv::usage   = "Value tolerance matrix";
-$OMS::usage   = "object missing set per an attribute k";
-$verboseOutcome::usage  = "output data container of RunAlgorithm method";
+$MAS::usage   = "Missing attribute set per each row";
 $missingRate::usage     = "Missing rate for the SetMissings method";
+$Mlv::usage   = "Value tolerance matrix";
+$MOS::usage   = "Missing object set in the dataset";
+$NS::usage    = "Set of no distinguishible object with a row";
+$OMS::usage   = "object missing set per an attribute k";
+$V::usage     = "Number of possible values that an attribute can take";
+$verboseOutcome::usage  = "output data container of RunAlgorithm method";
 
-$perdidos::usage = "data container of datasets with random missing values";
-$original::usage = "data container of original datasets";
-$datasetDir::usage = "folder location of datasets";
 $attr::usage     = "data container for the attributes";
+$original::usage = "data container of original datasets";
+$perdidos::usage = "data container of datasets with random missing values";
+$datasetDir::usage     = "folder location of datasets";
 $numIteraciones::usage = "number of iterations.";
 
+(* -------------------------------------------------------------------------- *)
 
 Off[AbortAssert];
 AbortAssert::trace = "Assertion failed ``.";
@@ -76,7 +78,6 @@ $missingRate      = 0.05;
 $missingSymbol    = Missing[];
 $missingSymbolPrint =
 "\!\(\* StyleBox[\"?\",\nFontSize->18,\nBackground->RGBColor[1, 1, 0]]\)";
-
 
 $perdidos = <||>;
 $original = <||>;
@@ -126,10 +127,10 @@ Union2[A_, B_] := Union[Flatten[{A, B}]];
 (*http://goo.gl/5O7jhs*)
 Clear[MakeArrange];
 MakeArrange[{n_, m_}, p_] := Module[
-{base = PadLeft[ConstantArray[1, Round[n m p]], n m], cand},
-  While[(cand = ArrayReshape[RandomSample@base, {n, m}];
-  Max[Total[cand]] > n - 2 || Max[Total /@ cand] > m - 2)];
-  Position[cand, 1]
+  {base = PadLeft[ConstantArray[1, Round[n m p]], n m], cand},
+    While[(cand = ArrayReshape[RandomSample@base, {n, m}];
+    Max[Total[cand]] > n - 2 || Max[Total /@ cand] > m - 2)];
+    Position[cand, 1]
 ];
 
 (* -------------------------------------------------------------------------- *)
