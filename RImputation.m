@@ -50,7 +50,7 @@ $original::usage = "data container of original datasets";
 $perdidos::usage = "data container of datasets with random missing values";
 $datasetDir::usage     = "folder location of datasets";
 $numIteraciones::usage = "number of iterations.";
-
+$runMC::usage = "control whether the last step on all algorithms runs or not";
 (* -------------------------------------------------------------------------- *)
 
 Off[AbortAssert];
@@ -82,7 +82,7 @@ $missingSymbolPrint =
 $perdidos = <||>;
 $original = <||>;
 $numIteraciones = 30;
-
+$runMC = True;
 (* -------------------------------------------------------------------------- *)
 
 Clear[SetInitValues]
@@ -319,7 +319,9 @@ ROUSTIDA[] := Module[
 
   If[ flag,
     ROUSTIDA[];
-  , MeanCompleter[];
+  , If[$runMC,
+      MeanCompleter[];
+    ];
   ];
 ];
 
@@ -347,7 +349,6 @@ RINS[] := Module[
 
    Table[
     changed = False;
-
     setVal1 = DeleteCases[Union@Table[$U[[j,k]], {j, $RInv[i]}], Missing[]];
     setVal2 = DeleteCases[Union@Table[$U[[j,k]], {j, $NS[i]}], Missing[]];
 
@@ -443,7 +444,9 @@ RINS[] := Module[
 
   If[ flag,
     RINS[];
-  , MeanCompleter[];
+    , If[$runMC,
+        MeanCompleter[];
+      ];
   ];
 ];
 
@@ -472,6 +475,41 @@ checkNS[] := Module[
   If[ flag,
     checkNS[];
   , Return[];
+  ];
+];
+
+(* -------------------------------------------------------------------------- *)
+
+Clear[VTRIDA];
+VTRIDA[] := Module[
+  {valMaxJ, maxJ, n, m, condition, i, j, flag, changed, setVal, maxVal},
+
+  If[ Length@Dimensions@$U != 2,
+    Print["Step Two. Invalid $U."];
+    Return[];
+  ];
+
+  {n,m} = Dimensions[$U];
+  flag  = False;
+
+  Table[
+    change = False;
+    setVal = Table[If[i!=j && $Mlv[i,j] > 0,j,Nothing], {j, 1, n}];
+    If[ Length@setVal > 0,
+      maxJ = Last@SortBy[setVal, $Mlv[i,#] &];
+      Table[
+        changed = FillWith[i, k, $U[[maxJ,k]]];
+        flag    = Or[flag, changed];
+      ,{k, $MAS[i]}];
+
+    ];
+  ,{i, $MOS}];
+
+  If[ flag,
+    VTRIDA[]
+  , If[ $runMC,
+      MeanCompleter[];
+    ];
   ];
 ];
 
@@ -518,39 +556,6 @@ CRINS[] := Module[
      CRINS[]
   ,  MeanCompleter[];
   (*MeanCompleter[]*)
-  ];
-];
-
-(* -------------------------------------------------------------------------- *)
-
-Clear[VTRIDA];
-VTRIDA[] := Module[
-  {valMaxJ, maxJ, n, m, condition, i, j, flag, changed, setVal, maxVal},
-
-  If[ Length@Dimensions@$U != 2,
-    Print["Step Two. Invalid $U."];
-    Return[];
-  ];
-
-  {n,m} = Dimensions[$U];
-  flag  = False;
-
-  Table[
-    change = False;
-    setVal = Table[If[i!=j && $Mlv[i,j] > 0,j,Nothing], {j, 1, n}];
-    If[ Length@setVal > 0,
-      maxJ = Last@SortBy[setVal, $Mlv[i,#] &];
-      Table[
-        changed = FillWith[i, k, $U[[maxJ,k]]];
-        flag    = Or[flag, changed];
-      ,{k, $MAS[i]}];
-
-    ];
-  ,{i, $MOS}];
-
-  If[ flag,
-    VTRIDA[]
-  , MeanCompleter[]
   ];
 ];
 
@@ -740,10 +745,14 @@ setDatasets[datasets_]:=Module[{name, f},
 ];
 
 Clear[RunAlgorithm];
-RunAlgorithm[algo_String, namedataset_String, numIter_Integer:30] :=
+
+RunAlgorithm[algo_String]:=
+  RunAlgorithm[algo, {}, $numIteraciones];
+
+RunAlgorithm[algo_String, namedataset_String, numIter_Integer] :=
   RunAlgorithm[algo, {namedataset}, numIter]
 
-RunAlgorithm[algo_String, namedatasets_List:{}, numIter_Integer:30] := Module[
+RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
   {name, citer, outcome = <||>, matches, cDataset = 0
     , resCal, oldJ, n=0, m=0, numMissing=0, attr, mean, stand, conf,f, stat, datasets},
 
@@ -830,9 +839,10 @@ RunAlgorithm[algo_String, namedatasets_List:{}, numIter_Integer:30] := Module[
       ];
 
       matches = checkMatches[oldJ];
-
-      PrintTemporary[ToString@cDataset<>" Algo: "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter];
-
+      If[ $runMC,
+        PrintTemporary[name<>" : "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter<>" = "<>ToString@numMissing];
+      ,  Print[name<>" : "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter<>" = "<>ToString@numMissing];
+      ];
       stat = N[Total@matches /numMissing];
       $lastResult = stat;
       $minResult = Min[$minResult, stat];
@@ -844,7 +854,7 @@ RunAlgorithm[algo_String, namedatasets_List:{}, numIter_Integer:30] := Module[
     stand = StandardDeviation@resCal;
     conf  = {mean - 2.01*(stand/Sqrt[numIter]), mean + 2.01*(stand/Sqrt[numIter])};
 
-    Export[FileNameJoin[{$datasetDir[[name]], algo<>"-"<>ToString[$missingRate]<>".csv"}],
+    Export[name<>"-"<>FileNameJoin[{$datasetDir[[name]], algo<>"-"<>ToString[$missingRate]<>"-"<>ToString@$numIteraciones<>".csv"}],
       { algo
       , name
       , $missingRate
