@@ -3,7 +3,7 @@
 (* :Context: Imputation`                                                      *)
 (* :Author: Jonathan Prieto-Cubides                                           *)
 (* :Date: 2016-11-07                                                          *)
-(* :Package Version: 0.2                                                      *)
+(* :Package Version: 20161113                                                 *)
 (* :Mathematica Version:                                                      *)
 (* :Copyright: (c) 2016-2018 Jonathan Prieto-Cubides                          *)
 (* :Keywords: Categorical, Classification, Imputation, Missing Values         *)
