@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     76659,       1674]
-NotebookOptionsPosition[     74881,       1607]
-NotebookOutlinePosition[     75240,       1623]
-CellTagsIndexPosition[     75197,       1620]
+NotebookDataLength[     78492,       1710]
+NotebookOptionsPosition[     76641,       1640]
+NotebookOutlinePosition[     77000,       1656]
+CellTagsIndexPosition[     76957,       1653]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -34,7 +34,8 @@ Cell[BoxData["\<\"/Users/jonaprieto/Imputation/databases/all/zoo\"\>"], \
  CellChangeTimes->{
   3.688092222984527*^9, 3.688092360830455*^9, {3.6880925060536003`*^9, 
    3.688092550866672*^9}, 3.688092616198141*^9, 3.68809272978539*^9, {
-   3.688092778714241*^9, 3.688092806204832*^9}, 3.6880930342801113`*^9}]
+   3.688092778714241*^9, 3.688092806204832*^9}, 3.6880930342801113`*^9, 
+   3.688093474173888*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -71,7 +72,7 @@ Cell[BoxData[
    3.688092229596078*^9, {3.688092346656249*^9, 3.6880923610288773`*^9}, {
    3.6880925062901573`*^9, 3.6880925510965357`*^9}, 3.6880926164507427`*^9, 
    3.6880927304728203`*^9, {3.688092778928337*^9, 3.688092806413282*^9}, 
-   3.688093034509387*^9}]
+   3.688093034509387*^9, 3.688093474414625*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -105,7 +106,7 @@ Cell[BoxData[
    ",", "\<\"Accuracy Ratio (%)\"\>"}], "}"}]], "Output",
  CellChangeTimes->{{3.6880925916886663`*^9, 3.6880926166090403`*^9}, 
    3.688092730644409*^9, {3.688092779071604*^9, 3.688092806510392*^9}, 
-   3.688093034640748*^9}]
+   3.688093034640748*^9, 3.688093474563119*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -133,7 +134,9 @@ Cell[BoxData[
     RowBox[{"PlotMarkers", "\[Rule]", "Automatic"}], ",", " ", 
     RowBox[{"LabelStyle", "\[Rule]", 
      RowBox[{"Directive", "[", 
-      RowBox[{"Bold", ",", "Medium", ",", "28"}], "]"}]}], ",", " ", 
+      RowBox[{"Bold", ",", "Medium", ",", "28", ",", " ", 
+       RowBox[{"FontFamily", " ", "\[Rule]", " ", "\"\<Sans\>\""}]}], " ", 
+      "]"}]}], ",", " ", 
     RowBox[{"AxesStyle", "\[Rule]", "Black"}]}], "]"}]}]], "Code",
  CellChangeTimes->{{3.6880856025498533`*^9, 3.688085656699113*^9}, {
    3.688085808594352*^9, 3.6880858097057333`*^9}, {3.6880859082990637`*^9, 
@@ -149,7 +152,7 @@ Cell[BoxData[
    3.6880925993128233`*^9}, {3.68809268012949*^9, 3.6880927031764097`*^9}, {
    3.688092762610437*^9, 3.6880927644232883`*^9}, {3.6880928962177553`*^9, 
    3.688093012574939*^9}, {3.68809318066518*^9, 3.688093192820709*^9}, {
-   3.688093368113597*^9, 3.688093407164164*^9}}],
+   3.688093368113597*^9, 3.6880934372917757`*^9}}],
 
 Cell[BoxData[
  TemplateBox[{GraphicsBox[{{}, {{{}, {}, {
@@ -202,7 +205,7 @@ Cell[BoxData[
      GridLines -> {Automatic, Automatic}, GridLinesStyle -> Directive[
        GrayLevel[0.78], 
        Dashing[{Small, Small}]], ImageSize -> {800, 500}, LabelStyle -> 
-     Directive[Bold, Medium, 28], 
+     Directive[Bold, Medium, 28, FontFamily -> "Sans"], 
      Method -> {"CoordinatesToolOptions" -> {"DisplayFunction" -> ({
            (Part[{{Identity, Identity}, {Identity, Identity}}, 1, 2][#]& )[
             Part[#, 1]], 
@@ -278,8 +281,9 @@ Cell[BoxData[
             "Grid"], Alignment -> Left, AppearanceElements -> None, 
            ImageMargins -> {{5, 5}, {5, 5}}, ImageSizeAction -> 
            "ResizeToFit"], LineIndent -> 0, StripOnInput -> False], {
-          Directive[Bold, Medium, 28], FontFamily -> "Arial"}, Background -> 
-         Automatic, StripOnInput -> False], TraditionalForm]& ), 
+          Directive[Bold, Medium, 28, FontFamily -> "Sans"], FontFamily -> 
+          "Arial"}, Background -> Automatic, StripOnInput -> False], 
+        TraditionalForm]& ), 
       InterpretationFunction :> (RowBox[{"PointLegend", "[", 
          RowBox[{
            RowBox[{"{", 
@@ -334,7 +338,9 @@ Cell[BoxData[
              RowBox[{"{", "True", "}"}]}], ",", 
            RowBox[{"LabelStyle", "\[Rule]", 
              RowBox[{"Directive", "[", 
-               RowBox[{"Bold", ",", "Medium", ",", "28"}], "]"}]}], ",", 
+               RowBox[{"Bold", ",", "Medium", ",", "28", ",", 
+                 RowBox[{"FontFamily", "\[Rule]", "\"Sans\""}]}], "]"}]}], 
+           ",", 
            RowBox[{"LegendLayout", "\[Rule]", "\"Column\""}]}], "]"}]& ), 
       Editable -> True], TraditionalForm], TraditionalForm]},
   "Legended",
@@ -356,7 +362,8 @@ Cell[BoxData[
          RowBox[{#2, ",", "After"}], "]"}]}], "]"}]& )]], "Output",
  CellChangeTimes->{{3.688092897101873*^9, 3.6880929458081093`*^9}, {
    3.688092984854369*^9, 3.688093001186689*^9}, 3.6880930349108057`*^9, {
-   3.688093186394919*^9, 3.688093193437973*^9}, 3.688093369286077*^9}]
+   3.688093186394919*^9, 3.688093193437973*^9}, 3.688093369286077*^9, {
+   3.688093430198628*^9, 3.688093438942202*^9}, 3.688093474846633*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -390,7 +397,7 @@ Cell[BoxData[
   3.68809224327442*^9, 3.688092280211244*^9, {3.6880923528689404`*^9, 
    3.688092361279346*^9}, {3.6880925069637117`*^9, 3.688092551373083*^9}, 
    3.688092616867326*^9, 3.688092731246859*^9, {3.688092779331601*^9, 
-   3.6880928068814783`*^9}, 3.688093035110496*^9}]
+   3.6880928068814783`*^9}, 3.688093035110496*^9, 3.688093475036663*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -419,8 +426,10 @@ Cell[BoxData[
     RowBox[{"PlotMarkers", "\[Rule]", "Automatic"}], ",", " ", 
     RowBox[{"LabelStyle", "\[Rule]", 
      RowBox[{"Directive", "[", 
-      RowBox[{"Bold", ",", "Medium", ",", "18"}], "]"}]}]}], "]"}]}]], "Code",\
-
+      RowBox[{"Bold", ",", "Medium", ",", "28", ",", " ", 
+       RowBox[{"FontFamily", " ", "\[Rule]", " ", "\"\<Sans\>\""}]}], " ", 
+      "]"}]}], ",", " ", 
+    RowBox[{"AxesStyle", "\[Rule]", "Black"}]}], "]"}]}]], "Code",
  CellChangeTimes->{{3.6880862099566793`*^9, 3.6880862418267927`*^9}, {
    3.688086359001143*^9, 3.6880863632079487`*^9}, {3.6880866656895227`*^9, 
    3.688086721856037*^9}, {3.688086775102566*^9, 3.688086836081319*^9}, {
@@ -432,7 +441,8 @@ Cell[BoxData[
    3.68809134916569*^9, 3.688091350109901*^9}, {3.688092499401595*^9, 
    3.688092526875391*^9}, {3.688092602760303*^9, 3.68809260537779*^9}, {
    3.688092717282323*^9, 3.688092718501134*^9}, {3.688092769088086*^9, 
-   3.688092770983139*^9}, {3.688093021508905*^9, 3.688093024339357*^9}}],
+   3.688092770983139*^9}, {3.688093021508905*^9, 3.688093024339357*^9}, 
+   3.6880934640384283`*^9}],
 
 Cell[BoxData[
  TemplateBox[{GraphicsBox[{{}, {{{}, {}, {
@@ -478,15 +488,16 @@ Cell[BoxData[
      Axes -> {True, True}, AxesLabel -> {
        FormBox["\"Samples of Zoo dataset\"", TraditionalForm], 
        FormBox["\"Accuracy Ratio (%)\"", TraditionalForm]}, 
-     AxesOrigin -> {1.07, 0.75075}, DisplayFunction :> Identity, 
-     Frame -> {{True, True}, {True, True}}, FrameLabel -> {{
+     AxesOrigin -> {1.07, 0.75075}, AxesStyle -> GrayLevel[0], 
+     DisplayFunction :> Identity, Frame -> {{True, True}, {True, True}}, 
+     FrameLabel -> {{
         FormBox["\"Accuracy Ratio (%)\"", TraditionalForm], None}, {
         FormBox["\"Samples of Zoo dataset\"", TraditionalForm], None}}, 
      FrameTicks -> {{Automatic, Automatic}, {Automatic, Automatic}}, 
      GridLines -> {Automatic, Automatic}, GridLinesStyle -> Directive[
        GrayLevel[0.78], 
        Dashing[{Small, Small}]], ImageSize -> {800, 500}, LabelStyle -> 
-     Directive[Bold, Medium, 18], 
+     Directive[Bold, Medium, 28, FontFamily -> "Sans"], 
      Method -> {"CoordinatesToolOptions" -> {"DisplayFunction" -> ({
            (Part[{{Identity, Identity}, {Identity, Identity}}, 1, 2][#]& )[
             Part[#, 1]], 
@@ -566,8 +577,9 @@ Cell[BoxData[
             "Grid"], Alignment -> Left, AppearanceElements -> None, 
            ImageMargins -> {{5, 5}, {5, 5}}, ImageSizeAction -> 
            "ResizeToFit"], LineIndent -> 0, StripOnInput -> False], {
-          Directive[Bold, Medium, 18], FontFamily -> "Arial"}, Background -> 
-         Automatic, StripOnInput -> False], TraditionalForm]& ), 
+          Directive[Bold, Medium, 28, FontFamily -> "Sans"], FontFamily -> 
+          "Arial"}, Background -> Automatic, StripOnInput -> False], 
+        TraditionalForm]& ), 
       InterpretationFunction :> (RowBox[{"PointLegend", "[", 
          RowBox[{
            RowBox[{"{", 
@@ -626,7 +638,9 @@ Cell[BoxData[
              RowBox[{"{", "True", "}"}]}], ",", 
            RowBox[{"LabelStyle", "\[Rule]", 
              RowBox[{"Directive", "[", 
-               RowBox[{"Bold", ",", "Medium", ",", "18"}], "]"}]}], ",", 
+               RowBox[{"Bold", ",", "Medium", ",", "28", ",", 
+                 RowBox[{"FontFamily", "\[Rule]", "\"Sans\""}]}], "]"}]}], 
+           ",", 
            RowBox[{"LegendLayout", "\[Rule]", "\"Column\""}]}], "]"}]& ), 
       Editable -> True], TraditionalForm], TraditionalForm]},
   "Legended",
@@ -646,7 +660,7 @@ Cell[BoxData[
      RowBox[{#, ",", 
        RowBox[{"Placed", "[", 
          RowBox[{#2, ",", "After"}], "]"}]}], "]"}]& )]], "Output",
- CellChangeTimes->{3.6880930355232697`*^9}]
+ CellChangeTimes->{3.6880930355232697`*^9, 3.688093475353032*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -677,7 +691,7 @@ Cell[BoxData[
  CellChangeTimes->{{3.688092286703081*^9, 3.6880923095981627`*^9}, 
    3.688092361509458*^9, {3.688092507389432*^9, 3.6880925516375*^9}, 
    3.688092617300542*^9, 3.688092731638089*^9, {3.6880927796912518`*^9, 
-   3.6880928075237923`*^9}, 3.688093035729888*^9}]
+   3.6880928075237923`*^9}, 3.688093035729888*^9, 3.688093475592533*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -706,8 +720,10 @@ Cell[BoxData[
     RowBox[{"PlotMarkers", "\[Rule]", "Automatic"}], ",", " ", 
     RowBox[{"LabelStyle", "\[Rule]", 
      RowBox[{"Directive", "[", 
-      RowBox[{"Bold", ",", "Medium", ",", "18"}], "]"}]}]}], "]"}]}]], "Code",\
-
+      RowBox[{"Bold", ",", "Medium", ",", "28", ",", " ", 
+       RowBox[{"FontFamily", " ", "\[Rule]", " ", "\"\<Sans\>\""}]}], " ", 
+      "]"}]}], ",", " ", 
+    RowBox[{"AxesStyle", "\[Rule]", "Black"}]}], "]"}]}]], "Code",
  CellChangeTimes->{{3.688087011618402*^9, 3.688087093168398*^9}, {
    3.688087221499361*^9, 3.68808723284203*^9}, {3.6880883037230177`*^9, 
    3.6880883143562927`*^9}, {3.688088484092215*^9, 3.688088508827073*^9}, {
@@ -716,7 +732,7 @@ Cell[BoxData[
    3.688089188221765*^9}, {3.688092494652885*^9, 3.688092548299848*^9}, {
    3.6880926091692963`*^9, 3.688092611832375*^9}, {3.688092726581706*^9, 
    3.688092727649851*^9}, {3.688092774872053*^9, 3.688092775350926*^9}, {
-   3.688093028346678*^9, 3.688093030555633*^9}}],
+   3.688093028346678*^9, 3.688093030555633*^9}, 3.688093469526113*^9}],
 
 Cell[BoxData[
  TemplateBox[{GraphicsBox[{{}, {{{}, {}, {
@@ -762,15 +778,16 @@ Cell[BoxData[
      Axes -> {True, True}, AxesLabel -> {
        FormBox["\"Samples of Zoo dataset\"", TraditionalForm], 
        FormBox["\"Accuracy Ratio (%)\"", TraditionalForm]}, 
-     AxesOrigin -> {1.07, 0.75075}, DisplayFunction :> Identity, 
-     Frame -> {{True, True}, {True, True}}, FrameLabel -> {{
+     AxesOrigin -> {1.07, 0.75075}, AxesStyle -> GrayLevel[0], 
+     DisplayFunction :> Identity, Frame -> {{True, True}, {True, True}}, 
+     FrameLabel -> {{
         FormBox["\"Accuracy Ratio (%)\"", TraditionalForm], None}, {
         FormBox["\"Samples of Zoo dataset\"", TraditionalForm], None}}, 
      FrameTicks -> {{Automatic, Automatic}, {Automatic, Automatic}}, 
      GridLines -> {Automatic, Automatic}, GridLinesStyle -> Directive[
        GrayLevel[0.78], 
        Dashing[{Small, Small}]], ImageSize -> {800, 500}, LabelStyle -> 
-     Directive[Bold, Medium, 18], 
+     Directive[Bold, Medium, 28, FontFamily -> "Sans"], 
      Method -> {"CoordinatesToolOptions" -> {"DisplayFunction" -> ({
            (Part[{{Identity, Identity}, {Identity, Identity}}, 1, 2][#]& )[
             Part[#, 1]], 
@@ -849,8 +866,9 @@ Cell[BoxData[
             "Grid"], Alignment -> Left, AppearanceElements -> None, 
            ImageMargins -> {{5, 5}, {5, 5}}, ImageSizeAction -> 
            "ResizeToFit"], LineIndent -> 0, StripOnInput -> False], {
-          Directive[Bold, Medium, 18], FontFamily -> "Arial"}, Background -> 
-         Automatic, StripOnInput -> False], TraditionalForm]& ), 
+          Directive[Bold, Medium, 28, FontFamily -> "Sans"], FontFamily -> 
+          "Arial"}, Background -> Automatic, StripOnInput -> False], 
+        TraditionalForm]& ), 
       InterpretationFunction :> (RowBox[{"PointLegend", "[", 
          RowBox[{
            RowBox[{"{", 
@@ -909,7 +927,9 @@ Cell[BoxData[
              RowBox[{"{", "True", "}"}]}], ",", 
            RowBox[{"LabelStyle", "\[Rule]", 
              RowBox[{"Directive", "[", 
-               RowBox[{"Bold", ",", "Medium", ",", "18"}], "]"}]}], ",", 
+               RowBox[{"Bold", ",", "Medium", ",", "28", ",", 
+                 RowBox[{"FontFamily", "\[Rule]", "\"Sans\""}]}], "]"}]}], 
+           ",", 
            RowBox[{"LegendLayout", "\[Rule]", "\"Column\""}]}], "]"}]& ), 
       Editable -> True], TraditionalForm], TraditionalForm]},
   "Legended",
@@ -929,7 +949,7 @@ Cell[BoxData[
      RowBox[{#, ",", 
        RowBox[{"Placed", "[", 
          RowBox[{#2, ",", "After"}], "]"}]}], "]"}]& )]], "Output",
- CellChangeTimes->{3.688093036044587*^9}]
+ CellChangeTimes->{3.688093036044587*^9, 3.688093475860338*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1055,15 +1075,16 @@ Cell[BoxData[
      Axes -> {True, True}, AxesLabel -> {
        FormBox["\"Samples of Zoo dataset\"", TraditionalForm], 
        FormBox["\"Accuracy Ratio (%)\"", TraditionalForm]}, 
-     AxesOrigin -> {1.07, 0.75075}, DisplayFunction :> Identity, 
-     Frame -> {{True, True}, {True, True}}, FrameLabel -> {{
+     AxesOrigin -> {1.07, 0.75075}, AxesStyle -> GrayLevel[0], 
+     DisplayFunction :> Identity, Frame -> {{True, True}, {True, True}}, 
+     FrameLabel -> {{
         FormBox["\"Accuracy Ratio (%)\"", TraditionalForm], None}, {
         FormBox["\"Samples of Zoo dataset\"", TraditionalForm], None}}, 
      FrameTicks -> {{Automatic, Automatic}, {Automatic, Automatic}}, 
      GridLines -> {Automatic, Automatic}, GridLinesStyle -> Directive[
        GrayLevel[0.78], 
        Dashing[{Small, Small}]], ImageSize -> {800, 500}, LabelStyle -> 
-     Directive[Bold, Medium, 18], 
+     Directive[Bold, Medium, 28, FontFamily -> "Sans"], 
      Method -> {"CoordinatesToolOptions" -> {"DisplayFunction" -> ({
            (Part[{{Identity, Identity}, {Identity, Identity}}, 1, 2][#]& )[
             Part[#, 1]], 
@@ -1141,8 +1162,8 @@ Cell[BoxData[
                "Grid"], Alignment -> Left, AppearanceElements -> None, 
               ImageMargins -> {{5, 5}, {5, 5}}, ImageSizeAction -> 
               "ResizeToFit"], LineIndent -> 0, StripOnInput -> False], {
-             Directive[Bold, Medium, 18], FontFamily -> "Arial"}, Background -> 
-            Automatic, StripOnInput -> False]& ), 
+             Directive[Bold, Medium, 28, FontFamily -> "Sans"], FontFamily -> 
+             "Arial"}, Background -> Automatic, StripOnInput -> False]& ), 
           InterpretationFunction :> (RowBox[{"PointLegend", "[", 
              RowBox[{
                RowBox[{"{", 
@@ -1197,7 +1218,9 @@ Cell[BoxData[
                  RowBox[{"{", "True", "}"}]}], ",", 
                RowBox[{"LabelStyle", "\[Rule]", 
                  RowBox[{"Directive", "[", 
-                   RowBox[{"Bold", ",", "Medium", ",", "18"}], "]"}]}], ",", 
+                   RowBox[{"Bold", ",", "Medium", ",", "28", ",", 
+                    RowBox[{"FontFamily", "\[Rule]", "\"Sans\""}]}], "]"}]}], 
+               ",", 
                RowBox[{"LegendLayout", "\[Rule]", "\"Column\""}]}], "]"}]& ), 
           Editable -> True], TraditionalForm]}, {
         FormBox[
@@ -1268,8 +1291,8 @@ Cell[BoxData[
                "Grid"], Alignment -> Left, AppearanceElements -> None, 
               ImageMargins -> {{5, 5}, {5, 5}}, ImageSizeAction -> 
               "ResizeToFit"], LineIndent -> 0, StripOnInput -> False], {
-             Directive[Bold, Medium, 18], FontFamily -> "Arial"}, Background -> 
-            Automatic, StripOnInput -> False]& ), 
+             Directive[Bold, Medium, 28, FontFamily -> "Sans"], FontFamily -> 
+             "Arial"}, Background -> Automatic, StripOnInput -> False]& ), 
           InterpretationFunction :> (RowBox[{"PointLegend", "[", 
              RowBox[{
                RowBox[{"{", 
@@ -1328,7 +1351,9 @@ Cell[BoxData[
                  RowBox[{"{", "True", "}"}]}], ",", 
                RowBox[{"LabelStyle", "\[Rule]", 
                  RowBox[{"Directive", "[", 
-                   RowBox[{"Bold", ",", "Medium", ",", "18"}], "]"}]}], ",", 
+                   RowBox[{"Bold", ",", "Medium", ",", "28", ",", 
+                    RowBox[{"FontFamily", "\[Rule]", "\"Sans\""}]}], "]"}]}], 
+               ",", 
                RowBox[{"LegendLayout", "\[Rule]", "\"Column\""}]}], "]"}]& ), 
           Editable -> True], TraditionalForm]}, {
         FormBox[
@@ -1399,8 +1424,8 @@ Cell[BoxData[
                "Grid"], Alignment -> Left, AppearanceElements -> None, 
               ImageMargins -> {{5, 5}, {5, 5}}, ImageSizeAction -> 
               "ResizeToFit"], LineIndent -> 0, StripOnInput -> False], {
-             Directive[Bold, Medium, 18], FontFamily -> "Arial"}, Background -> 
-            Automatic, StripOnInput -> False]& ), 
+             Directive[Bold, Medium, 28, FontFamily -> "Sans"], FontFamily -> 
+             "Arial"}, Background -> Automatic, StripOnInput -> False]& ), 
           InterpretationFunction :> (RowBox[{"PointLegend", "[", 
              RowBox[{
                RowBox[{"{", 
@@ -1459,7 +1484,9 @@ Cell[BoxData[
                  RowBox[{"{", "True", "}"}]}], ",", 
                RowBox[{"LabelStyle", "\[Rule]", 
                  RowBox[{"Directive", "[", 
-                   RowBox[{"Bold", ",", "Medium", ",", "18"}], "]"}]}], ",", 
+                   RowBox[{"Bold", ",", "Medium", ",", "28", ",", 
+                    RowBox[{"FontFamily", "\[Rule]", "\"Sans\""}]}], "]"}]}], 
+               ",", 
                RowBox[{"LegendLayout", "\[Rule]", "\"Column\""}]}], "]"}]& ), 
           Editable -> True], TraditionalForm]}}, 
       GridBoxAlignment -> {"Columns" -> {{Left}}}, AutoDelete -> False, 
@@ -1492,7 +1519,7 @@ Cell[BoxData[
    3.688089464738947*^9, 3.6880897125674467`*^9, 3.6880923147495403`*^9, 
    3.688092361995763*^9, {3.688092507989048*^9, 3.688092552245965*^9}, 
    3.6880926179297943`*^9, 3.68809273231837*^9, {3.688092780346176*^9, 
-   3.688092808018857*^9}, 3.6880930364332542`*^9}]
+   3.688092808018857*^9}, 3.6880930364332542`*^9, 3.688093476261031*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1513,7 +1540,7 @@ Cell[BoxData["\<\"/Users/jonaprieto/imputation-article/figs/zoo005.eps\"\>"], \
    3.688089776803697*^9, 3.688092369831129*^9, 3.688092413088498*^9, {
    3.6880925105269203`*^9, 3.6880925546658077`*^9}, 3.688092620598296*^9, 
    3.688092736013644*^9, {3.6880927830184937`*^9, 3.6880928106416883`*^9}, 
-   3.688093039076459*^9}]
+   3.688093039076459*^9, 3.6880934785515633`*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1542,7 +1569,7 @@ Cell[BoxData["13"], "Output",
    3.688089475992599*^9, 3.6880897240289507`*^9, 3.6880923705615253`*^9, 
    3.688092423452651*^9, {3.688092510709547*^9, 3.6880925548678627`*^9}, 
    3.6880926212001553`*^9, 3.6880927365452414`*^9, {3.688092783691051*^9, 
-   3.688092810825783*^9}, 3.688093039427993*^9}]
+   3.688092810825783*^9}, 3.688093039427993*^9, 3.6880934787494917`*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1572,7 +1599,7 @@ Cell[BoxData["12"], "Output",
    3.688092371125193*^9, {3.688092429215232*^9, 3.688092433722036*^9}, {
    3.688092510869884*^9, 3.6880925550295687`*^9}, 3.688092621352066*^9, 
    3.688092736692651*^9, {3.6880927838408813`*^9, 3.688092810989717*^9}, 
-   3.68809303958772*^9}]
+   3.68809303958772*^9, 3.6880934789109592`*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1593,7 +1620,7 @@ Cell[BoxData["86.66666666666667`"], "Output",
    3.688092371501133*^9, {3.6880924419705667`*^9, 3.688092444659033*^9}, {
    3.688092511022539*^9, 3.688092555194014*^9}, 3.688092621517516*^9, 
    3.6880927368370237`*^9, {3.6880927840108023`*^9, 3.688092811156616*^9}, 
-   3.688093039732195*^9}]
+   3.688093039732195*^9, 3.688093479079138*^9}]
 }, Open  ]],
 
 Cell[BoxData[""], "Input",
@@ -1602,8 +1629,14 @@ Cell[BoxData[""], "Input",
    3.688087808856907*^9}, {3.688087865109702*^9, 3.688088069480425*^9}, {
    3.688088121149663*^9, 3.688088127052498*^9}, 3.688088586361421*^9}],
 
+Cell[CellGroupData[{
+
 Cell[BoxData["LabelS"], "Input",
- CellChangeTimes->{{3.6880930566443043`*^9, 3.688093073068347*^9}}]
+ CellChangeTimes->{{3.6880930566443043`*^9, 3.688093073068347*^9}}],
+
+Cell[BoxData["LabelS"], "Output",
+ CellChangeTimes->{3.688093479270351*^9}]
+}, Open  ]]
 },
 WindowSize->{1440, 851},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
@@ -1624,58 +1657,61 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 304, 7, 32, "Input"],
-Cell[887, 31, 319, 5, 32, "Output"]
+Cell[887, 31, 345, 6, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1243, 41, 614, 13, 32, "Input"],
-Cell[1860, 56, 918, 17, 32, "Output"]
+Cell[1269, 42, 614, 13, 32, "Input"],
+Cell[1886, 57, 940, 17, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[2815, 78, 727, 21, 75, "Input"],
-Cell[3545, 101, 299, 6, 32, "Output"]
+Cell[2863, 79, 727, 21, 75, "Input"],
+Cell[3593, 102, 321, 6, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[3881, 112, 2381, 39, 243, "Code"],
-Cell[6265, 153, 10085, 205, 517, "Output"]
+Cell[3951, 113, 2474, 41, 243, "Code"],
+Cell[6428, 156, 10293, 209, 517, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[16387, 363, 540, 12, 52, "Code"],
-Cell[16930, 377, 792, 15, 32, "Output"]
+Cell[16758, 370, 540, 12, 52, "Code"],
+Cell[17301, 384, 814, 15, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[17759, 397, 2159, 37, 243, "Code"],
-Cell[19921, 436, 10239, 212, 517, "Output"]
+Cell[18152, 404, 2334, 40, 243, "Code"],
+Cell[20489, 446, 10430, 216, 517, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[30197, 653, 409, 10, 52, "Code"],
-Cell[30609, 665, 766, 14, 32, "Output"]
+Cell[30956, 667, 409, 10, 52, "Code"],
+Cell[31368, 679, 788, 14, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[31412, 684, 1906, 34, 243, "Code"],
-Cell[33321, 720, 10227, 211, 517, "Output"]
+Cell[32193, 698, 2075, 36, 243, "Code"],
+Cell[34271, 736, 10418, 215, 517, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[43585, 936, 321, 7, 52, "Code"],
-Cell[43909, 945, 26883, 549, 517, "Output"]
+Cell[44726, 956, 321, 7, 52, "Code"],
+Cell[45050, 965, 27296, 556, 517, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[70829, 1499, 317, 7, 52, "Code"],
-Cell[71149, 1508, 425, 7, 32, "Output"]
+Cell[72383, 1526, 317, 7, 52, "Code"],
+Cell[72703, 1535, 449, 7, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[71611, 1520, 581, 16, 32, "Input"],
-Cell[72195, 1538, 441, 6, 32, "Output"]
+Cell[73189, 1547, 581, 16, 32, "Input"],
+Cell[73773, 1565, 465, 6, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[72673, 1549, 574, 16, 32, "Input"],
-Cell[73250, 1567, 439, 7, 32, "Output"]
+Cell[74275, 1576, 574, 16, 32, "Input"],
+Cell[74852, 1594, 463, 7, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[73726, 1579, 259, 7, 32, "Input"],
-Cell[73988, 1588, 460, 7, 32, "Output"]
+Cell[75352, 1606, 259, 7, 32, "Input"],
+Cell[75614, 1615, 482, 7, 32, "Output"]
 }, Open  ]],
-Cell[74463, 1598, 311, 4, 32, "Input"],
-Cell[74777, 1604, 100, 1, 32, "Input"]
+Cell[76111, 1625, 311, 4, 32, "Input"],
+Cell[CellGroupData[{
+Cell[76447, 1633, 100, 1, 32, "Input"],
+Cell[76550, 1636, 75, 1, 32, "Output"]
+}, Open  ]]
 }
 ]
 *)
