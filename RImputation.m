@@ -1130,5 +1130,5 @@ Print[Column /@ (Normal /@ $reportE21["TestsFailed"]) // TabView];
 Print[$reportE21["TimeElapsed"]];
 
 (* END of Tests ------------------------------------------------------------- *)
+
 EndPackage[];
-6 // Print;
