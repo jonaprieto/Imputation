@@ -1,4 +1,5 @@
 (* ::Package:: *)
+
 (* :Title: Imputation                                                         *)
 (* :Context: Imputation`                                                      *)
 (* :Author: Jonathan Prieto-Cubides                                           *)
@@ -81,7 +82,7 @@ $missingSymbolPrint =
 
 $perdidos = <||>;
 $original = <||>;
-$numIteraciones = 30;
+$numIteraciones = 51;
 $runMC = True;
 (* -------------------------------------------------------------------------- *)
 
@@ -756,8 +757,6 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
   {name, citer, outcome = <||>, matches, cDataset = 0
     , resCal, oldJ, n=0, m=0, numMissing=0, attr, mean, stand, conf,f, stat, datasets},
 
-  AbortAssert[numIter > $numIteraciones, "Set $numIteraciones"];
-
   SetInitValues[];
 
   $lastResult = "";
@@ -804,6 +803,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
 
   Table[
     name = ndataset;
+	Print[name];
     With[
       {d = Dimensions@$original[[name]]},
       AbortAssert[Length@d == 2, "RunAlgorithm"];
@@ -854,7 +854,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
     stand = StandardDeviation@resCal;
     conf  = {mean - 2.01*(stand/Sqrt[numIter]), mean + 2.01*(stand/Sqrt[numIter])};
 
-    Export[name<>"-"<>FileNameJoin[{$datasetDir[[name]], algo<>"-"<>ToString[$missingRate]<>"-"<>ToString@$numIteraciones<>".csv"}],
+    Export[FileNameJoin[{$datasetDir[[name]], name<>"-"<>algo<>"-"<>ToString[$missingRate]<>"-"<>ToString@$numIteraciones<>".csv"}],
       { algo
       , name
       , $missingRate
@@ -1132,3 +1132,4 @@ Print[$reportE21["TimeElapsed"]];
 (* END of Tests ------------------------------------------------------------- *)
 
 EndPackage[];
+
