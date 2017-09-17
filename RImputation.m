@@ -1,26 +1,40 @@
-(* ::Package:: *)
-
-(* :Title: Imputation                                                         *)
-(* :Context: Imputation`                                                      *)
+(* ::Package::                                                                *)
+(* :Title: RImputation                                                         *)
+(* :Context: RImputation`                                                      *)
 (* :Author: Jonathan Prieto-Cubides                                           *)
 (* :Date: 2016-11-07                                                          *)
 (* :Package Version: 20161113                                                 *)
 (* :Mathematica Version:                                                      *)
 (* :Copyright: (c) 2016-2018 Jonathan Prieto-Cubides                          *)
 (* :Keywords: Categorical, Classification, Imputation, Missing Values         *)
-(* :Discussion: Dealing with Missing Data using a Selection Hybrid Algorithm  *)
+
+(*       ___      .______          _______. __
+(*      /   \     |   _  \        /       ||  |                               *)
+(*     /  ^  \    |  |_)  |      |   (----`|  |                               *)
+(*    /  /_\  \   |      /        \   \    |  |                               *)
+(*   /  _____  \  |  |\  \----.----)   |   |  |                               *)
+(*  /__/     \__\ | _| `._____|_______/    |__| algorithm.                    *)
+
+(* ---------------------------------------------------------------------------*)
+(* International Journal of Computational Intelligence Systems                *)
+(* ---------------------------------------------------------------------------*)
+(* ---------------------------------------------------------------------------*)
+(* -- Title:  Dealing with Missing Data using a Selection Algorithm           *)
+(* --         on Rough Sets.                                                  *)
+(* -- Author: Jonathan Prieto-Cubides and Camilo Argoty.                      *)
+(* ---------------------------------------------------------------------------*)
 
 BeginPackage["RImputation`"];
 
 (* -------------------------------------------------------------------------- *)
 
 ImputeVersion::usage = "ImputateVersion";
-ImputeVersion        = "Imputation Package v0.2";
+ImputeVersion        = "Imputation Package v0.3";
 
-CRINS::usage      = "CRINS algorithm implementation";
+CARSI::usage      = "CARSI algorithm implementation";
 ROUSTIDA::usage   = "ROUSTIDA algorithm implementation";
 VTRIDA::usage     = "VTRIDA algorithm implemenation";
-RINS::usage       = "check using RInv and NS sets";
+ARSI::usage       = "ARSI (Agreements based on Rough Set Imputation).";
 checkMatches::usage   = "Check for the accuracy ratio";
 FillWith::usage       = "Handy method to fill a position with a set value";
 MeanCompleter::usage  = "Mean completer implementation";
@@ -326,8 +340,8 @@ ROUSTIDA[] := Module[
   ];
 ];
 
-Clear[RINS];
-RINS[] := Module[
+Clear[ARSI];
+ARSI[] := Module[
   {condition, n,m, flag, changed, val, setVal
   , rangeN, rangeM, otherwise=True
   , base, rowsWithK, rows, III=0, model, correct =0, total=0},
@@ -444,7 +458,7 @@ RINS[] := Module[
   Print["total:", total];*)
 
   If[ flag,
-    RINS[];
+    ARSI[];
     , If[$runMC,
         MeanCompleter[];
       ];
@@ -516,8 +530,8 @@ VTRIDA[] := Module[
 
 (* -------------------------------------------------------------------------- *)
 
-Clear[CRINS];
-CRINS[] := Module[
+Clear[CARSI];
+CARSI[] := Module[
   {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal, flag
     ,rowsAll, changed, classes, entro =0},
 
@@ -554,7 +568,7 @@ CRINS[] := Module[
   , {i, $MOS}];
 
   If[ flag,
-     CRINS[]
+     CARSI[]
   ,  MeanCompleter[];
   (*MeanCompleter[]*)
   ];
@@ -831,8 +845,8 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
       Which[
         algo == "ROUSTIDA", ROUSTIDA[]
       , algo == "VTRIDA", VTRIDA[]
-      , algo == "CRINS",  CRINS[]
-      , algo == "RINS",  RINS[]
+      , algo == "CARSI",  CARSI[]
+      , algo == "ARSI",  ARSI[]
       , algo == "checkNS",  checkNS[]
       , True,
         Print[algo<>" is not implemenated."];
