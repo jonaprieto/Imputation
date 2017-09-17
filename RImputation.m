@@ -350,7 +350,7 @@ ARSI[] := Module[
   rangeM  = Range[m];
   flag    = False;
 
-  $MOS    = SortBy[$MOS, {Length@$MAS[#], Times@@Table[$OMS[i], {i,$MAS[#]}]} &];
+  $MOS    = SortBy[$MOS, {Length@$MAS[#], Times@@Table[Length@$OMS[i], {i,$MAS[#]}]} &];
 
   Table[
 
