@@ -8,13 +8,6 @@
 (* :Copyright: (c) 2016-2018 Jonathan Prieto-Cubides                          *)
 (* :Keywords: Categorical, Classification, Imputation, Missing Values         *)
 
-(*       ___      .______          _______. __
-(*      /   \     |   _  \        /       ||  |                               *)
-(*     /  ^  \    |  |_)  |      |   (----`|  |                               *)
-(*    /  /_\  \   |      /        \   \    |  |                               *)
-(*   /  _____  \  |  |\  \----.----)   |   |  |                               *)
-(*  /__/     \__\ | _| `._____|_______/    |__| algorithm.                    *)
-
 (* ---------------------------------------------------------------------------*)
 (* International Journal of Computational Intelligence Systems                *)
 (* ---------------------------------------------------------------------------*)
@@ -23,6 +16,7 @@
 (* --         on Rough Sets.                                                  *)
 (* -- Author: Jonathan Prieto-Cubides and Camilo Argoty.                      *)
 (* ---------------------------------------------------------------------------*)
+
 
 BeginPackage["RImputation`"];
 
