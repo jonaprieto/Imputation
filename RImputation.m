@@ -1,9 +1,9 @@
 (* ::Package::                                                                *)
-(* :Title: RImputation                                                         *)
-(* :Context: RImputation`                                                      *)
+(* :Title: RImputation                                                        *)
+(* :Context: RImputation`                                                     *)
 (* :Author: Jonathan Prieto-Cubides                                           *)
 (* :Date: 2016-11-07                                                          *)
-(* :Package Version: 20161113                                                 *)
+(* :Package Version: 20170918                                                 *)
 (* :Mathematica Version:                                                      *)
 (* :Copyright: (c) 2016-2018 Jonathan Prieto-Cubides                          *)
 (* :Keywords: Categorical, Classification, Imputation, Missing Values         *)
@@ -25,10 +25,10 @@ BeginPackage["RImputation`"];
 ImputeVersion::usage = "ImputateVersion";
 ImputeVersion        = "Imputation Package v0.3";
 
+ARSI::usage       = "ARSI (Agreements based on Rough Set Imputation).";
 CARSI::usage      = "CARSI algorithm implementation";
 ROUSTIDA::usage   = "ROUSTIDA algorithm implementation";
 VTRIDA::usage     = "VTRIDA algorithm implemenation";
-ARSI::usage       = "ARSI (Agreements based on Rough Set Imputation).";
 checkMatches::usage   = "Check for the accuracy ratio";
 FillWith::usage       = "Handy method to fill a position with a set value";
 MeanCompleter::usage  = "Mean completer implementation";
@@ -46,7 +46,7 @@ setDatasets::usage   = "setup the dataset for runnings";
 
 $GM::usage    = "Generalized descirnibility matrix";
 $MAS::usage   = "Missing attribute set per each row";
-$missingRate::usage     = "Missing rate for the SetMissings method";
+$missingRate::usage  = "Missing rate for the SetMissings method";
 $Mlv::usage   = "Value tolerance matrix";
 $MOS::usage   = "Missing object set in the dataset";
 $NS::usage    = "Set of no distinguishible object with a row";
@@ -60,6 +60,7 @@ $perdidos::usage = "data container of datasets with random missing values";
 $datasetDir::usage     = "folder location of datasets";
 $numIteraciones::usage = "number of iterations.";
 $runMC::usage = "control whether the last step on all algorithms runs or not";
+
 (* -------------------------------------------------------------------------- *)
 
 Off[AbortAssert];
@@ -92,6 +93,7 @@ $perdidos = <||>;
 $original = <||>;
 $numIteraciones = 51;
 $runMC = True;
+
 (* -------------------------------------------------------------------------- *)
 
 Clear[SetInitValues]
@@ -165,8 +167,8 @@ SetMissings[] := Module[
   AbortAssert[m-1 > 0 && n > 1, "SetMissings"];
   AbortAssert[$missingRate < 0.5 && $missingRate > 0,"Rate out of range"];
 
-  cant  = Ceiling[n * (m-1) * $missingRate];
-  ms    = MakeArrange[{n, m-1}, $missingRate];
+  cant = Ceiling[n * (m-1) * $missingRate];
+  ms   = MakeArrange[{n, m-1}, $missingRate];
   Table[
     $U[[pos[[1]], pos[[2]]]] = $missingSymbol
   , {pos, ms}];
@@ -177,7 +179,7 @@ SetMissings[] := Module[
 
 Clear[Preprocessing];
 Preprocessing[] := Module[
-  {n=0,m=0, symetric = True, flag, equals},
+  {n=0, m=0, symetric=True, flag, equals},
 
   If[Length@Dimensions[$U] != 2,
     Print["Step One, invalid $U"];
@@ -186,36 +188,35 @@ Preprocessing[] := Module[
 
   {n, m} = Dimensions[$U];
 
-
   Clear[$MOS, $MAS, $OMS, $GM, $Mlv, $NS, $S, $R, $RInv];
   Clear[$numMissings, $missingU, $numMeanCompleter, $numAlgo, $numCorrectAlgo];
 
-  $numMissings = 0;
-  $missingU    = $U;
+  $missingU         = $U;
+  $numAlgo          = 0;
+  $numCorrectAlgo   = 0;
   $numMeanCompleter = 0;
-  $numAlgo = 0;
-  $numCorrectAlgo = 0;
+  $numMissings      = 0;
 
-  $MAS[_] := {};
-  $NS[_]  := {};
-  $R[_]   := {};
-  $RInv[_]   := {}; (* RInv *)
-  $OMS[_] := {};
+  $MAS[_]  := {};
+  $NS[_]   := {};
+  $R[_]    := {};
+  $RInv[_] := {};
+  $OMS[_]  := {};
 
-  $GM[i_,j_]  := $GM[j,i] /; i > j;
-  $GM[i_,j_]  := {} /; i == j;
-  $GM[_,_]    := {};
+  $GM[i_,j_] := $GM[j,i] /; i > j;
+  $GM[i_,j_] := {} /; i == j;
+  $GM[_,_]   := {};
 
   $Mlv[i_,j_] := $Mlv[j,i] /; i > j;
   $Mlv[i_,j_] := 1 /; i == j;
   $Mlv[_,_]   := 0;
 
-  (*$S[i_, j_]  := True ;/ i == j;
-  $S[_, _]    := False;*)
+  (*$S[i_, j_] := True ;/ i == j;
+  $S[_, _]     := False;*)
 
   Table[If[ i != j,
     $Mlv[i,j] = 1;
-    symetric = True;
+    symetric  = True;
     Table[
       If[ MissingQ@$U[[i,k]],
         If[ MissingQ@$U[[j,k]],
@@ -259,8 +260,8 @@ Preprocessing[] := Module[
       If[ MissingQ@$U[[i,k]],
         $MAS[i] = {$MAS[i],k};
         $OMS[k] = {$OMS[k],i};
-        flag = True;
         $numMissings = $numMissings + 1;
+        flag = True;
       ];
     ,{k, 1, m}];
 
@@ -336,7 +337,7 @@ ROUSTIDA[] := Module[
 
 Clear[ARSI];
 ARSI[] := Module[
-  {condition, n,m, flag, changed, val, setVal
+  {condition, n, m, flag, changed, val, setVal
   , rangeN, rangeM, otherwise=True
   , base, rowsWithK, rows, III=0, model, correct =0, total=0},
 
@@ -350,7 +351,7 @@ ARSI[] := Module[
   rangeM  = Range[m];
   flag    = False;
 
-  $MOS    = SortBy[$MOS, {Length@$MAS[#], Times@@Table[Length@$OMS[i], {i,$MAS[#]}]} &];
+  $MOS = SortBy[$MOS, {Length@$MAS[#], Times@@Table[Length@$OMS[i], {i,$MAS[#]}]} &];
 
   Table[
 
@@ -443,9 +444,7 @@ ARSI[] := Module[
         ];
         total++;
       ];
-
-      ];
-
+    ];
   ,{i, $MOS}, {k, $MAS[i]}];*)
 
   (*Print["correct:", correct];
@@ -526,8 +525,8 @@ VTRIDA[] := Module[
 
 Clear[CARSI];
 CARSI[] := Module[
-  {answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal, flag
-    ,rowsAll, changed, classes, entro =0},
+  { answers, rows, cols, rangeN, rangeM, base, model, clasifier, ans, goal, flag
+  ,rowsAll, changed, classes, entro =0},
 
   If[ Length@$MOS == 0,
     Return[];
@@ -552,8 +551,6 @@ CARSI[] := Module[
         ];
     ];
   ,{i, $MOS}, {k, $MAS[i]}];
-
-
 
   $MOS    = SortBy[$MOS, Length@$MAS[#]*(Length@$R[#]+1) &];
   Table[
@@ -598,9 +595,10 @@ UpdateData[i_Integer,k_Integer, val_] := Module[
 
   {n,m}   = Dimensions[$U];
 
-  oldValue = $U[[i,k]];
-  $U[[i, k]]  = val;
-  missingI = MissingQ@$U[[i, k]];
+  oldValue   = $U[[i,k]];
+  $U[[i, k]] = val;
+  missingI   = MissingQ@$U[[i, k]];
+
   If[ !missingI,
       $MAS[i] = DeleteCases[$MAS[i], k];
     , $MAS[i] = Union[$MAS[i]~Join~{k}];
@@ -612,7 +610,8 @@ UpdateData[i_Integer,k_Integer, val_] := Module[
       $OMS[k] = DeleteCases[$OMS[k], i];
   ];
 
-  Table[If[i != j,
+  Table[
+    If[i != j,
 
       missingI = MissingQ@$U[[i, k]];
       missingJ = MissingQ@$U[[j, k]];
@@ -731,18 +730,17 @@ MeanCompleter[]:= Module[
 Clear[setDatasets];
 setDatasets[datasets_]:=Module[{name, f},
   SeedRandom[1014221091, Method->All];
-  $perdidos = <||>;
-  $original = <||>;
-  $attr  = <||>;
+  $perdidos   = <||>;
+  $original   = <||>;
+  $attr       = <||>;
   $datasetDir = <||>;
 
   Table[
-    name = f[["name"]];
-
-    $oldU = Import@f["data"];
-    $attr[[name]]     = Import@f["attr"];
-    $original[[name]] = $oldU;
-    $perdidos[[name]] = {};
+    name                = f[["name"]];
+    $oldU               = Import@f["data"];
+    $attr[[name]]       = Import@f["attr"];
+    $original[[name]]   = $oldU;
+    $perdidos[[name]]   = {};
     $datasetDir[[name]] = f[["dir"]];
 
     Table[
@@ -762,8 +760,8 @@ RunAlgorithm[algo_String, namedataset_String, numIter_Integer] :=
   RunAlgorithm[algo, {namedataset}, numIter]
 
 RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
-  {name, citer, outcome = <||>, matches, cDataset = 0
-    , resCal, oldJ, n=0, m=0, numMissing=0, attr, mean, stand, conf,f, stat, datasets},
+  { attr, cDataset = 0, citer, conf, datasets, f, m=0, matches, mean
+  , n=0, name, numMissing=0, oldJ, outcome = <||>, resCal, stand, stat },
 
   SetInitValues[];
 
@@ -777,7 +775,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
         Nothing
       ]
       ,{tal, namedatasets}];
-  , datasets = Keys@$original;
+   , datasets = Keys@$original;
   ];
 
   If[ Length@datasets == 0,
@@ -849,7 +847,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
       matches = checkMatches[oldJ];
       If[ $runMC,
         PrintTemporary[name<>" : "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter<>" = "<>ToString@numMissing];
-      ,  Print[name<>" : "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter<>" = "<>ToString@numMissing];
+      , Print[name<>" : "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter<>" = "<>ToString@numMissing];
       ];
       stat = N[Total@matches /numMissing];
       $lastResult = stat;
@@ -875,13 +873,13 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
       , "CSV"];
 
       $verboseOutcome[[cDataset]] =
-        <|  "dataset"     -> name
-        ,   "size"        -> ToString@n<>"x"<>ToString@m
-        ,   "algo"        -> algo
-        ,   "numIter"     -> numIter
-        ,   "(min, max)"  -> {$minResult, $maxResult}
-        ,   "mean"        -> mean
-        ,   "interval"    -> conf
+        <| "dataset"    -> name
+        ,  "size"       -> ToString@n<>"x"<>ToString@m
+        ,  "algo"       -> algo
+        ,  "numIter"    -> numIter
+        ,  "(min, max)" -> {$minResult, $maxResult}
+        ,  "mean"       -> mean
+        ,  "interval"   -> conf
         |>;
 
   cDataset++;
