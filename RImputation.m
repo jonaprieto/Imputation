@@ -83,7 +83,6 @@ $oldU             = {};
 $U                = {};
 $missingU         = {};
 $algorithm        = "ROUSTIDA";
-$numberIterations = 20;
 $missingRate      = 0.05;
 $missingSymbol    = Missing[];
 $missingSymbolPrint =
@@ -91,7 +90,7 @@ $missingSymbolPrint =
 
 $perdidos = <||>;
 $original = <||>;
-$numIteraciones = 51;
+$numIteraciones = 50;
 $runMC = True;
 
 (* -------------------------------------------------------------------------- *)
@@ -160,11 +159,11 @@ SetMissings[] := Module[
 
   $oldU = $U;
   With[{d = Dimensions@$U},
-    AbortAssert[Length@d == 2, "SetMissings"];
+    AbortAssert[Length@d == 2, "SetMissings> Length@d == 2"];
     {n, m} = d;
   ];
 
-  AbortAssert[m-1 > 0 && n > 1, "SetMissings"];
+  AbortAssert[m-1 > 0 && n > 1, "SetMissings> m-1 > 0 && n > 1"];
   AbortAssert[$missingRate < 0.5 && $missingRate > 0,"Rate out of range"];
 
   cant = Ceiling[n * (m-1) * $missingRate];
@@ -490,7 +489,7 @@ checkNS[] := Module[
 
 Clear[VTRIDA];
 VTRIDA[] := Module[
-  {valMaxJ, maxJ, n, m, condition, i, j, flag, changed, setVal, maxVal},
+  {maxJ, n, m, flag, changed, setVal},
 
   If[ Length@Dimensions@$U != 2,
     Print["Step Two. Invalid $U."];
@@ -502,7 +501,14 @@ VTRIDA[] := Module[
 
   Table[
     change = False;
-    setVal = Table[If[i!=j && $Mlv[i,j] > 0,j,Nothing], {j, 1, n}];
+    
+    setVal = Table[
+        If[ i != j && $Mlv[i,j] > 0
+          , j
+          , Nothing
+          ]
+        , {j, 1, n}];
+
     If[ Length@setVal > 0,
       maxJ = Last@SortBy[setVal, $Mlv[i,#] &];
       Table[
@@ -590,8 +596,7 @@ FillWith[i_Integer, k_Integer, val_] := Module[
 (* This method supposes that $U[i,k] has been imputed *)
 Clear[UpdateData];
 UpdateData[i_Integer,k_Integer, val_] := Module[
-  {newPkij, oldMlv, oldPkij, n, m,
-    oldGM, oldNS, oldR, symetric, missingJ, missingI, oldValue},
+  {oldMlv, oldPkij, n, m, symetric, missingJ, missingI, oldValue},
 
   {n,m}   = Dimensions[$U];
 
@@ -841,7 +846,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
       , algo == "ARSI",  ARSI[]
       , algo == "checkNS",  checkNS[]
       , True,
-        Print[algo<>" is not implemenated."];
+        Print[algo<>" is not implemented."];
       ];
 
       matches = checkMatches[oldJ];
