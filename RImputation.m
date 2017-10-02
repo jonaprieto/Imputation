@@ -752,7 +752,7 @@ setDatasets[datasets_]:=Module[{name, f},
       $U = $oldU;
       SetMissings[];
       AppendTo[$perdidos[[name]], $U];
-    , {i, 1, $numIteraciones}];
+    , {$numIteraciones}];
   , {f, datasets}];
 ];
 
@@ -814,7 +814,6 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
 
   Table[
     name = ndataset;
-	Print[name];
     With[
       {d = Dimensions@$original[[name]]},
       AbortAssert[Length@d == 2, "RunAlgorithm"];
@@ -842,9 +841,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
       Which[
         algo == "ROUSTIDA", ROUSTIDA[]
       , algo == "VTRIDA", VTRIDA[]
-      , algo == "CARSI",  CARSI[]
       , algo == "ARSI",  ARSI[]
-      , algo == "checkNS",  checkNS[]
       , True,
         Print[algo<>" is not implemented."];
       ];
@@ -852,9 +849,8 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
       matches = checkMatches[oldJ];
       If[ $runMC,
         PrintTemporary[name<>" : "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter<>" = "<>ToString@numMissing];
-      , Print[name<>" : "<>ToString@$numCorrectAlgo<>"/"<>ToString@$numAlgo<>" + "<>ToString@$numMeanCompleter<>" = "<>ToString@numMissing];
       ];
-      stat = N[Total@matches /numMissing];
+      stat = N[Total@matches / numMissing];
       $lastResult = stat;
       $minResult = Min[$minResult, stat];
       $maxResult = Max[$maxResult, stat];
@@ -865,7 +861,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
     stand = StandardDeviation@resCal;
     conf  = {mean - 2.01*(stand/Sqrt[numIter]), mean + 2.01*(stand/Sqrt[numIter])};
 
-    Export[FileNameJoin[{$datasetDir[[name]], name<>"-"<>algo<>"-"<>ToString[$missingRate]<>"-"<>ToString@$numIteraciones<>".csv"}],
+    Export[FileNameJoin[{$datasetDir[[name]], name<>"-"<>algo<>"-"<>ToString[$missingRate]<>"-"<>ToString@$numIteraciones<>".tsv"}],
       { algo
       , name
       , $missingRate
@@ -875,7 +871,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
       , {mean, stand}
       , conf
       }
-      , "CSV"];
+      , "TSV"];
 
       $verboseOutcome[[cDataset]] =
         <| "dataset"    -> name
@@ -886,7 +882,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
         ,  "mean"       -> mean
         ,  "interval"   -> conf
         |>;
-
+        
   cDataset++;
   , {ndataset, datasets}];
 
