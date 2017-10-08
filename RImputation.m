@@ -164,7 +164,7 @@ SetMissings[] := Module[
   ];
 
   AbortAssert[m-1 > 0 && n > 1, "SetMissings> m-1 > 0 && n > 1"];
-  AbortAssert[$missingRate < 0.5 && $missingRate > 0,"Rate out of range"];
+  AbortAssert[$missingRate < 1 && $missingRate > 0,"Rate out of range"];
 
   cant = Ceiling[n * (m-1) * $missingRate];
   ms   = MakeArrange[{n, m-1}, $missingRate];
