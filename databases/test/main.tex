@@ -1,69 +1,8 @@
-% Mrate	Win	Lost	Dataset
-% 0.05	15/50 	10/50	breast-cancer
-% 0.05	12/50 	 2/50	spect
-% 0.05	 0/50 	 0/50	lymphography
-% 0.05	 3/50 	 1/50	soybean
-% 0.05	17/50 	 6/50	zoo
-% ------------------------------------------------------------------------------
-% Mrate	Win	Lost	Dataset
-% 0.10	22/50 	12/50	breast-cancer
-% 0.10	24/50 	 4/50	spect
-% 0.10	 1/50 	 3/50	lymphography
-% 0.10	 9/50 	 3/50	soybean
-% 0.10	23/50 	 3/50	zoo
-% ------------------------------------------------------------------------------
-% Mrate	Win	Lost	Dataset
-% 0.15	28/50 	 4/50	breast-cancer
-% 0.15	33/50 	 5/50	spect
-% 0.15	11/50 	15/50	lymphography
-% 0.15	26/50 	 7/50	soybean
-% 0.15	38/50 	 2/50	zoo
-% ------------------------------------------------------------------------------
-% Mrate	Win	Lost	Dataset
-% 0.20	25/50 	 4/50	breast-cancer
-% 0.20	39/50 	 1/50	spect
-% 0.20	17/50 	13/50	lymphography
-% 0.20	31/50 	 5/50	soybean
-% 0.20	37/50 	 4/50	zoo
-% ------------------------------------------------------------------------------
-% Mrate	Win	Lost	Dataset
-% 0.25	37/50 	 3/50	breast-cancer
-% 0.25	47/50 	 0/50	spect
-% 0.25	22/50 	16/50	lymphography
-% 0.25	41/50 	 2/50	soybean
-% 0.25	37/50 	 2/50	zoo
-% ------------------------------------------------------------------------------
-% Mrate	Win	Lost	Dataset
-% 0.30	31/50 	 1/50	breast-cancer
-% 0.30	50/50 	 0/50	spect
-% 0.30	35/50 	 6/50	lymphography
-% 0.30	43/50 	 2/50	soybean
-% 0.30	44/50 	 1/50	zoo
-% ------------------------------------------------------------------------------
-% Mrate	Win	Lost	Dataset
-% 0.35	38/50 	 0/50	breast-cancer
-% 0.35	50/50 	 0/50	spect
-% 0.35	36/50 	 7/50	lymphography
-% 0.35	50/50 	 0/50	soybean
-% 0.35	38/50 	 0/50	zoo
-% ------------------------------------------------------------------------------
-% Mrate	Win	Lost	Dataset
-% 0.40	43/50 	 1/50	breast-cancer
-% 0.40	49/50 	 0/50	spect
-% 0.40	41/50 	 1/50	lymphography
-% 0.40	47/50 	 1/50	soybean
-% 0.40	35/50 	 6/50	zoo
-% ------------------------------------------------------------------------------
-% Mrate	Win	Lost	Dataset
-% 0.45	49/50 	 0/50	breast-cancer
-% 0.45	50/50 	 0/50	spect
-% 0.45	42/50 	 1/50	lymphography
-% 0.45	49/50 	 1/50	soybean
-% 0.45	35/50 	13/50	zoo
-% ------------------------------------------------------------------------------
 
 \documentclass[10pt]{article}
 \usepackage{ap-article}
+
+\usepackage[a4paper, total={6in, 10in}]{geometry}
 
 \baselineskip=13pt
 
@@ -95,7 +34,9 @@
 \usepackage{numprint} % for rounding numbers.
 
 \begin{document}
-\section{5\% of Missing Values}
+\section{Apendix}
+\subsection{Figures}
+\subsubsection{5\% of Missing Values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -214,15 +155,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 5\% in the Breast-cancer database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  15 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 5\% in the Breast-cancer database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 15 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 10 runs of a total of 50 runs.
   }
   \label{table:5-Breast-cancer}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -342,15 +280,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 5\% in the Spect database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  12 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 5\% in the Spect database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 12 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 2 runs of a total of 50 runs.
   }
   \label{table:5-Spect}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -470,15 +405,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 5\% in the Lymphography database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  0 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 5\% in the Lymphography database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 0 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:5-Lymphography}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -598,15 +530,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 5\% in the Soybean database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  3 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 5\% in the Soybean database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 3 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 1 runs of a total of 50 runs.
   }
   \label{table:5-Soybean}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -726,18 +655,15 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 5\% in the Zoo database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  17 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 5\% in the Zoo database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 17 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 6 runs of a total of 50 runs.
   }
   \label{table:5-Zoo}
 \end{Figure}
 
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
-\section{10\% of Missing Values}
+\subsubsection{10\% of Missing Values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -856,15 +782,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 10\% in the Breast-cancer database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  22 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 10\% in the Breast-cancer database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 22 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 12 runs of a total of 50 runs.
   }
   \label{table:10-Breast-cancer}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -984,15 +907,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 10\% in the Spect database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  24 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 10\% in the Spect database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 24 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 4 runs of a total of 50 runs.
   }
   \label{table:10-Spect}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -1112,15 +1032,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 10\% in the Lymphography database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  1 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 10\% in the Lymphography database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 1 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 3 runs of a total of 50 runs.
   }
   \label{table:10-Lymphography}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -1240,15 +1157,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 10\% in the Soybean database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  9 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 10\% in the Soybean database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 9 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 3 runs of a total of 50 runs.
   }
   \label{table:10-Soybean}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -1368,18 +1282,15 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 10\% in the Zoo database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  23 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 10\% in the Zoo database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 23 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 3 runs of a total of 50 runs.
   }
   \label{table:10-Zoo}
 \end{Figure}
 
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
-\section{15\% of Missing Values}
+\subsubsection{15\% of Missing Values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -1498,15 +1409,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 15\% in the Breast-cancer database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  28 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 15\% in the Breast-cancer database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 28 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 4 runs of a total of 50 runs.
   }
   \label{table:15-Breast-cancer}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -1626,15 +1534,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 15\% in the Spect database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  33 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 15\% in the Spect database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 33 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 5 runs of a total of 50 runs.
   }
   \label{table:15-Spect}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -1754,15 +1659,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 15\% in the Lymphography database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  11 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 15\% in the Lymphography database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 11 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 15 runs of a total of 50 runs.
   }
   \label{table:15-Lymphography}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -1882,15 +1784,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 15\% in the Soybean database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  26 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 15\% in the Soybean database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 26 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 7 runs of a total of 50 runs.
   }
   \label{table:15-Soybean}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -2010,18 +1909,15 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 15\% in the Zoo database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  38 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 15\% in the Zoo database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 38 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 2 runs of a total of 50 runs.
   }
   \label{table:15-Zoo}
 \end{Figure}
 
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
-\section{20\% of Missing Values}
+\subsubsection{20\% of Missing Values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -2140,15 +2036,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 20\% in the Breast-cancer database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  25 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 20\% in the Breast-cancer database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 25 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 4 runs of a total of 50 runs.
   }
   \label{table:20-Breast-cancer}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -2268,15 +2161,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 20\% in the Spect database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  39 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 20\% in the Spect database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 39 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 1 runs of a total of 50 runs.
   }
   \label{table:20-Spect}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -2396,15 +2286,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 20\% in the Lymphography database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  17 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 20\% in the Lymphography database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 17 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 13 runs of a total of 50 runs.
   }
   \label{table:20-Lymphography}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -2524,15 +2411,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 20\% in the Soybean database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  31 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 20\% in the Soybean database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 31 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 5 runs of a total of 50 runs.
   }
   \label{table:20-Soybean}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -2652,18 +2536,15 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 20\% in the Zoo database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  37 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 20\% in the Zoo database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 37 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 4 runs of a total of 50 runs.
   }
   \label{table:20-Zoo}
 \end{Figure}
 
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
-\section{25\% of Missing Values}
+\subsubsection{25\% of Missing Values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -2782,15 +2663,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 25\% in the Breast-cancer database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  37 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 25\% in the Breast-cancer database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 37 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 3 runs of a total of 50 runs.
   }
   \label{table:25-Breast-cancer}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -2910,15 +2788,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 25\% in the Spect database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  47 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 25\% in the Spect database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 47 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:25-Spect}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -3038,15 +2913,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 25\% in the Lymphography database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  22 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 25\% in the Lymphography database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 22 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 16 runs of a total of 50 runs.
   }
   \label{table:25-Lymphography}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -3166,15 +3038,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 25\% in the Soybean database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  41 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 25\% in the Soybean database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 41 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 2 runs of a total of 50 runs.
   }
   \label{table:25-Soybean}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -3294,18 +3163,15 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 25\% in the Zoo database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  37 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 25\% in the Zoo database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 37 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 2 runs of a total of 50 runs.
   }
   \label{table:25-Zoo}
 \end{Figure}
 
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
-\section{30\% of Missing Values}
+\subsubsection{30\% of Missing Values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -3424,15 +3290,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 30\% in the Breast-cancer database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  31 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 30\% in the Breast-cancer database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 31 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 1 runs of a total of 50 runs.
   }
   \label{table:30-Breast-cancer}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -3552,15 +3415,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 30\% in the Spect database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  50 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 30\% in the Spect database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 50 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:30-Spect}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -3680,15 +3540,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 30\% in the Lymphography database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  35 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 30\% in the Lymphography database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 35 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 6 runs of a total of 50 runs.
   }
   \label{table:30-Lymphography}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -3808,15 +3665,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 30\% in the Soybean database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  43 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 30\% in the Soybean database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 43 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 2 runs of a total of 50 runs.
   }
   \label{table:30-Soybean}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -3936,18 +3790,15 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 30\% in the Zoo database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  44 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 30\% in the Zoo database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 44 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 1 runs of a total of 50 runs.
   }
   \label{table:30-Zoo}
 \end{Figure}
 
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
-\section{35\% of Missing Values}
+\subsubsection{35\% of Missing Values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -4066,15 +3917,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 35\% in the Breast-cancer database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  38 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 35\% in the Breast-cancer database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 38 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:35-Breast-cancer}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -4194,15 +4042,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 35\% in the Spect database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  50 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 35\% in the Spect database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 50 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:35-Spect}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -4322,15 +4167,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 35\% in the Lymphography database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  36 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 35\% in the Lymphography database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 36 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 7 runs of a total of 50 runs.
   }
   \label{table:35-Lymphography}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -4450,15 +4292,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 35\% in the Soybean database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  50 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 35\% in the Soybean database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 50 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:35-Soybean}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -4578,18 +4417,15 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 35\% in the Zoo database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  38 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 35\% in the Zoo database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 38 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:35-Zoo}
 \end{Figure}
 
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
-\section{40\% of Missing Values}
+\subsubsection{40\% of Missing Values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -4708,15 +4544,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 40\% in the Breast-cancer database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  43 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 40\% in the Breast-cancer database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 43 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 1 runs of a total of 50 runs.
   }
   \label{table:40-Breast-cancer}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -4836,15 +4669,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 40\% in the Spect database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  49 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 40\% in the Spect database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 49 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:40-Spect}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -4964,15 +4794,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 40\% in the Lymphography database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  41 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 40\% in the Lymphography database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 41 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 1 runs of a total of 50 runs.
   }
   \label{table:40-Lymphography}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -5092,15 +4919,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 40\% in the Soybean database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  47 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 40\% in the Soybean database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 47 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 1 runs of a total of 50 runs.
   }
   \label{table:40-Soybean}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -5220,18 +5044,15 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 40\% in the Zoo database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  35 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 40\% in the Zoo database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 35 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 6 runs of a total of 50 runs.
   }
   \label{table:40-Zoo}
 \end{Figure}
 
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
-\section{45\% of Missing Values}
+\subsubsection{45\% of Missing Values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -5350,15 +5171,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 45\% in the Breast-cancer database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  49 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 45\% in the Breast-cancer database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 49 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:45-Breast-cancer}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -5466,15 +5284,12 @@ Sample,	ARSI,	ROUSTIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 45\% in the Spect database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  50 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 45\% in the Spect database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 50 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 0 runs of a total of 50 runs.
   }
   \label{table:45-Spect}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -5594,15 +5409,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 45\% in the Lymphography database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  42 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 45\% in the Lymphography database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 42 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 1 runs of a total of 50 runs.
   }
   \label{table:45-Lymphography}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -5722,15 +5534,12 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 45\% in the Soybean database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  49 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 45\% in the Soybean database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 49 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 1 runs of a total of 50 runs.
   }
   \label{table:45-Soybean}
 \end{Figure}
-% ------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 
 \begin{Figure}
   \centering
@@ -5838,15 +5647,307 @@ Sample,	ARSI,	ROUSTIDA\\
   \end{axis}
   \end{tikzpicture}
 
-  \fcaption{Behavior of the imputation algorithms with a missing values rate of 45\% in the Zoo database. The vertical axis
-  corresponds to the accuracy rate of the respective algorithm, and the
-  horizontal axis represents the sample number in the experiment. We
-  observe ARSI gets the best accuracy with respect the other algorithms in
-  35 runs of a total of 50 runs.
+  \fcaption{
+  Behavior of the imputation algorithms with a missing values rate of 45\% in the Zoo database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in 35 runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm 13 runs of a total of 50 runs.
   }
   \label{table:45-Zoo}
 \end{Figure}
 
+
+\newpage
+\subsection{Tables}
+\begin{Table}
+\tcap{Experimental Results with 5.0\%, 10.0\%, 15.0\%, 20.0\% missing values rates.}
+\scalebox{0.65}{
+\setlength{\extrarowheight}{3pt}
+\setlength{\columnsep}{8pt}
+\baselineskip=13pt
+\begin{tabular}{|c|c|ccc|ccc|ccc|ccc|}
+\hline
+Dataset& & \multicolumn{3}{c|}{$5.0\%$}& \multicolumn{3}{c|}{$10.0\%$}& \multicolumn{3}{c|}{$15.0\%$}& \multicolumn{3}{c|}{$20.0\%$}\\ \cline{3-14}
+
+& &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} \\ \cline{1-14}
+\multirow{4}{1.6cm}{B. Cancer}
+&Min
+ &42.4 &42.4 &40.8  % -- 5.0
+ &45.8 &46.2 &43.8  % -- 10.0
+ &{\bfseries 47.3} &45.2 &45.7  % -- 15.0
+ &{\bfseries 47.9} &45.9 &45.1  % -- 20.0
+\\
+&Max
+ &61.6 &61.6 &60.8  % -- 5.0
+ &57.4 &58.2 &57.8  % -- 10.0
+ &{\bfseries 58.0} &57.5 &55.9  % -- 15.0
+ &56.1 &55.3 &56.5  % -- 20.0
+\\
+&Mean
+ &52.1 &52.1 &51.7  % -- 5.0
+ &{\bfseries 51.7} &51.6 &50.9  % -- 10.0
+ &{\bfseries 52.2} &51.2 &50.4  % -- 15.0
+ &{\bfseries 51.6} &50.6 &49.8  % -- 20.0
+\\
+&Int.
+ &[50.7 53.6] &[50.8 53.4] &[50.3 53.1]  % -- 5.0
+ &[51.0 52.5] &[50.8 52.4] &[50.1 51.7]  % -- 10.0
+ &[51.5 52.9] &[50.5 51.8] &[49.8 51.1]  % -- 15.0
+ &[51.0 52.1] &[50.0 51.3] &[49.1 50.5]  % -- 20.0
+\\
+\cline{1-14}
+\multirow{4}{1.6cm}{Spect}
+&Min
+ &65.0 &64.6 &65.0  % -- 5.0
+ &65.8 &66.1 &66.6  % -- 10.0
+ &{\bfseries 68.6} &67.1 &68.1  % -- 15.0
+ &{\bfseries 68.0} &66.5 &66.9  % -- 20.0
+\\
+&Max
+ &75.2 &73.8 &75.5  % -- 5.0
+ &73.6 &72.9 &73.8  % -- 10.0
+ &72.6 &72.6 &73.0  % -- 15.0
+ &{\bfseries 72.9} &71.5 &72.1  % -- 20.0
+\\
+&Mean
+ &70.2 &69.6 &70.2  % -- 5.0
+ &{\bfseries 70.2} &69.4 &70.1  % -- 10.0
+ &{\bfseries 70.6} &69.5 &70.1  % -- 15.0
+ &{\bfseries 70.9} &69.4 &70.1  % -- 20.0
+\\
+&Int.
+ &[69.5 70.8] &[68.9 70.2] &[69.5 70.9]  % -- 5.0
+ &[69.8 70.6] &[68.9 69.8] &[69.6 70.5]  % -- 10.0
+ &[70.3 70.9] &[69.2 69.8] &[69.8 70.5]  % -- 15.0
+ &[70.6 71.2] &[69.1 69.7] &[69.8 70.4]  % -- 20.0
+\\
+\cline{1-14}
+\multirow{4}{1.6cm}{Lymph.}
+&Min
+ &52.6 &52.6 &52.6  % -- 5.0
+ &55.3 &55.3 &55.3  % -- 10.0
+ &57.0 &57.0 &57.0  % -- 15.0
+ &{\bfseries 58.0} &56.8 &57.6  % -- 20.0
+\\
+&Max
+ &73.7 &73.7 &73.7  % -- 5.0
+ &68.8 &68.8 &68.8  % -- 10.0
+ &66.2 &66.8 &66.8  % -- 15.0
+ &66.2 &66.0 &66.2  % -- 20.0
+\\
+&Mean
+ &61.4 &61.4 &61.4  % -- 5.0
+ &61.5 &61.5 &61.6  % -- 10.0
+ &61.4 &61.4 &61.5  % -- 15.0
+ &{\bfseries 61.5} &61.4 &61.4  % -- 20.0
+\\
+&Int.
+ &[60.1 62.7] &[60.1 62.7] &[60.1 62.7]  % -- 5.0
+ &[60.7 62.3] &[60.7 62.3] &[60.8 62.4]  % -- 10.0
+ &[60.8 62.1] &[60.8 62.1] &[60.8 62.1]  % -- 15.0
+ &[60.9 62.0] &[60.8 62.0] &[60.8 62.0]  % -- 20.0
+\\
+\cline{1-14}
+\multirow{4}{1.6cm}{Soybean}
+&Min
+ &{\bfseries 78.2} &77.3 &77.3  % -- 5.0
+ &80.9 &80.9 &80.0  % -- 10.0
+ &{\bfseries 81.9} &80.7 &81.0  % -- 15.0
+ &{\bfseries 81.2} &79.6 &79.4  % -- 20.0
+\\
+&Max
+ &93.6 &93.6 &93.6  % -- 5.0
+ &89.5 &89.5 &89.5  % -- 10.0
+ &88.2 &88.2 &88.2  % -- 15.0
+ &{\bfseries 88.0} &87.3 &87.1  % -- 20.0
+\\
+&Mean
+ &86.1 &86.0 &86.1  % -- 5.0
+ &{\bfseries 85.6} &85.3 &85.5  % -- 10.0
+ &{\bfseries 85.2} &84.7 &84.9  % -- 15.0
+ &{\bfseries 84.8} &83.9 &84.2  % -- 20.0
+\\
+&Int.
+ &[85.1 87.1] &[85.0 87.0] &[85.2 87.1]  % -- 5.0
+ &[85.0 86.1] &[84.7 85.9] &[84.9 86.2]  % -- 10.0
+ &[84.7 85.7] &[84.2 85.2] &[84.4 85.4]  % -- 15.0
+ &[84.4 85.2] &[83.4 84.3] &[83.8 84.7]  % -- 20.0
+\\
+\cline{1-14}
+\multirow{4}{1.6cm}{Zoo}
+&Min
+ &72.8 &72.8 &75.3  % -- 5.0
+ &{\bfseries 77.2} &74.7 &75.3  % -- 10.0
+ &{\bfseries 79.3} &75.2 &77.3  % -- 15.0
+ &{\bfseries 81.7} &78.3 &77.1  % -- 20.0
+\\
+&Max
+ &90.1 &88.9 &91.4  % -- 5.0
+ &{\bfseries 88.3} &87.0 &87.7  % -- 10.0
+ &{\bfseries 88.8} &87.6 &87.6  % -- 15.0
+ &{\bfseries 89.2} &87.6 &87.6  % -- 20.0
+\\
+&Mean
+ &{\bfseries 82.5} &80.9 &82.0  % -- 5.0
+ &{\bfseries 84.1} &82.5 &83.1  % -- 10.0
+ &{\bfseries 84.9} &82.9 &83.2  % -- 15.0
+ &{\bfseries 85.5} &83.5 &83.7  % -- 20.0
+\\
+&Int.
+ &[81.5 83.5] &[79.8 82.0] &[81.0 83.1]  % -- 5.0
+ &[83.3 84.9] &[81.6 83.3] &[82.2 84.0]  % -- 10.0
+ &[84.2 85.5] &[82.1 83.6] &[82.4 83.9]  % -- 15.0
+ &[85.0 86.0] &[82.9 84.1] &[83.1 84.3]  % -- 20.0
+\\
+\cline{1-14}
+\hline
+\end{tabular}
+}
+\end{Table}
+% -----------------------------------------------------------------------------
+
+\begin{Table}
+\tcap{Experimental Results with 25.0\%, 30.0\%, 35.0\%, 40.0\% missing values rates.}
+\scalebox{0.65}{
+\setlength{\extrarowheight}{3pt}
+\setlength{\columnsep}{8pt}
+\baselineskip=13pt
+\begin{tabular}{|c|c|ccc|ccc|ccc|ccc|}
+\hline
+Dataset& & \multicolumn{3}{c|}{$25.0\%$}& \multicolumn{3}{c|}{$30.0\%$}& \multicolumn{3}{c|}{$35.0\%$}& \multicolumn{3}{c|}{$40.0\%$}\\ \cline{3-14}
+
+& &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} \\ \cline{1-14}
+\multirow{4}{1.6cm}{B. Cancer}
+&Min
+ &{\bfseries 47.4} &46.4 &45.6  % -- 25.0
+ &{\bfseries 47.9} &46.5 &44.0  % -- 30.0
+ &{\bfseries 49.3} &45.2 &43.6  % -- 35.0
+ &{\bfseries 48.8} &45.9 &44.3  % -- 40.0
+\\
+&Max
+ &55.1 &56.0 &53.6  % -- 25.0
+ &{\bfseries 54.5} &53.9 &52.9  % -- 30.0
+ &{\bfseries 56.2} &53.8 &52.1  % -- 35.0
+ &{\bfseries 53.9} &52.5 &51.0  % -- 40.0
+\\
+&Mean
+ &{\bfseries 51.4} &50.2 &49.2  % -- 25.0
+ &{\bfseries 51.2} &49.9 &48.5  % -- 30.0
+ &{\bfseries 51.2} &49.6 &48.0  % -- 35.0
+ &{\bfseries 51.5} &49.3 &48.0  % -- 40.0
+\\
+&Int.
+ &[50.9 51.9] &[49.7 50.7] &[48.6 49.7]  % -- 25.0
+ &[50.7 51.7] &[49.4 50.4] &[48.1 49.0]  % -- 30.0
+ &[50.8 51.7] &[49.1 50.1] &[47.6 48.4]  % -- 35.0
+ &[51.1 51.9] &[48.9 49.8] &[47.6 48.4]  % -- 40.0
+\\
+\cline{1-14}
+\multirow{4}{1.6cm}{Spect}
+&Min
+ &{\bfseries 69.0} &66.1 &67.1  % -- 25.0
+ &{\bfseries 69.7} &66.8 &68.0  % -- 30.0
+ &{\bfseries 70.0} &67.3 &68.1  % -- 35.0
+ &{\bfseries 69.4} &66.0 &66.7  % -- 40.0
+\\
+&Max
+ &{\bfseries 73.4} &71.1 &71.9  % -- 25.0
+ &{\bfseries 73.4} &71.7 &72.7  % -- 30.0
+ &{\bfseries 74.0} &71.4 &71.7  % -- 35.0
+ &{\bfseries 74.9} &70.3 &72.1  % -- 40.0
+\\
+&Mean
+ &{\bfseries 71.5} &69.4 &70.2  % -- 25.0
+ &{\bfseries 71.8} &69.1 &70.2  % -- 30.0
+ &{\bfseries 72.1} &69.0 &70.0  % -- 35.0
+ &{\bfseries 71.9} &68.3 &69.1  % -- 40.0
+\\
+&Int.
+ &[71.1 71.8] &[69.1 69.7] &[69.9 70.5]  % -- 25.0
+ &[71.6 72.1] &[68.7 69.4] &[69.8 70.5]  % -- 30.0
+ &[71.8 72.4] &[68.7 69.3] &[69.7 70.2]  % -- 35.0
+ &[71.6 72.2] &[68.0 68.6] &[68.8 69.5]  % -- 40.0
+\\
+\cline{1-14}
+\multirow{4}{1.6cm}{Lymph.}
+&Min
+ &55.7 &56.8 &56.8  % -- 25.0
+ &{\bfseries 57.7} &56.3 &56.4  % -- 30.0
+ &{\bfseries 58.6} &56.9 &57.6  % -- 35.0
+ &57.5 &56.5 &57.6  % -- 40.0
+\\
+&Max
+ &63.7 &64.4 &64.1  % -- 25.0
+ &64.0 &63.8 &64.0  % -- 30.0
+ &{\bfseries 64.2} &64.1 &63.2  % -- 35.0
+ &{\bfseries 63.4} &62.2 &63.3  % -- 40.0
+\\
+&Mean
+ &61.1 &61.1 &61.1  % -- 25.0
+ &{\bfseries 61.2} &60.6 &60.7  % -- 30.0
+ &{\bfseries 61.1} &60.1 &60.2  % -- 35.0
+ &{\bfseries 61.1} &59.4 &59.7  % -- 40.0
+\\
+&Int.
+ &[60.6 61.6] &[60.6 61.5] &[60.7 61.6]  % -- 25.0
+ &[60.7 61.7] &[60.1 61.1] &[60.3 61.2]  % -- 30.0
+ &[60.8 61.5] &[59.7 60.6] &[59.8 60.6]  % -- 35.0
+ &[60.8 61.5] &[59.0 59.8] &[59.3 60.1]  % -- 40.0
+\\
+\cline{1-14}
+\multirow{4}{1.6cm}{Soybean}
+&Min
+ &{\bfseries 81.5} &79.7 &79.7  % -- 25.0
+ &{\bfseries 82.2} &79.8 &79.2  % -- 30.0
+ &{\bfseries 82.9} &79.0 &79.5  % -- 35.0
+ &{\bfseries 83.7} &79.0 &78.7  % -- 40.0
+\\
+&Max
+ &{\bfseries 87.7} &86.9 &87.1  % -- 25.0
+ &{\bfseries 87.5} &85.3 &86.0  % -- 30.0
+ &{\bfseries 87.3} &86.3 &86.5  % -- 35.0
+ &{\bfseries 89.2} &85.7 &86.1  % -- 40.0
+\\
+&Mean
+ &{\bfseries 85.0} &83.6 &83.9  % -- 25.0
+ &{\bfseries 84.4} &82.8 &82.9  % -- 30.0
+ &{\bfseries 85.5} &82.8 &82.9  % -- 35.0
+ &{\bfseries 85.7} &82.4 &82.5  % -- 40.0
+\\
+&Int.
+ &[84.6 85.4] &[83.1 84.1] &[83.4 84.4]  % -- 25.0
+ &[84.1 84.7] &[82.4 83.1] &[82.5 83.3]  % -- 30.0
+ &[85.2 85.8] &[82.4 83.2] &[82.4 83.3]  % -- 35.0
+ &[85.4 86.0] &[81.9 82.8] &[82.1 83.0]  % -- 40.0
+\\
+\cline{1-14}
+\multirow{4}{1.6cm}{Zoo}
+&Min
+ &{\bfseries 83.4} &80.9 &80.0  % -- 25.0
+ &{\bfseries 83.9} &81.0 &80.2  % -- 30.0
+ &{\bfseries 83.2} &80.7 &78.6  % -- 35.0
+ &{\bfseries 81.6} &80.7 &79.9  % -- 40.0
+\\
+&Max
+ &{\bfseries 91.3} &87.4 &87.6  % -- 25.0
+ &{\bfseries 89.7} &88.5 &86.8  % -- 30.0
+ &{\bfseries 89.4} &87.5 &87.8  % -- 35.0
+ &89.2 &89.2 &86.8  % -- 40.0
+\\
+&Mean
+ &{\bfseries 86.4} &84.4 &84.1  % -- 25.0
+ &{\bfseries 87.1} &84.7 &84.2  % -- 30.0
+ &{\bfseries 86.3} &84.4 &84.0  % -- 35.0
+ &{\bfseries 86.0} &84.8 &84.0  % -- 40.0
+\\
+&Int.
+ &[85.9 86.8] &[83.9 84.8] &[83.6 84.7]  % -- 25.0
+ &[86.8 87.5] &[84.3 85.1] &[83.7 84.6]  % -- 30.0
+ &[85.9 86.8] &[83.9 84.8] &[83.5 84.4]  % -- 35.0
+ &[85.5 86.5] &[84.4 85.2] &[83.6 84.5]  % -- 40.0
+\\
+\cline{1-14}
+\hline
+\end{tabular}
+}
+\end{Table}
 
 \end{document}
 
