@@ -190,7 +190,7 @@ with open(join(basedir, "main.tex"), 'w') as mainLatex:
 
   nameDataset = \
    {
-    "breast-cancer" : "B. Cancer"
+    "breast-cancer" : "B.\;Cancer"
   , "spect"         : "Spect"
   , "lymphography"  : "Lymph."
   , "soybean"       : "Soybean"
@@ -198,8 +198,8 @@ with open(join(basedir, "main.tex"), 'w') as mainLatex:
    }
 
   ListRates  = [
-             map(fixReal, ["0.05", "0.10", "0.15", "0.20"])
-           , map(fixReal, ["0.20", "0.30", "0.40", "0.50"])
+             map(fixReal, ["0.05", "0.10", "0.20"])
+           , map(fixReal, ["0.30", "0.40", "0.50"])
            ]
 
   tables = []

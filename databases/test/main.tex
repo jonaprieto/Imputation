@@ -34,9 +34,9 @@
 \usepackage{numprint} % for rounding numbers.
 
 \begin{document}
-\section{Apendix}
+\section{Appendix}
 \subsection{Figures}
-\subsubsection{5\% of Missing Values}
+\subsubsection{5\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -663,7 +663,7 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
 
 % -----------------------------------------------------------------------------
 
-\subsubsection{10\% of Missing Values}
+\subsubsection{10\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -1290,7 +1290,7 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
 
 % -----------------------------------------------------------------------------
 
-\subsubsection{15\% of Missing Values}
+\subsubsection{15\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -1917,7 +1917,7 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
 
 % -----------------------------------------------------------------------------
 
-\subsubsection{20\% of Missing Values}
+\subsubsection{20\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -2544,7 +2544,7 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
 
 % -----------------------------------------------------------------------------
 
-\subsubsection{25\% of Missing Values}
+\subsubsection{25\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -3171,7 +3171,7 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
 
 % -----------------------------------------------------------------------------
 
-\subsubsection{30\% of Missing Values}
+\subsubsection{30\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -3798,7 +3798,7 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
 
 % -----------------------------------------------------------------------------
 
-\subsubsection{35\% of Missing Values}
+\subsubsection{35\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -4425,7 +4425,7 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
 
 % -----------------------------------------------------------------------------
 
-\subsubsection{40\% of Missing Values}
+\subsubsection{40\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -5052,7 +5052,7 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
 
 % -----------------------------------------------------------------------------
 
-\subsubsection{45\% of Missing Values}
+\subsubsection{45\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -5655,7 +5655,7 @@ Sample,	ARSI,	ROUSTIDA\\
 
 % -----------------------------------------------------------------------------
 
-\subsubsection{50\% of Missing Values}
+\subsubsection{50\% of missing values}
 \begin{Figure}
   \centering
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
@@ -6283,298 +6283,258 @@ Sample,	ARSI,	ROUSTIDA,	VTRIDA\\
 
 \newpage
 \subsection{Tables}
-\begin{Table}
-\tcap{Experimental Results with 5.0\%, 10.0\%, 15.0\%, 20.0\% missing values rates.}
-\scalebox{0.65}{
+\begin{table*}\centering
+\tcap{Experimental results with 5.0\%, 10.0\%, 20.0\% missing values rates.}
+\scalebox{0.70}{
 \setlength{\extrarowheight}{3pt}
-\setlength{\columnsep}{8pt}
 \baselineskip=13pt
-\begin{tabular}{|c|c|ccc|ccc|ccc|ccc|}
+\setlength{\tabcolsep}{4pt}
+\setlength{\columnsep}{1pt}
+\begin{tabular}{|c|c|ccc|ccc|ccc|}
 \hline
-Dataset& & \multicolumn{3}{c|}{$5.0\%$}& \multicolumn{3}{c|}{$10.0\%$}& \multicolumn{3}{c|}{$15.0\%$}& \multicolumn{3}{c|}{$20.0\%$}\\ \cline{3-14}
+Dataset& & \multicolumn{3}{c|}{$5.0\%$}& \multicolumn{3}{c|}{$10.0\%$}& \multicolumn{3}{c|}{$20.0\%$}\\ \cline{3-11}
 
-& &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} \\ \cline{1-14}
-\multirow{4}{1.6cm}{B. Cancer}
+& &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} \\ \cline{1-11}
+\multirow{4}{1.6cm}{B.\;Cancer}
 &Min
  &42.4 &42.4 &40.8  % -- 5.0
  &45.8 &46.2 &43.8  % -- 10.0
- &{\bfseries 47.3} &45.2 &45.7  % -- 15.0
  &{\bfseries 47.9} &45.9 &45.1  % -- 20.0
 \\
 &Max
  &61.6 &61.6 &60.8  % -- 5.0
  &57.4 &58.2 &57.8  % -- 10.0
- &{\bfseries 58.0} &57.5 &55.9  % -- 15.0
  &56.1 &55.3 &56.5  % -- 20.0
 \\
 &Mean
  &52.1 &52.1 &51.7  % -- 5.0
  &{\bfseries 51.7} &51.6 &50.9  % -- 10.0
- &{\bfseries 52.2} &51.2 &50.4  % -- 15.0
  &{\bfseries 51.6} &50.6 &49.8  % -- 20.0
 \\
 &Int.
  &[50.7 53.6] &[50.8 53.4] &[50.3 53.1]  % -- 5.0
  &[51.0 52.5] &[50.8 52.4] &[50.1 51.7]  % -- 10.0
- &[51.5 52.9] &[50.5 51.8] &[49.8 51.1]  % -- 15.0
  &[51.0 52.1] &[50.0 51.3] &[49.1 50.5]  % -- 20.0
 \\
-\cline{1-14}
+\cline{1-11}
 \multirow{4}{1.6cm}{Spect}
 &Min
  &65.0 &64.6 &65.0  % -- 5.0
  &65.8 &66.1 &66.6  % -- 10.0
- &{\bfseries 68.6} &67.1 &68.1  % -- 15.0
  &{\bfseries 68.0} &66.5 &66.9  % -- 20.0
 \\
 &Max
  &75.2 &73.8 &75.5  % -- 5.0
  &73.6 &72.9 &73.8  % -- 10.0
- &72.6 &72.6 &73.0  % -- 15.0
  &{\bfseries 72.9} &71.5 &72.1  % -- 20.0
 \\
 &Mean
  &70.2 &69.6 &70.2  % -- 5.0
  &{\bfseries 70.2} &69.4 &70.1  % -- 10.0
- &{\bfseries 70.6} &69.5 &70.1  % -- 15.0
  &{\bfseries 70.9} &69.4 &70.1  % -- 20.0
 \\
 &Int.
  &[69.5 70.8] &[68.9 70.2] &[69.5 70.9]  % -- 5.0
  &[69.8 70.6] &[68.9 69.8] &[69.6 70.5]  % -- 10.0
- &[70.3 70.9] &[69.2 69.8] &[69.8 70.5]  % -- 15.0
  &[70.6 71.2] &[69.1 69.7] &[69.8 70.4]  % -- 20.0
 \\
-\cline{1-14}
+\cline{1-11}
 \multirow{4}{1.6cm}{Lymph.}
 &Min
  &52.6 &52.6 &52.6  % -- 5.0
  &55.3 &55.3 &55.3  % -- 10.0
- &57.0 &57.0 &57.0  % -- 15.0
  &{\bfseries 58.0} &56.8 &57.6  % -- 20.0
 \\
 &Max
  &73.7 &73.7 &73.7  % -- 5.0
  &68.8 &68.8 &68.8  % -- 10.0
- &66.2 &66.8 &66.8  % -- 15.0
  &66.2 &66.0 &66.2  % -- 20.0
 \\
 &Mean
  &61.4 &61.4 &61.4  % -- 5.0
  &61.5 &61.5 &61.6  % -- 10.0
- &61.4 &61.4 &61.5  % -- 15.0
  &{\bfseries 61.5} &61.4 &61.4  % -- 20.0
 \\
 &Int.
  &[60.1 62.7] &[60.1 62.7] &[60.1 62.7]  % -- 5.0
  &[60.7 62.3] &[60.7 62.3] &[60.8 62.4]  % -- 10.0
- &[60.8 62.1] &[60.8 62.1] &[60.8 62.1]  % -- 15.0
  &[60.9 62.0] &[60.8 62.0] &[60.8 62.0]  % -- 20.0
 \\
-\cline{1-14}
+\cline{1-11}
 \multirow{4}{1.6cm}{Soybean}
 &Min
  &{\bfseries 78.2} &77.3 &77.3  % -- 5.0
  &80.9 &80.9 &80.0  % -- 10.0
- &{\bfseries 81.9} &80.7 &81.0  % -- 15.0
  &{\bfseries 81.2} &79.6 &79.4  % -- 20.0
 \\
 &Max
  &93.6 &93.6 &93.6  % -- 5.0
  &89.5 &89.5 &89.5  % -- 10.0
- &88.2 &88.2 &88.2  % -- 15.0
  &{\bfseries 88.0} &87.3 &87.1  % -- 20.0
 \\
 &Mean
  &86.1 &86.0 &86.1  % -- 5.0
  &{\bfseries 85.6} &85.3 &85.5  % -- 10.0
- &{\bfseries 85.2} &84.7 &84.9  % -- 15.0
  &{\bfseries 84.8} &83.9 &84.2  % -- 20.0
 \\
 &Int.
  &[85.1 87.1] &[85.0 87.0] &[85.2 87.1]  % -- 5.0
  &[85.0 86.1] &[84.7 85.9] &[84.9 86.2]  % -- 10.0
- &[84.7 85.7] &[84.2 85.2] &[84.4 85.4]  % -- 15.0
  &[84.4 85.2] &[83.4 84.3] &[83.8 84.7]  % -- 20.0
 \\
-\cline{1-14}
+\cline{1-11}
 \multirow{4}{1.6cm}{Zoo}
 &Min
  &72.8 &72.8 &75.3  % -- 5.0
  &{\bfseries 77.2} &74.7 &75.3  % -- 10.0
- &{\bfseries 79.3} &75.2 &77.3  % -- 15.0
  &{\bfseries 81.7} &78.3 &77.1  % -- 20.0
 \\
 &Max
  &90.1 &88.9 &91.4  % -- 5.0
  &{\bfseries 88.3} &87.0 &87.7  % -- 10.0
- &{\bfseries 88.8} &87.6 &87.6  % -- 15.0
  &{\bfseries 89.2} &87.6 &87.6  % -- 20.0
 \\
 &Mean
  &{\bfseries 82.5} &80.9 &82.0  % -- 5.0
  &{\bfseries 84.1} &82.5 &83.1  % -- 10.0
- &{\bfseries 84.9} &82.9 &83.2  % -- 15.0
  &{\bfseries 85.5} &83.5 &83.7  % -- 20.0
 \\
 &Int.
  &[81.5 83.5] &[79.8 82.0] &[81.0 83.1]  % -- 5.0
  &[83.3 84.9] &[81.6 83.3] &[82.2 84.0]  % -- 10.0
- &[84.2 85.5] &[82.1 83.6] &[82.4 83.9]  % -- 15.0
  &[85.0 86.0] &[82.9 84.1] &[83.1 84.3]  % -- 20.0
 \\
-\cline{1-14}
+\cline{1-11}
 \hline
-\end{tabular}
-}
-\end{Table}
+\end{tabular}}
+\end{table*}
 % -----------------------------------------------------------------------------
 
-\begin{Table}
-\tcap{Experimental Results with 20.0\%, 30.0\%, 40.0\%, 50.0\% missing values rates.}
-\scalebox{0.65}{
+\begin{table*}\centering
+\tcap{Experimental results with 30.0\%, 40.0\%, 50.0\% missing values rates.}
+\scalebox{0.70}{
 \setlength{\extrarowheight}{3pt}
-\setlength{\columnsep}{8pt}
 \baselineskip=13pt
-\begin{tabular}{|c|c|ccc|ccc|ccc|ccc|}
+\setlength{\tabcolsep}{4pt}
+\setlength{\columnsep}{1pt}
+\begin{tabular}{|c|c|ccc|ccc|ccc|}
 \hline
-Dataset& & \multicolumn{3}{c|}{$20.0\%$}& \multicolumn{3}{c|}{$30.0\%$}& \multicolumn{3}{c|}{$40.0\%$}& \multicolumn{3}{c|}{$50.0\%$}\\ \cline{3-14}
+Dataset& & \multicolumn{3}{c|}{$30.0\%$}& \multicolumn{3}{c|}{$40.0\%$}& \multicolumn{3}{c|}{$50.0\%$}\\ \cline{3-11}
 
-& &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} \\ \cline{1-14}
-\multirow{4}{1.6cm}{B. Cancer}
+& &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} &\textsc{ARSI} &\textsc{ROUSTIDA} &\textsc{VTRIDA} \\ \cline{1-11}
+\multirow{4}{1.6cm}{B.\;Cancer}
 &Min
- &{\bfseries 47.9} &45.9 &45.1  % -- 20.0
  &{\bfseries 47.9} &46.5 &44.0  % -- 30.0
  &{\bfseries 48.8} &45.9 &44.3  % -- 40.0
  &{\bfseries 49.4} &46.1 &44.6  % -- 50.0
 \\
 &Max
- &56.1 &55.3 &56.5  % -- 20.0
  &{\bfseries 54.5} &53.9 &52.9  % -- 30.0
  &{\bfseries 53.9} &52.5 &51.0  % -- 40.0
  &{\bfseries 53.7} &52.5 &51.0  % -- 50.0
 \\
 &Mean
- &{\bfseries 51.6} &50.6 &49.8  % -- 20.0
  &{\bfseries 51.2} &49.9 &48.5  % -- 30.0
  &{\bfseries 51.5} &49.3 &48.0  % -- 40.0
  &{\bfseries 51.4} &49.0 &47.3  % -- 50.0
 \\
 &Int.
- &[51.0 52.1] &[50.0 51.3] &[49.1 50.5]  % -- 20.0
  &[50.7 51.7] &[49.4 50.4] &[48.1 49.0]  % -- 30.0
  &[51.1 51.9] &[48.9 49.8] &[47.6 48.4]  % -- 40.0
  &[51.1 51.7] &[48.6 49.5] &[46.9 47.7]  % -- 50.0
 \\
-\cline{1-14}
+\cline{1-11}
 \multirow{4}{1.6cm}{Spect}
 &Min
- &{\bfseries 68.0} &66.5 &66.9  % -- 20.0
  &{\bfseries 69.7} &66.8 &68.0  % -- 30.0
  &{\bfseries 69.4} &66.0 &66.7  % -- 40.0
  &{\bfseries 68.6} &64.3 &65.4  % -- 50.0
 \\
 &Max
- &{\bfseries 72.9} &71.5 &72.1  % -- 20.0
  &{\bfseries 73.4} &71.7 &72.7  % -- 30.0
  &{\bfseries 74.9} &70.3 &72.1  % -- 40.0
  &{\bfseries 72.9} &69.8 &71.0  % -- 50.0
 \\
 &Mean
- &{\bfseries 70.9} &69.4 &70.1  % -- 20.0
  &{\bfseries 71.8} &69.1 &70.2  % -- 30.0
  &{\bfseries 71.9} &68.3 &69.1  % -- 40.0
  &{\bfseries 70.9} &67.0 &68.0  % -- 50.0
 \\
 &Int.
- &[70.6 71.2] &[69.1 69.7] &[69.8 70.4]  % -- 20.0
  &[71.6 72.1] &[68.7 69.4] &[69.8 70.5]  % -- 30.0
  &[71.6 72.2] &[68.0 68.6] &[68.8 69.5]  % -- 40.0
  &[70.7 71.1] &[66.7 67.3] &[67.7 68.4]  % -- 50.0
 \\
-\cline{1-14}
+\cline{1-11}
 \multirow{4}{1.6cm}{Lymph.}
 &Min
- &{\bfseries 58.0} &56.8 &57.6  % -- 20.0
  &{\bfseries 57.7} &56.3 &56.4  % -- 30.0
  &57.5 &56.5 &57.6  % -- 40.0
  &{\bfseries 59.0} &55.6 &55.3  % -- 50.0
 \\
 &Max
- &66.2 &66.0 &66.2  % -- 20.0
  &64.0 &63.8 &64.0  % -- 30.0
  &{\bfseries 63.4} &62.2 &63.3  % -- 40.0
  &{\bfseries 64.0} &61.5 &61.1  % -- 50.0
 \\
 &Mean
- &{\bfseries 61.5} &61.4 &61.4  % -- 20.0
  &{\bfseries 61.2} &60.6 &60.7  % -- 30.0
  &{\bfseries 61.1} &59.4 &59.7  % -- 40.0
  &{\bfseries 61.3} &58.7 &59.0  % -- 50.0
 \\
 &Int.
- &[60.9 62.0] &[60.8 62.0] &[60.8 62.0]  % -- 20.0
  &[60.7 61.7] &[60.1 61.1] &[60.3 61.2]  % -- 30.0
  &[60.8 61.5] &[59.0 59.8] &[59.3 60.1]  % -- 40.0
  &[61.0 61.6] &[58.3 59.0] &[58.7 59.4]  % -- 50.0
 \\
-\cline{1-14}
+\cline{1-11}
 \multirow{4}{1.6cm}{Soybean}
 &Min
- &{\bfseries 81.2} &79.6 &79.4  % -- 20.0
  &{\bfseries 82.2} &79.8 &79.2  % -- 30.0
  &{\bfseries 83.7} &79.0 &78.7  % -- 40.0
  &{\bfseries 82.9} &79.3 &79.1  % -- 50.0
 \\
 &Max
- &{\bfseries 88.0} &87.3 &87.1  % -- 20.0
  &{\bfseries 87.5} &85.3 &86.0  % -- 30.0
  &{\bfseries 89.2} &85.7 &86.1  % -- 40.0
  &{\bfseries 87.7} &86.0 &85.0  % -- 50.0
 \\
 &Mean
- &{\bfseries 84.8} &83.9 &84.2  % -- 20.0
  &{\bfseries 84.4} &82.8 &82.9  % -- 30.0
  &{\bfseries 85.7} &82.4 &82.5  % -- 40.0
  &{\bfseries 85.9} &82.1 &82.1  % -- 50.0
 \\
 &Int.
- &[84.4 85.2] &[83.4 84.3] &[83.8 84.7]  % -- 20.0
  &[84.1 84.7] &[82.4 83.1] &[82.5 83.3]  % -- 30.0
  &[85.4 86.0] &[81.9 82.8] &[82.1 83.0]  % -- 40.0
  &[85.6 86.2] &[81.7 82.5] &[81.8 82.5]  % -- 50.0
 \\
-\cline{1-14}
+\cline{1-11}
 \multirow{4}{1.6cm}{Zoo}
 &Min
- &{\bfseries 81.7} &78.3 &77.1  % -- 20.0
  &{\bfseries 83.9} &81.0 &80.2  % -- 30.0
  &{\bfseries 81.6} &80.7 &79.9  % -- 40.0
  &{\bfseries 82.3} &81.4 &81.4  % -- 50.0
 \\
 &Max
- &{\bfseries 89.2} &87.6 &87.6  % -- 20.0
  &{\bfseries 89.7} &88.5 &86.8  % -- 30.0
  &89.2 &89.2 &86.8  % -- 40.0
  &{\bfseries 88.4} &87.1 &86.0  % -- 50.0
 \\
 &Mean
- &{\bfseries 85.5} &83.5 &83.7  % -- 20.0
  &{\bfseries 87.1} &84.7 &84.2  % -- 30.0
  &{\bfseries 86.0} &84.8 &84.0  % -- 40.0
  &{\bfseries 85.1} &84.5 &83.8  % -- 50.0
 \\
 &Int.
- &[85.0 86.0] &[82.9 84.1] &[83.1 84.3]  % -- 20.0
  &[86.8 87.5] &[84.3 85.1] &[83.7 84.6]  % -- 30.0
  &[85.5 86.5] &[84.4 85.2] &[83.6 84.5]  % -- 40.0
  &[84.7 85.5] &[84.1 84.9] &[83.5 84.2]  % -- 50.0
 \\
-\cline{1-14}
+\cline{1-11}
 \hline
-\end{tabular}
-}
-\end{Table}
+\end{tabular}}
+\end{table*}
 
 \end{document}
 
