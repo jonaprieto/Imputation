@@ -1,10 +1,9 @@
-\begin{Figure}
-  \centering
+\subfigure{
 \pgfplotstableread[col sep=comma,header=true, row sep=crcr]{
 $table
 }\data
 
-  \begin{tikzpicture}
+  \begin{tikzpicture}[scale=0.48]
   \begin{axis}[
     axis lines = left
   , width  = \textwidth
@@ -14,26 +13,21 @@ $table
   % , ymax   = 0.94
   , ylabel = {Accuracy Ratio (\%)}
   , grid   = major
-  % , symbolic x coords
-  %          = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50}
+  , symbolic x coords
+           = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50}
   % , xtick  = {1,2,3,4,5,6,7,8,9,10}
-  , xlabel = {Sample of $dataset dataset}
-  , enlarge x limits = 0.05
-  , legend style     =
-      { at     = {(0.5,1.25)}
-      , anchor = north
-      , legend columns = $nalgos
-      }
+  , xlabel = {$dataset dataset samples with $missingrate\% of missing rate.}
+  % , enlarge x limits = 0.05
+  , legend = empty
+  % , legend style     =
+      % {draw=none}
+      % { at     = {(0.5,1.1)}
+      % , anchor = north
+      % , legend columns = $nalgos
+      % }
   ]
-
   $addplots
-
-  \legend{$algorithms}
+  % \legend{$algorithms}
   \end{axis}
   \end{tikzpicture}
-
-  \fcaption{
-  Behavior of the imputation algorithms with a missing values rate of $missingrate\% in the $dataset database. The vertical axis corresponds to the accuracy rate of the respective algorithm, and the horizontal axis represents the sample number in the experiment. We observe ARSI gets the best accuracy with respect the other algorithms in $arsiwins runs of a total of 50 runs. ARSI gets the worst accuracy with respect the other algorithm $arsilost runs of a total of 50 runs.
-  }
-  \label{table:$missingrate-$dataset}
-\end{Figure}
+}\qquad

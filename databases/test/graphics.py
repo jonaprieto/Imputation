@@ -83,10 +83,17 @@ sep = "% " + "-"*77 + "\n\n"
 with open(join(basedir, "main.tex"), 'w') as mainLatex:
 
   sections = []
-  for mrate in sorted(test.keys()):
+
+  # for mrate in sorted(test.keys()):
+  #   figures = []
+  #   print("% Mrate\tWin\tLost\tDataset")
+  #   for dname in test[mrate].keys():
+
+  for dname in test[fixReal("0.25")].keys():
     figures = []
     print("% Mrate\tWin\tLost\tDataset")
-    for dname in test[mrate].keys():
+    for mrate in map(fixReal,["0.25", "0.50"]):
+
       algos = sorted([a for a in test[mrate][dname].keys()])
       addplots = []
       for algo in algos:
@@ -140,7 +147,7 @@ with open(join(basedir, "main.tex"), 'w') as mainLatex:
         if carsilost + 1 == len(algos):
           arsilost += 1
 
-      print("% {:1.2f}\t{:2d}/50 \t{:2d}/50\t{}".format(mrate, arsiwins, arsilost, dname))
+      print("% {:1.2f}\t{:2d}/50\t{:2d}/50\t{}".format(mrate, arsiwins, arsilost, dname))
       # ------------------------------------------------------------------
 
       table  = [ header]
