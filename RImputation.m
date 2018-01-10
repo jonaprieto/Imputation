@@ -44,12 +44,13 @@ $missingU::usage     = "dataset with random missing values";
 Preprocessing::usage = "";
 setDatasets::usage   = "setup the dataset for runnings";
 
-$GM::usage    = "Generalized descirnibility matrix";
+$debug        = "debug purposes";
+$GM::usage    = "Generalized discernibility matrix";
 $MAS::usage   = "Missing attribute set per each row";
 $missingRate::usage  = "Missing rate for the SetMissings method";
 $Mlv::usage   = "Value tolerance matrix";
 $MOS::usage   = "Missing object set in the dataset";
-$NS::usage    = "Set of no distinguishible object with a row";
+$NS::usage    = "Set of no distinguishable object with a row";
 $OMS::usage   = "object missing set per an attribute k";
 $V::usage     = "Number of possible values that an attribute can take";
 $verboseOutcome::usage  = "output data container of RunAlgorithm method";
@@ -92,6 +93,7 @@ $perdidos = <||>;
 $original = <||>;
 $numIteraciones = 50;
 $runMC = True;
+$debug = false;
 
 (* -------------------------------------------------------------------------- *)
 
@@ -116,7 +118,7 @@ PrintData[ex_] := Module[{nX, n, m},
   {n, m} = Dimensions@ex;
   nX = ex;
   Table[
-    nX[[i, j]] = If[ MissingQ[ex[[i, j]]], $missingSymbolPrint , nX[[i, j]]];
+    nX[[i, j]] = If[ MissingQ[ex[[i, j]]] || ex[[i, j]]=== "*", $missingSymbolPrint , nX[[i, j]]];
     , {i, 1, n}, {j, 1, m}];
   Print[TableForm@nX];
 ];
@@ -135,8 +137,8 @@ Union2[A_, B_] := Union[Flatten[{A, B}]];
 (* -------------------------------------------------------------------------- *)
 
 (*http://goo.gl/5O7jhs*)
-Clear[MakeArrange];
-MakeArrange[{n_, m_}, p_] := Module[
+Clear[MakeSampleMissing];
+MakeSampleMissing[{n_, m_}, p_] := Module[
   {base = PadLeft[ConstantArray[1, Round[n m p]], n m], cand},
     While[(cand = ArrayReshape[RandomSample@base, {n, m}];
     Max[Total[cand]] > n - 2 || Max[Total /@ cand] > m - 2)];
@@ -167,7 +169,7 @@ SetMissings[] := Module[
   AbortAssert[$missingRate < 1 && $missingRate > 0,"Rate out of range"];
 
   cant = Ceiling[n * (m-1) * $missingRate];
-  ms   = MakeArrange[{n, m-1}, $missingRate];
+  ms   = MakeSampleMissing[{n, m-1}, $missingRate];
   Table[
     $U[[pos[[1]], pos[[2]]]] = $missingSymbol
   , {pos, ms}];
@@ -280,6 +282,19 @@ Preprocessing[] := Module[
     $OMS[k] = Flatten[$OMS[k], Infinity];
   ,{k,1, m}];
 
+  If[ $debug,
+     Print["MOS : ",$MOS];
+     Table[
+        Print["OMS[",k,"] : ",$OMS[k]];
+     ,{k,1, m}];
+
+    Table[
+      Print["$MAS[",i,"]  = ", $MAS[i]];
+      Print["$RInv[",i,"] = ", $RInv[i]];
+      Print["$R[", i,"]    = ", $R[i]];
+      Print["$NS[",i, "]   = ", $NS[i]];
+  ,{i, 1, n}];
+  ];
 ];
 
 (* -------------------------------------------------------------------------- *)
@@ -334,6 +349,8 @@ ROUSTIDA[] := Module[
   ];
 ];
 
+Msg[msg__]:= If[$debug, Print[msg]];
+
 Clear[ARSI];
 ARSI[] := Module[
   {condition, n, m, flag, changed, val, setVal
@@ -350,108 +367,55 @@ ARSI[] := Module[
   rangeM  = Range[m];
   flag    = False;
 
+  Msg["(line 4) -> MOS = ", $MOS];
   $MOS = SortBy[$MOS, {Length@$MAS[#], Times@@Table[Length@$OMS[i], {i,$MAS[#]}]} &];
+  Msg["Sort     -> ", $MOS];
 
   Table[
-
+   Msg["(line 5) -> i = ",i];
+   Msg["(line 6) -> MAS[",i,"] : = ", $MAS[i]];
    $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
+   Msg["Sort     -> ", $MAS[i]];
 
    Table[
+    Msg["(line 7) k = ",k];
+
     changed = False;
     setVal1 = DeleteCases[Union@Table[$U[[j,k]], {j, $RInv[i]}], Missing[]];
     setVal2 = DeleteCases[Union@Table[$U[[j,k]], {j, $NS[i]}], Missing[]];
 
+    Msg["C1 = ", setVal1];
+    Msg["C2 = ", setVal2];
+
     Which[
       Length@setVal1 == 1 ,
+        Msg["Agreement! in C1"];
         changed = FillWith[i,k, First@setVal1];
+        If[ Length@setVal2 > 1,
+           Msg["\!\(\*StyleBox[\"[ ARSI ]\",FontSize->18,Background->RGBColor[1, 1, 0]]\)"<>" imputes this one!"],
+           Msg["ROUSTIDA also imputes this one."]
+           ];
+        Msg["Changing ",$U[[i,k]], " by ", First@setVal1];
         flag    = Or[flag, changed];
     , Length@setVal2 == 1 ,
+        Msg["Agreement! in C2"];
         changed = FillWith[i,k, First@setVal2];
+         Msg["Changing ",$U[[i,k]], " by ", First@setVal2];
         flag    = Or[flag, changed];
+
     ];
+    Msg["---"];
     , {k, $MAS[i]}];
+   Msg["--"]
   ,{i, $MOS}];
 
-  (*Table[
-    change = Or[change, False];
-
-    base      = Complement2[rangeM, $MAS[i]];
-    rowsWithK = Complement2[rangeN, $OMS[k]];
-    rows      = Select[rowsWithK, SameQ[Intersection[$MAS[#], base],{}] &];
-
-    (*Print["rowsWithK:", rowsWithK];
-    Print["rows:", rows];
-    Print["base:", base];*)
-
-    If[ Length@rows == 1,
-        Print["entro1"];
-        changed = FillWith[i, k, $U[[ rows[[1]], k ]] ];
-        flag    = Or[flag, changed];
-    ];
-
-    If[ Length@rows >= 2*$missingRate*n,
-      rows = SortBy[rows, - $Mlv[i,#] &];
-      rows = Take[rows, UpTo@Ceiling[ 2*$missingRate*n ]];
-      (*Print["rows refinamiento"];*)
-    ];
-    (*Print["rows 2:", rows];*)
-
-    If[ Length@rows > 1,
-      (* cols with values in the i-row *)
-      If[ Length@base >= 0.8*m,
-        base = SortBy[base, Length@$OMS[#] &];
-        base = Take[base, UpTo@Ceiling[0.8*m]];
-      ];
-
-      model   = $U[[rows, base]] -> $U[[rows, k]];
-      classes = Union@DeleteCases[$U[[rows, k]], Missing[]];
-
-      (*Print["Model "];*)
-      (*PrintData[$U[[rows, base]]];*)
-      (*Print["classes:"];*)
-      (*Print[classes];*)
-
-      If[ Length@classes == 1,
-        (*Print["ans     :", classes[[1]] ];*)
-        (*Print["correct :", $oldU[[i,k]] ];*)
-        change = FillWith[i, j, classes[[1]] ];
-        flag   = Or[flag, change];
-        If[ SameQ[ans, $oldU[[i,k]]],
-          correct++;
-        ];
-        total++;
-      ];
-
-      If[ Length@classes > 1,
-        clasifier = Classify[model
-          , Method          -> $classifier
-          , PerformanceGoal -> "Quality"
-        ];
-        (*Print["using classifier"];*)
-        (*Print["i,k :", {i,k}];*)
-        goal  = $U[[i, base]];
-        (*Print["goal:", goal];*)
-        ans   = clasifier[goal];
-        (*Print["ans     :", ans];*)
-        (*Print["correct :", $oldU[[i,k]] ];*)
-
-        changed  = FillWith[i, k, ans];
-        flag     = Or[flag, changed];
-
-        If[ SameQ[ans, $oldU[[i,k]]],
-          correct++;
-        ];
-        total++;
-      ];
-    ];
-  ,{i, $MOS}, {k, $MAS[i]}];*)
-
-  (*Print["correct:", correct];
-  Print["total:", total];*)
 
   If[ flag,
+    Msg["Repeat (line 2)"];
     ARSI[];
-    , If[$runMC,
+    ,
+    Msg["line 20 (MeanCompleter)"];
+    If[$runMC,
         MeanCompleter[];
       ];
   ];
@@ -501,7 +465,7 @@ VTRIDA[] := Module[
 
   Table[
     change = False;
-    
+
     setVal = Table[
         If[ i != j && $Mlv[i,j] > 0
           , j
@@ -882,7 +846,7 @@ RunAlgorithm[algo_String, namedatasets_List, numIter_Integer] := Module[
         ,  "mean"       -> mean
         ,  "interval"   -> conf
         |>;
-        
+
   cDataset++;
   , {ndataset, datasets}];
 
