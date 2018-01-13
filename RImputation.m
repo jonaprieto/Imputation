@@ -114,13 +114,23 @@ SetInitValues[];
 (* -------------------------------------------------------------------------- *)
 
 Clear[PrintData];
-PrintData[ex_] := Module[{nX, n, m},
+PrintData[ex_, printCounter_:True, headings_:{}] := Module[{nX, n, m, count = 1},
   {n, m} = Dimensions@ex;
   nX = ex;
   Table[
-    nX[[i, j]] = If[ MissingQ[ex[[i, j]]] || ex[[i, j]]=== "*", $missingSymbolPrint , nX[[i, j]]];
+    nX[[i, j]] =
+      If[ MissingQ[ex[[i, j]]] || ex[[i, j]] === "*",
+          If[ printCounter,
+            Subscript[$missingSymbolPrint, Style[ToString[count++], Background->Yellow]],
+            $missingSymbolPrint
+           ]
+          ,(* else *)
+          nX[[i, j]]];
     , {i, 1, n}, {j, 1, m}];
-  Print[TableForm@nX];
+  If[ Not[SameQ[headings, {}]],
+    Print[TableForm[nX, TableHeadings -> headings]],
+    Print[TableForm[nX, TableHeadings -> {Range[n], Table[Subscript["A", i], {i,1,m}]}]];
+  ];
 ];
 
 (* -------------------------------------------------------------------------- *)
@@ -355,7 +365,8 @@ Clear[ARSI];
 ARSI[] := Module[
   {condition, n, m, flag, changed, val, setVal
   , rangeN, rangeM, otherwise=True
-  , base, rowsWithK, rows, III=0, model, correct =0, total=0},
+  , base, rowsWithK, rows, III=0, model, correct =0, total=0
+  , refObj},
 
   If[ Length@Dimensions@$U != 2,
     Print["Step Two. Invalid $U."];
@@ -374,6 +385,7 @@ ARSI[] := Module[
   Table[
    Msg["(line 5) -> i = ",i];
    Msg["(line 6) -> MAS[",i,"] : = ", $MAS[i]];
+   Msg[i, " row -> ", $U[[i]]];
    $MAS[i] = SortBy[$MAS[i], Length@$OMS[#] &];
    Msg["Sort     -> ", $MAS[i]];
 
@@ -390,17 +402,44 @@ ARSI[] := Module[
     Which[
       Length@setVal1 == 1 ,
         Msg["Agreement! in C1"];
-        changed = FillWith[i,k, First@setVal1];
         If[ Length@setVal2 > 1,
-           Msg["\!\(\*StyleBox[\"[ ARSI ]\",FontSize->18,Background->RGBColor[1, 1, 0]]\)"<>" imputes this one!"],
-           Msg["ROUSTIDA also imputes this one."]
-           ];
-        Msg["Changing ",$U[[i,k]], " by ", First@setVal1];
-        flag    = Or[flag, changed];
+           Msg[Style["[ ARSI ] imputes this one!", Background-> Yellow]],
+           Msg[Style["[ ROUSTIDA ] also imputes this one!", Background-> Yellow]]
+          ];
+        Msg["Imputing with "<>ToString@First@setVal1, " the attribute ", Subscript["A",k] ];
+        Msg["The agreement used:"];
+
+          refObj = First@$RInv[i];
+          If[$debug,
+            PrintData[{$U[[i]],$U[[refObj]]}, False, {{i,refObj},
+              Table[
+                If[ j == k,
+                   Style[Subscript["A", j], Background -> Yellow],
+                   Subscript["A", j]
+                 ]
+                   ,{j,1, m}]}];
+          ];
+
+        changed = FillWith[i,k, First@setVal1];
+        flag = Or[flag, changed];
+
     , Length@setVal2 == 1 ,
         Msg["Agreement! in C2"];
-        changed = FillWith[i,k, First@setVal2];
-         Msg["Changing ",$U[[i,k]], " by ", First@setVal2];
+        Msg[Style["[ ROUSTIDA ] imputes this one!", Background-> Yellow]];
+        Msg["Imputing with "<>ToString@First@setVal2, " the attribute ", Subscript["A",k] ];
+        Msg["The agreement used:"];
+        refObj = First@$NS[i];
+        If[$debug,
+          PrintData[{$U[[i]],$U[[refObj]]}, False, {{i,refObj},
+            Table[
+              If[ j == k,
+                 Style[Subscript["A", j], Background -> Yellow],
+                 Subscript["A", j]
+               ]
+                 ,{j,1, m}]}];
+        ];
+
+        changed = FillWith[i, k, First@setVal2];
         flag    = Or[flag, changed];
 
     ];
